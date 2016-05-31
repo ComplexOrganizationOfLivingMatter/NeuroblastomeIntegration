@@ -8,9 +8,9 @@ v2 = [];
 
 for i = 2:size(Img,1)
     for j = 2:size(Img,2)
-        if (mask(i,j) ==  0 && Img(i,j) ~= 255)
+        if (mask(i,j) ==  0 && Img(i,j) == 255)
             %Add to verteces list
-            [vSides] = connectedHexagons(Img, i, j);
+            [vSides] = connectedHexagons(mask, i, j);
             %%Add it to the vertex list
                 v1 = [v1;vSides(1)];
                 v2 = [v2;vSides(2)];
