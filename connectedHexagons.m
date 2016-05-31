@@ -7,6 +7,7 @@ function [ v ] = connectedHexagons( Img, i, j )
           v = [v;Img(i1,j1)]; 
        end
     end
+    v = unique(v);
     v(v==0) = [];
 end
 
