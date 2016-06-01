@@ -31,21 +31,19 @@ function [ ] = createIncidenceMatrix()
             end
         end
 
-        classes = unique(v1+v2);
+        classes = unique([v1,v2]);
         %Creating the Incidence matrix
         incidenceMatrix = zeros(size(classes,1), size(classes,1));
 
-        %parpool(6);
-        for i = 1:size(v1,1)
-            v2Index = classes(classes == v2(i));
-            incidenceMatrix(i, v2Index) = 1;
-            incidenceMatrix(v2Index, i) = 1;
+        for i = 1:size(classes,1)
+            v2Index = find(classes == v2(i));
+            incidenceMatrix(i, v2Index) = incidenceMatrix(i, v2Index) + 1;
+            incidenceMatrix(v2Index, i) = incidenceMatrix(v2Index, i) + 1;
         end
 
         
         inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.')
         outputFileName = strcat('Incidences\incidenceMatrix', inNameFile(2), 'hexagonalMask20Diamet.mat')
         save(outputFileName{:},'incidenceMatrix', '-v7.3');
-        break
     end
 end
