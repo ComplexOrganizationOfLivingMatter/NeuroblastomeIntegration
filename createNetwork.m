@@ -68,7 +68,7 @@ function [ ] = createNetwork()
             bg = biograph(adjacencyMatrix, num2str(classes),'ShowArrows','off','ShowWeights','off');
             [S, C] = graphconncomp(adjacencyMatrix, 'Directed', false)
             
-            [vCentroids, vCluster] = GetCentroidOfClass(mask, C, S);
+            [vCentroids] = GetCentroidOfCluster(mask, C, S)
 
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.mat')
