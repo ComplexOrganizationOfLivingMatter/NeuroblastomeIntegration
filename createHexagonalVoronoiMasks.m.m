@@ -6,7 +6,7 @@
 %[H,W]=size(Img);
 H = 7000;
 W = 0;
-for j = 5:100;
+for j = 1:5;
     %%Elegimos el diametro de los hexágonos
     hexagonDiameter = j;
     %%Con meshgrid obtenemos puntos equidistantes en una matriz cuadrada
