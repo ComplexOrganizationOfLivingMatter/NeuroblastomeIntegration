@@ -43,7 +43,7 @@ function [ ] = createIncidenceMatrix()
 
         
         inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.')
-        outputFileName = strcat('Incidences\incidenceMatrix', inNameFile(2), 'hexagonalMask20Diamet.mat')
+        outputFileName = strcat('Incidences\incidenceMatrix', inNameFile(1), 'hexagonalMask20Diamet.mat')
         save(outputFileName{:},'incidenceMatrix', '-v7.3');
     end
 end
