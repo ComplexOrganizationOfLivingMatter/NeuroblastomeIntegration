@@ -4,7 +4,7 @@ function [ ] = createNetwork()
     [stat,struc] = fileattrib;
     PathCurrent = struc.Name;
     lee_imagenes = dir(PathCurrent);
-    lee_imagenes = lee_imagenes(4:size(lee_imagenes,1)-1)
+    lee_imagenes = lee_imagenes(3:size(lee_imagenes,1)-1)
     for imK = 1:size(lee_imagenes,1)
         lee_imagenes(imK).name
         Img=imread(lee_imagenes(imK).name);
@@ -65,12 +65,14 @@ function [ ] = createNetwork()
             %clear v1 v2 classesArea mask
             %classesStr = num2str(classes);
             %file:///C:/Program%20Files/MATLAB/R2014b/help/bioinfo/ref/biograph.html
-            %bg = biograph(full(adjacencyMatrix), num2str(classes),'ShowArrows','off','ShowWeights','off');
-            graphconncomp(adjacencyMatrix, 'Directed', false)
+            bg = biograph(adjacencyMatrix, num2str(classes),'ShowArrows','off','ShowWeights','off');
+            [S, C] = graphconncomp(adjacencyMatrix, 'Directed', false)
+            
+            [vCentroids, vCluster] = GetCentroidOfClass(mask, C, S);
 
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.mat')
-            save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
+            save(outputFileName{:}, 'adjacencyMatrix', 'bg', 'C', '-v7.3');
         end
     end
 end
