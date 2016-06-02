@@ -15,7 +15,8 @@ function [ ] = createNetworkMinimumDistance( )
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), '.mat')
             save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
-            generateSIFFromAdjacencyMatrix(adjacencyMatrix, strcat('visualize\minimumDistanceClasses', inNameFile(1), '.sif'));
+            outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.sif');
+            generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
         end
     end
 end
