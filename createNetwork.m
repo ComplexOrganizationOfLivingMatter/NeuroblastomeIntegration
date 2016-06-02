@@ -86,6 +86,7 @@ function [ ] = createNetwork()
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.mat')
             save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
+            generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.sif'));
         end
         break
     end
