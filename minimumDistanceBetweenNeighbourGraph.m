@@ -13,7 +13,7 @@ Centroids = vertcat(S.Centroid);
 %// Measure pairwise distance
 distanceBetweenObjects = pdist(Centroids,'euclidean');
 
-adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenObjects , Img, C);
+adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenObjects , zeros(max(C(C~=0))), C);
 
 end
 

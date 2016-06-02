@@ -5,6 +5,7 @@ function [ adjacencyMatrix ] = GetCompleteGraphWithMinimumDistances( distanceBet
     mDistanceBetweenClusters = squareform(distanceBetweenClusters);
     mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int8');
 
+    adjacencyMatrix = sparse(adjacencyMatrix);
     while graphconncomp(adjacencyMatrix) > 1
         [rowMin, colMin] = find(mDistanceBetweenClusters == min(mDistanceBetweenClusters(:)), 1);
         class1 = find(C == rowMin, 1);
