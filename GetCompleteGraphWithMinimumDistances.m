@@ -1,13 +1,18 @@
-function [ adjacencyMatrix ] = GetCompleteGraphWithMinimumDistances( distanceBetweenClusters, adjacencyMatrix, C, bg)
+function [ adjacencyMatrix ] = GetCompleteGraphWithMinimumDistances( distanceBetweenClusters, adjacencyMatrix, C)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-    while conncomp(bg) == 1
-        [rowMin, colMin] = find(distanceBetweenClusters == min(distanceBetweenClusters));
-        adjacencyMatrix(rowMin, colMin) = distanceBetweenClusters(rowMin, colMin);
-        adjacencyMatrix(colMin, rowMin) = distanceBetweenClusters(rowMin, colMin);
+    mDistanceBetweenClusters = squareform(distanceBetweenClusters);
+    mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int8');
+
+    while graphconncomp(adjacencyMatrix) > 1
+        [rowMin, colMin] = find(mDistanceBetweenClusters == min(mDistanceBetweenClusters(:)), 1);
+        class1 = find(C == rowMin, 1);
+        class2 = find(C == colMin, 1);
+        adjacencyMatrix(class1, class2) = mDistanceBetweenClusters(rowMin, colMin);
+        adjacencyMatrix(class2, class1) = mDistanceBetweenClusters(rowMin, colMin);
         
-        distanceBetweenClusters(rowMin, colMin) = intmax('int8');
+        mDistanceBetweenClusters(rowMin, colMin) = intmax('int8');
     end
 end
 
