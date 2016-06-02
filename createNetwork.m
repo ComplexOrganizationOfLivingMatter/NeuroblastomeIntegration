@@ -16,17 +16,25 @@ function [ ] = createNetwork()
             v1 = [];
             v2 = [];
             classesArea = containers.Map('KeyType','single','ValueType','single');
+            hexagonArea = containers.Map('KeyType','single','ValueType','single');
 
             for i = 2:size(Img,1)
                 for j = 2:size(Img,2)
-                    %If trasspass the the boundary we put an edge
-                    if (mask(i,j) ~= 0 && Img(i,j) ~= 0)
-                        if classesArea.isKey(mask(i,j))
-                            classesArea(mask(i,j)) = classesArea(mask(i,j)) + 1;
+                    
+                    if (mask(i,j) ~= 0) %Area of the hexagon itself
+                        if hexagonArea.isKey(mask(i,j))
+                            hexagonArea(mask(i,j)) = hexagonArea(mask(i,j)) + 1;
                         else
-                            classesArea(mask(i,j)) = 1;
+                            hexagonArea(mask(i,j)) = 1;
                         end
-                    elseif (mask(i,j) ==  0 && Img(i,j) ~= 0)
+                        if (Img(i,j) ~= 0) %Area of cells/fibers in the hexagon
+                            if classesArea.isKey(mask(i,j))
+                                classesArea(mask(i,j)) = classesArea(mask(i,j)) + 1;
+                            else
+                                classesArea(mask(i,j)) = 1;
+                            end
+                        end
+                    elseif (mask(i,j) ==  0 && Img(i,j) ~= 0) %If trasspass the boundary we put an edge
                         %Add to verteces list
                         [vSides] = connectedHexagons(mask, i, j);
                         %%Add it to the vertex list
@@ -52,10 +60,10 @@ function [ ] = createNetwork()
                 v1Area = 0;
                 v2Area = 0;
                 if classesArea.isKey(v1(i))
-                    v1Area = classesArea(v1(i));
+                    v1Area = classesArea(v1(i))/hexagonArea(v1(i));
                 end
                 if classesArea.isKey(v2(v2Index))
-                   v2Area = classesArea(v2(v2Index)); 
+                   v2Area = classesArea(v2(v2Index))/hexagonArea(v1(i)); 
                 end
                 adjacencyMatrix(i, v2Index) = (v1Area + v2Area)/2;
                 adjacencyMatrix(v2Index, i) = (v1Area + v2Area)/2;
@@ -65,16 +73,20 @@ function [ ] = createNetwork()
             %clear v1 v2 classesArea mask
             %classesStr = num2str(classes);
             %file:///C:/Program%20Files/MATLAB/R2014b/help/bioinfo/ref/biograph.html
-            bg = biograph(adjacencyMatrix, num2str(classes),'ShowArrows','off','ShowWeights','off');
+            %bg = biograph(adjacencyMatrix, num2str(classes),'ShowArrows','off','ShowWeights','off');
             [S, C] = graphconncomp(adjacencyMatrix, 'Directed', false);
             
             [vCentroidsRows, vCentroidsCols] = GetCentroidOfCluster(mask, C, S);
             
-            %distanceBetweenClusters = pdist(vCentroids,'euclidean');
+            distanceBetweenClusters = pdist([vCentroidsRows', vCentroidsCols'], 'euclidean');
+            
+            adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
+            
 
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.mat')
-            save(outputFileName{:}, 'adjacencyMatrix', 'bg', 'C', 'vCentroidsRows', 'vCentroidsCols', '-v7.3');
+            save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
         end
+        break
     end
 end
