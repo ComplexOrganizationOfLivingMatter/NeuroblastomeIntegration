@@ -6,7 +6,7 @@ function [ ] = createNetwork()
     lee_imagenes = dir(PathCurrent);
     lee_imagenes = lee_imagenes(3:size(lee_imagenes,1))
     for imK = 1:size(lee_imagenes,1)
-        if (lee_imagenes(imK).isdir == 0)
+        if (lee_imagenes(imK).isdir == 0 && size(strfind(lee_imagenes(imK).name, 'negativ'),1) == 0)
             lee_imagenes(imK).name
             Img=imread(lee_imagenes(imK).name);
             Img = im2bw(Img, 0.2);
@@ -87,7 +87,7 @@ function [ ] = createNetwork()
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
                 outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.mat')
                 save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
-                outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.sif');
+                outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.cvs');
                 generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
             end
             break

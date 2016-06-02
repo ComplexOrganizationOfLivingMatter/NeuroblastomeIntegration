@@ -6,7 +6,7 @@ function [ ] = createNetworkMinimumDistance( )
     lee_imagenes = dir(PathCurrent);
     lee_imagenes = lee_imagenes(3:size(lee_imagenes,1))
     for imK = 1:size(lee_imagenes,1)
-        if (lee_imagenes(imK).isdir == 0)
+        if (lee_imagenes(imK).isdir == 0 && size(strfind(lee_imagenes(imK).name, 'negativ'),1) == 0)
             lee_imagenes(imK).name
             Img=imread(lee_imagenes(imK).name);
             adjacencyMatrix = minimumDistanceBetweenNeighbourGraph(Img);
@@ -15,7 +15,7 @@ function [ ] = createNetworkMinimumDistance( )
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), '.mat')
             save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
-            outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.sif');
+            outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
             generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
         end
     end
