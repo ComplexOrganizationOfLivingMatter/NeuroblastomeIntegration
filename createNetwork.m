@@ -80,7 +80,7 @@ function [ ] = createNetwork()
             
             distanceBetweenClusters = pdist([vCentroidsRows', vCentroidsCols'], 'euclidean');
             
-            adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
+            adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C); %Revisar
             
 
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
