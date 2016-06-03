@@ -40,15 +40,17 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                         end
                     end
 
-                    classes = unique([v1,v2]);
+                    classes = unique([v1,v2]); 
                     %Creating the Incidence matrix
-                    %adjacencyMatrix = zeros(size(classes,1), size(classes,1));
                     adjacencyMatrix = sparse(size(classes,1), size(classes,1));
-                    maxSharedSide = max(adjacencyMatrix(:));
-                    for i = 1:size(classes,1)
+                    %GetThe
+                    v1Concatv2 = strcat(num2str(v1), '_', num2str(v2));
+                    [uniques,numUnique] = count_unique(v1Concatv2);
+                    maxSidesTime = max(numUnique)
+                    for i = 1:size(v1,1)
                         v2Index = find(classes == v2(i));
-                        adjacencyMatrix(i, v2Index) = adjacencyMatrix(i, v2Index)/maxSharedSide;
-                        adjacencyMatrix(v2Index, i) = adjacencyMatrix(i, v2Index)/maxSharedSide;
+                        adjacencyMatrix(i, v2Index) = adjacencyMatrix(i, v2Index) / maxSidesTime;
+                        adjacencyMatrix(v2Index, i) = adjacencyMatrix(i, v2Index) / maxSidesTime;
                     end
 
 
