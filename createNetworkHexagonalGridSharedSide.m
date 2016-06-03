@@ -65,7 +65,7 @@ function [ ] = createNetworkHexagonalGridSharedSide()
 
                     distanceBetweenClusters = pdist([vCentroidsRows', vCentroidsCols'], 'euclidean');
 
-                    adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
+                    adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
 
 
 

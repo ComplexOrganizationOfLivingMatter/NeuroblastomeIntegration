@@ -85,7 +85,7 @@ function [ ] = createNetworkHexagonalGridMeanArea()
 
                     distanceBetweenClusters = pdist([vCentroidsRows', vCentroidsCols'], 'euclidean');
 
-                    adjacencyMatrixComplete = GetCompleteGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
+                    adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
 
                     save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
                     outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
