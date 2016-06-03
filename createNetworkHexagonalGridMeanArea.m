@@ -59,7 +59,7 @@ function [ ] = createNetworkHexagonalGridMeanArea()
                     %adjacencyMatrix = zeros(size(classes,1), size(classes,1));
                     adjacencyMatrix = sparse(size(classes,1), size(classes,1));
 
-                    for i = 1:size(classes,1)
+                    for i = 1:size(v1,1)
                         v2Index = find(classes == v2(i));
                         v1Area = 0;
                         v2Area = 0;
