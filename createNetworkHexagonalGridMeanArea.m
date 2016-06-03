@@ -60,17 +60,18 @@ function [ ] = createNetworkHexagonalGridMeanArea()
                     adjacencyMatrix = sparse(size(classes,1), size(classes,1));
 
                     for i = 1:size(v1,1)
+                        v1Index = find(classes == v1(i));
                         v2Index = find(classes == v2(i));
                         v1Area = 0;
                         v2Area = 0;
-                        if classesArea.isKey(v1(i))
-                            v1Area = classesArea(v1(i))/hexagonArea(v1(i));
+                        if classesArea.isKey(v1(v1Index))
+                            v1Area = classesArea(v1(v1Index))/hexagonArea(v1(v1Index));
                         end
                         if classesArea.isKey(v2(v2Index))
-                            v2Area = classesArea(v2(v2Index))/hexagonArea(v1(i));
+                            v2Area = classesArea(v2(v2Index))/hexagonArea(v2(v2Index));
                         end
-                        adjacencyMatrix(i, v2Index) = (v1Area + v2Area)/2;
-                        adjacencyMatrix(v2Index, i) = (v1Area + v2Area)/2;
+                        adjacencyMatrix(v1Index, v2Index) = (v1Area + v2Area)/2;
+                        adjacencyMatrix(v2Index, v1Index) = (v1Area + v2Area)/2;
                     end
 
 
