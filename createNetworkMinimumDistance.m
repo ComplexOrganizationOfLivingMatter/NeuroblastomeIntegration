@@ -19,31 +19,38 @@ function [ ] = createNetworkMinimumDistance( )
 			%// Measure pairwise distance
 			distanceBetweenObjects = pdist(Centroids,'euclidean');
 			
-			adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
-            %Saving file
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), '.mat')
-            save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
-            outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
-            generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+            if exist(outputFileName{:}, 'file') ~= 2
+                adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
+                %Saving file
+
+                save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
+                outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
+                generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+            end
 			
-			%Another type of graph
-			adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistanceBetweenPairs(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
-            %Saving file
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), '.mat')
-            save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
-            outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
-            generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+			%Another type of graph
+            if exist(outputFileName{:}, 'file') ~= 2
+                adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistanceBetweenPairs(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
+                %Saving file
+                save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
+                outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
+                generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+            end
 			
 			%CompleteGraph
-			adjacencyMatrixComplete = GetCompleteGraphWithEveryDistance(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
-            %Saving file
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\everyDistanceClasses', inNameFile(1), '.mat')
-            save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
-            outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
-            generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+            if exist(outputFileName{:}, 'file') ~= 2
+                adjacencyMatrixComplete = GetCompleteGraphWithEveryDistance(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
+                %Saving file
+                save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
+                outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
+                generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+            end
         end
     end
 end
