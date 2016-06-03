@@ -85,9 +85,9 @@ function [ ] = createNetworkHexagonalGridMeanArea()
 
 
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
-                outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.mat')
+                outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.mat')
                 save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
-                outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMask', num2str(numMask),'Diamet.cvs');
+                outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
                 generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
             end
             break
