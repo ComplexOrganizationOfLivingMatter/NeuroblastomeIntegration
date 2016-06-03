@@ -7,7 +7,8 @@ function [ adjacencyMatrix ] = GetCompleteGraphWithMinimumDistances( distanceBet
 
     for i = 1:size(mDistanceBetweenClusters,1)
 		for j = 1:size(mDistanceBetweenClusters,2)
-			[rowMin, colMin] = [i, j]
+			rowMin = i;
+            colMin = j;
 			if size(C,1) > 1
 			   class1 = find(C == rowMin, 1);
 			   class2 = find(C == colMin, 1);
