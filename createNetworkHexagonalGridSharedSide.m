@@ -4,9 +4,9 @@ function [ ] = createNetworkHexagonalGridSharedSide()
     [stat,struc] = fileattrib;
     PathCurrent = struc.Name;
     lee_imagenes = dir(PathCurrent);
-    lee_imagenes = lee_imagenes(3:size(lee_imagenes,1))
+    lee_imagenes = lee_imagenes(4:size(lee_imagenes,1))
     for imK = 1:size(lee_imagenes,1)
-        if (lee_imagenes(imK).isdir == 0 && size(strfind(lee_imagenes(imK).name, 'negativ'),1) == 0)
+        if (lee_imagenes(imK).isdir == 0 && size(strfind(lower(lee_imagenes(imK).name), 'neg'),1) == 0)
             lee_imagenes(imK).name
             Img=imread(lee_imagenes(imK).name);
             Img = im2bw(Img, 0.2);
