@@ -1,6 +1,6 @@
 %Developed by Pablo Vicente-Munuera
 
-function [ ] = createNetwork()
+function [ ] = createNetworkHexagonalGridMeanArea()
     [stat,struc] = fileattrib;
     PathCurrent = struc.Name;
     lee_imagenes = dir(PathCurrent);
