@@ -45,7 +45,7 @@ function [ ] = createNetworkMinimumDistance( )
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\everyDistanceClasses', inNameFile(1), '.mat')
             if exist(outputFileName{:}, 'file') ~= 2
-                adjacencyMatrixComplete = GetCompleteGraphWithEveryDistance(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
+                adjacencyMatrixComplete = GetCompleteGraphWithEveryDistance(distanceBetweenObjects , zeros(size(S,1), size(S,1)), zeros(1));
                 %Saving file
                 save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
                 outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
