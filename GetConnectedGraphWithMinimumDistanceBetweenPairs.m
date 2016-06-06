@@ -10,7 +10,11 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistanceBetweenPairs(
     mDistanceBetweenClusters = squareform(distanceBetweenClusters);
     mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int32');
 
-	for i=1:size(adjacencyMatrix, 1)
+	i = 1;
+    while connectedComps > 1
+        if i > size(adjacencyMatrix,1)
+            i=1;
+        end
         minimumDistance = min(mDistanceBetweenClusters(i,:));
         [rowMin, colMin] = find(mDistanceBetweenClusters == minimumDistance, 1);
         if size(C,2) > 1
@@ -34,7 +38,9 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistanceBetweenPairs(
 				return
 			end
 			contConnectedComps = connectedComps;
-		end
+        end
+        
+        i = i + 1;
     end
 end
 

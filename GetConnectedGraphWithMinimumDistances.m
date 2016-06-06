@@ -1,7 +1,6 @@
 function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistances( distanceBetweenClusters, adjacencyMatrix, C)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-
 	connectedComps = graphconncomp(adjacencyMatrix, 'Directed', 'false');
     if connectedComps == 1
 		return
@@ -11,7 +10,11 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistances( distanceBe
     mDistanceBetweenClusters = squareform(distanceBetweenClusters);
     mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int32');
 
-    for i=1:size(adjacencyMatrix, 1)
+    i = 1;
+    while connectedComps > 1
+        if i > size(adjacencyMatrix,1)
+            i=1;
+        end
         minimumDistance = min(mDistanceBetweenClusters(:));
         [rowMin, colMin] = find(mDistanceBetweenClusters == minimumDistance, 1);
         if size(C,2) > 1
@@ -35,7 +38,9 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistances( distanceBe
 				return
 			end
 			contConnectedComps = connectedComps;
-		end
+        end
+        
+        i = i + 1;
     end
 end
 
