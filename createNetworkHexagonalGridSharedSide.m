@@ -13,6 +13,7 @@ function [ ] = createNetworkHexagonalGridSharedSide()
             for numMask = 2:50
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
                 outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalSharedSideMask', num2str(numMask),'Diamet.mat')
+				outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalSharedSideMask', num2str(numMask),'Diamet.cvs');
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
@@ -70,8 +71,10 @@ function [ ] = createNetworkHexagonalGridSharedSide()
 
 
                     save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
-                    outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalSharedSideMask', num2str(numMask),'Diamet.cvs');
                     generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+				elseif exist(outputFileNameSif{:}, 'file') ~= 2
+					load(outputFileName{:},'-mat')
+					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
                 end
             end
         end
