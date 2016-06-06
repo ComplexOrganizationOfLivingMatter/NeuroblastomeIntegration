@@ -74,6 +74,8 @@ function [ ] = createNetworkHexagonalGridMeanArea()
                         adjacencyMatrix(v1Index, v2Index) = (v1Area + v2Area)/2;
                         adjacencyMatrix(v2Index, v1Index) = (v1Area + v2Area)/2;
                     end
+                    
+                    adjacencyMatrix = adjacencyMatrix / max(adjacencyMatrix(:));
 
 
                     %clear v1 v2 classesArea mask

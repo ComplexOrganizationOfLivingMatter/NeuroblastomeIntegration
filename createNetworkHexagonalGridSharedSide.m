@@ -55,7 +55,8 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                         adjacencyMatrix(v2Index, v1Index) = adjacencyMatrix(v2Index, v1Index) + 1;
                     end
 
-
+                    adjacencyMatrix = adjacencyMatrix / max(adjacencyMatrix(:));
+                    
                     %clear v1 v2 classesArea mask
                     %classesStr = num2str(classes);
                     %file:///C:/Program%20Files/MATLAB/R2014b/help/bioinfo/ref/biograph.html
