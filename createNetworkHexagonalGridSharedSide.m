@@ -10,7 +10,7 @@ function [ ] = createNetworkHexagonalGridSharedSide()
             lee_imagenes(imK).name
             Img=imread(lee_imagenes(imK).name);
             Img = im2bw(Img, 0.2);
-            for numMask = 2:50
+            for numMask = 20:20
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
                 outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalSharedSideMask', num2str(numMask),'Diamet.mat')
 				outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalSharedSideMask', num2str(numMask),'Diamet.cvs');
