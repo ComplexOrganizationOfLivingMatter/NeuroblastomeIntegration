@@ -37,7 +37,7 @@ function [ ] = createNetworkMinimumDistance( )
                 adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistanceBetweenPairs(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1));
                 %Saving file
                 save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
-                outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
+                outputFileNameSif = strcat('visualize\minimumDistanceClassesBetweenPairs', inNameFile(1), '.cvs');
                 generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
             end
 			
@@ -48,7 +48,7 @@ function [ ] = createNetworkMinimumDistance( )
                 adjacencyMatrixComplete = GetCompleteGraphWithEveryDistance(distanceBetweenObjects , zeros(size(S,1), size(S,1)), zeros(1));
                 %Saving file
                 save(outputFileName{:}, 'adjacencyMatrixComplete', '-v7.3');
-                outputFileNameSif = strcat('visualize\minimumDistanceClasses', inNameFile(1), '.cvs');
+                outputFileNameSif = strcat('visualize\everyDistanceClasses', inNameFile(1), '.cvs');
                 generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
             end
         end
