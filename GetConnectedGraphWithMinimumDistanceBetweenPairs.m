@@ -1,7 +1,9 @@
 function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistanceBetweenPairs( distanceBetweenClusters, adjacencyMatrix, C)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-
+    if graphconncomp(adjacencyMatrix, 'Directed', 'false') == 1
+		return
+	end
     mDistanceBetweenClusters = squareform(distanceBetweenClusters);
     mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int32');
 
