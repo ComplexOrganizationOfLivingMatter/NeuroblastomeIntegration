@@ -11,7 +11,7 @@ function [ ] = createNetworkMinimumDistance( )
             Img=imread(lee_imagenes(imK).name);
 			
 			%Clusterize image
-			Img = im2bw(Img, 0.2);
+			Img = im2bw(Img(:,:,1), 0.2);
 			C = bwlabel(Img);
 			S = regionprops(C,'Centroid');
 			Centroids = vertcat(S.Centroid);
