@@ -10,31 +10,31 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
             lee_imagenes(imK).name
             Img=imread(lee_imagenes(imK).name);
             Img = im2bw(Img, 0.2);
-            for numMask = 2:50
+            for numMask = 4:50
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
                 outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.mat')
 				outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
-
-                    yMax = max(size(Img));
-                    xMax = max(size(Img));
-                    lastClass = mask(xMax, yMax);
-                    while lastClass == 0
-                        xMax = xMax + 1;
-                        lastClass = mask(xMax, yMax);
-						if lastClass ~= 0
-							break
-						end
-						yMax = yMax + 1;
-                        lastClass = mask(xMax, yMax);
-                    end
-					
-                    adjacencyMatrixHexagons = zeros(lastClass, lastClass);
+                    mask = mask(1:size(Img, 1), 1:size(Img,2));
                     
-                    for i=1:lastClass %Going through the classes
+                    maxHexagons = size(unique(mask(mask>0)),1);
+                    
+                    ImgMasked = Img .* mask;
+                    
+                    classes = unique(ImgMasked(ImgMasked > 0));
+                    numClasses = size(classes,1);
+                    adjacencyMatrixHexagons = sparse(numClasses, numClasses);
+                    for i=1:numClasses %Going through the classes
+                        [x,y] = find(mask==classes(i));
+                        contigousHexagons = lookForContigousHexagons(x, y, mask);
+                        contigousHexagons = unique(contigousHexagons(contigousHexagons(contigousHexagons ~= classes(i))>0));
+                        contigousHexagons = classes(ismember(classes, contigousHexagons));
                         
+                        for class = 1:size(contigousHexagons, 1)
+                           adjacencyMatrixHexagons(find(classes == classes(i)), find(classes==contigousHexagons(class))) = size(ImgMasked(ImgMasked == classes(i)), 1) + size(ImgMasked(ImgMasked == contigousHexagons(class)), 1) / 2;
+                        end
                     end
 
 
