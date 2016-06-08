@@ -24,7 +24,7 @@ function [ stringData ] = calculateBasicMeasuresOfNetwork( adjacencyMatrix )
 	[lambda,efficiency,ecc,radius,diameter] = charpath(adjacencyMatrix);
 	
 	%Transform to a string
-	stringData = strcat(num2str(ccuu), ' ', num2str(ccwu), ' ', num2str(assor), ' ', num2str(den), ' ', num2str(efficiency), ' ', num2str(diameter), ' ', num2str(size(lambda), 1));
+	stringData = strcat(num2str(ccuu), ', ', num2str(ccwu), ', ', num2str(assor), ', ', num2str(den), ', ', num2str(efficiency), ', ', num2str(diameter), ', ', num2str(lambda));
 
 end
 
