@@ -18,11 +18,12 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
+                    mask = mask(1:size(Img, 1), 1:size(Img,2));
+                    
+                    maxHexagons = size(unique(mask(mask>0)),1);
 
                     v1 = [];
                     v2 = [];
-                    classesArea = containers.Map('KeyType','single','ValueType','single');
-                    hexagonArea = containers.Map('KeyType','single','ValueType','single');
 
                     for i = 2:size(Img,1)
                         for j = 2:size(Img,2)
@@ -76,6 +77,10 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                     save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
                     generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
+                    
+                    fileID = fopen('percentageOfHexagonsOccupied.txt','a');
+                    fprintf(fileID,'Percentage of Hexagons occupied:%d of %d on file %s\n', 'size(classes, 1)', 'maxHexagons', 'outputFileName{:}');
+                    fclose(fileID);
 				elseif exist(outputFileNameSifComplete{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')
 					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});

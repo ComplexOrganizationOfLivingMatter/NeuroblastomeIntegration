@@ -18,6 +18,9 @@ function [ ] = createNetworkHexagonalGridMeanArea()
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
+                    mask = mask(1:size(Img, 1), 1:size(Img,2));
+                    
+                    maxHexagons = size(unique(mask(mask>0)),1);
 
                     v1 = [];
                     v2 = [];
@@ -94,6 +97,10 @@ function [ ] = createNetworkHexagonalGridMeanArea()
                     save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
                     generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
 					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
+                    
+                    fileID = fopen('percentageOfHexagonsOccupied.txt','a');
+                    fprintf(fileID,'Percentage of Hexagons occupied:%d of %d on file %s\n', 'size(classes, 1)', 'maxHexagons', 'outputFileName{:}');
+                    fclose(fileID);
 				elseif exist(outputFileNameSif{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
