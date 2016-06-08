@@ -6,15 +6,15 @@ function [ stringData ] = calculateBasicMeasuresOfNetwork( adjacencyMatrix )
 %   average degree and others.
 	
 	%Clustering coefficient unweighted undirected
-	ccuu = clustering_coef_bu(adjacencyMatrix);
+	ccuu = transitivity_bu(adjacencyMatrix);
 	%Clustering coefficient weighted undirected
-	ccwu = clustering_coef_wu(adjacencyMatrix);
+	ccwu = transitivity_wu(adjacencyMatrix);
 	
 	%Assortivity
 	assor = assortativity(adjacencyMatrix, 0);
 	
 	%Density undirected unweighted
-	den = density_ud(adjacencyMatrix);
+	den = density_und(adjacencyMatrix);
 	
 	%   Outputs:    lambda,         characteristic path length
 	%               efficiency,     global efficiency
