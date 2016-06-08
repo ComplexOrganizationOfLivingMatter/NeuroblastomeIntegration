@@ -99,7 +99,8 @@ function [ ] = createNetworkHexagonalGridMeanArea()
 					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
                     
                     fileID = fopen('percentageOfHexagonsOccupied.txt','a');
-                    fprintf(fileID,'Percentage of Hexagons occupied:%d of %d on file %s\n', 'size(classes, 1)', 'maxHexagons', 'outputFileName{:}');
+                    string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of', num2str(maxHexagons) ,' on file ', outputFileName{:});
+                    fprintf(fileID,'%s\r\n', string{:});
                     fclose(fileID);
 				elseif exist(outputFileNameSif{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')

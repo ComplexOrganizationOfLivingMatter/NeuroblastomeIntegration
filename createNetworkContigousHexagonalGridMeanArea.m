@@ -40,29 +40,31 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
 
                     adjacencyMatrix = adjacencyMatrixHexagons;
 
-                    %clear v1 v2 classesArea mask
-                    %classesStr = num2str(classes);
-                    %file:///C:/Program%20Files/MATLAB/R2014b/help/bioinfo/ref/biograph.html
-                    %bg = biograph(adjacencyMatrix, num2str(classes),'ShowArrows','off','ShowWeights','off');
-                    [S, C] = graphconncomp(adjacencyMatrix, 'Directed', false);
+%                     %clear v1 v2 classesArea mask
+%                     %classesStr = num2str(classes);
+%                     %file:///C:/Program%20Files/MATLAB/R2014b/help/bioinfo/ref/biograph.html
+%                     %bg = biograph(adjacencyMatrix, num2str(classes),'ShowArrows','off','ShowWeights','off');
+%                     [S, C] = graphconncomp(adjacencyMatrix, 'Directed', false);
+% 
+%                     [vCentroidsRows, vCentroidsCols] = GetCentroidOfCluster(mask, C, S);
+% 
+%                     distanceBetweenClusters = pdist([vCentroidsRows', vCentroidsCols'], 'euclidean');
+% 
+%                     adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
 
-                    [vCentroidsRows, vCentroidsCols] = GetCentroidOfCluster(mask, C, S);
-
-                    distanceBetweenClusters = pdist([vCentroidsRows', vCentroidsCols'], 'euclidean');
-
-                    adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
-
-                    save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
-					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
+                    %save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
+                    save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
+					%generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                     
                     fileID = fopen('percentageOfHexagonsOccupied.txt','a');
-                    fprintf(fileID,'Percentage of Hexagons occupied:%d of %d on file %s\n', 'size(classes, 1)', 'maxHexagons', 'outputFileName{:}');
+                    string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of', num2str(maxHexagons) ,' on file ', outputFileName{:});
+                    fprintf(fileID,'%s\r\n', string{:});
                     fclose(fileID);
                     
 				elseif exist(outputFileNameSif{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')
-					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
+					%generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                 end
             end
