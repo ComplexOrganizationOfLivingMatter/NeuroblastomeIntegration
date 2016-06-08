@@ -79,8 +79,8 @@ function [ ] = createNetworkHexagonalGridSharedSide()
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                     
                     fileID = fopen('percentageOfHexagonsOccupied.txt','a');
-                    string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of', num2str(maxHexagons) ,' on file ', outputFileName{:});
-                    fprintf(fileID,'%s\r\n', string{:});
+                    string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of ', num2str(maxHexagons) ,' on file ', outputFileName{:});
+                    fprintf(fileID,'%s\r\n', string);
                     fclose(fileID);
 				elseif exist(outputFileNameSifComplete{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')

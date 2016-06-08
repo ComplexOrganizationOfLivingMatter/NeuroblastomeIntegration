@@ -10,7 +10,7 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
             lee_imagenes(imK).name
             Img=imread(lee_imagenes(imK).name);
             Img = im2bw(Img, 0.2);
-            for numMask = 20:25 %4 min
+            for numMask = 20:20 %4 min
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
                 outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'Diamet.mat')
 				outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
@@ -58,8 +58,8 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                     
                     fileID = fopen('percentageOfHexagonsOccupied.txt','a');
-                    string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of', num2str(maxHexagons) ,' on file ', outputFileName{:});
-                    fprintf(fileID,'%s\r\n', string{:});
+                    string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of ', num2str(maxHexagons) ,' on file ', outputFileName{:});
+                    fprintf(fileID,'%s\r\n', string);
                     fclose(fileID);
                     
 				elseif exist(outputFileNameSif{:}, 'file') ~= 2
