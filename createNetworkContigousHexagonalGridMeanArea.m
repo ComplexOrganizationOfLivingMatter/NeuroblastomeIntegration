@@ -30,11 +30,13 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
                     for i=1:numClasses %Going through the classes
                         [x,y] = find(mask==classes(i));
                         contigousHexagons = lookForContigousHexagons(x, y, mask);
-                        contigousHexagons = unique(contigousHexagons(contigousHexagons(contigousHexagons ~= classes(i))>0));
+                        contigousHexagons = unique(contigousHexagons(contigousHexagons>0));
                         contigousHexagons = classes(ismember(classes, contigousHexagons));
                         
                         for class = 1:size(contigousHexagons, 1)
-                           adjacencyMatrixHexagons(find(classes == classes(i)), find(classes==contigousHexagons(class))) = size(ImgMasked(ImgMasked == classes(i)), 1) + size(ImgMasked(ImgMasked == contigousHexagons(class)), 1) / 2;
+                            if contigousHexagons(class) ~= classes(i)
+                                adjacencyMatrixHexagons(find(classes == classes(i)), find(classes==contigousHexagons(class))) = size(ImgMasked(ImgMasked == classes(i)), 1) + size(ImgMasked(ImgMasked == contigousHexagons(class)), 1) / 2;
+                            end
                         end
                     end
 
