@@ -1,4 +1,4 @@
-function [ ] = calculateBasicMeasuresOfNetwork( adjacencyMatrix )
+function [ stringData ] = calculateBasicMeasuresOfNetwork( adjacencyMatrix )
 %calculateBasicMeasuresOfNetwork Calculate several important measures of a given network
 %   This file should calculate the following measures of a network:
 %   Clustering coefficient, network diameter, connectedness,
@@ -22,6 +22,9 @@ function [ ] = calculateBasicMeasuresOfNetwork( adjacencyMatrix )
 	%               radius,         radius of graph
 	%               diameter,       diameter of graph
 	[lambda,efficiency,ecc,radius,diameter] = charpath(adjacencyMatrix);
+	
+	%Transform to a string
+	stringData = strcat(num2str(ccuu), ' ', num2str(ccwu), ' ', num2str(assor), ' ', num2str(den), ' ', num2str(efficiency), ' ', num2str(diameter), ' ', num2str(size(lambda), 1));
 
 end
 
