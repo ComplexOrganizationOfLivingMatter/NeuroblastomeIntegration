@@ -18,13 +18,23 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
 
-                    adjacencyMatrixHexagons = zeros(mask(max(size(Img)), max(size(Img))))
-                    if size(adjacencyMatrixHexagons,1)==0
-                        
+                    yMax = max(size(Img));
+                    xMax = max(size(Img));
+                    lastClass = mask(xMax, yMax);
+                    while lastClass == 0
+                        xMax = xMax + 1;
+                        lastClass = mask(xMax, yMax);
+						if lastClass ~= 0
+							break
+						end
+						yMax = yMax + 1;
+                        lastClass = mask(xMax, yMax);
                     end
+					
+                    adjacencyMatrixHexagons = zeros(lastClass, lastClass);
                     
-                    for i=1: mask(6999,6999) %Going through the classes
-                       
+                    for i=1:lastClass %Going through the classes
+                        
                     end
 
 
