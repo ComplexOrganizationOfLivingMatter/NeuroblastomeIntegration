@@ -12,8 +12,9 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
             Img = im2bw(Img, 0.2);
             for numMask = 4:50
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
-                outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.mat')
-				outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'hexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
+                outputFileName = strcat('Adjacency\adjacencyMatrix', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'Diamet.mat')
+				outputFileNameSif = strcat('visualize\adjacencyMatrix', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
+				outputFileNameSifComplete = strcat('visualize\adjacencyMatrixComplete', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'Diamet.cvs');
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
@@ -51,10 +52,12 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
                     adjacencyMatrixComplete = GetConnectedGraphWithMinimumDistances(distanceBetweenClusters ,adjacencyMatrix, C);
 
                     save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
-                    generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
+					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
 				elseif exist(outputFileNameSif{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')
-					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
+					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                 end
             end
         end

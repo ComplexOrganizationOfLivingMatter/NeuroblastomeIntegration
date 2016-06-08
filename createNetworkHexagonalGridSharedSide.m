@@ -75,6 +75,7 @@ function [ ] = createNetworkHexagonalGridSharedSide()
 
                     save(outputFileName{:}, 'adjacencyMatrix', 'adjacencyMatrixComplete', '-v7.3');
                     generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
+					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
 				elseif exist(outputFileNameSifComplete{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')
 					generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
