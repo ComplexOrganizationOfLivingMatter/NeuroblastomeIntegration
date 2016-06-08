@@ -38,6 +38,7 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
                         end
                     end
 
+                    adjacencyMatrix = adjacencyMatrixHexagons;
 
                     %clear v1 v2 classesArea mask
                     %classesStr = num2str(classes);
