@@ -6,21 +6,37 @@ function [ contigousHexagons ] = lookForContigousHexagons(x, y, mask)
        x1 = x(i);
        y1 = y(i);
        x1 = x1 + 3; % 0 + 3
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if x1 <= size(mask, 2)
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        y1 = y1 + 3; % +3 +3
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if y1 <= size(mask, 1) && x1 <= size(mask, 2)
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        x1 = x(i); % +3 0
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if y1 <= size(mask, 1)
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        x1 = x1 - 3; %+3 -3
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if x1 > 0 && y1 <= size(mask, 1)
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        y1 = y(i); %0 -3
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if x1 > 0
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        y1 = y1 - 3; % -3 -3
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if x1 > 0 && y1 > 0
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        x1 = x(i); % -3 0
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if y1 > 0
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
        x1 = x1 + 3; %-3 +3
-       contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       if y1 > 0 && x1 <= size(mask,2)
+        contigousHexagons = [contigousHexagons; mask(x1, y1)];
+       end
     end
 end
 
