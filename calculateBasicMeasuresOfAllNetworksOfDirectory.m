@@ -15,9 +15,11 @@ function [ ] = calculateBasicMeasuresOfAllNetworksOfDirectory( )
             load(lee_matrices(imK).name);
             if exist('adjacencyMatrix', 'var') == 1
                 fprintf(fileID, 'Clusters, %s\r\n', calculateBasicMeasuresOfNetwork(adjacencyMatrix));
+                clear adjacencyMatrix
             end
             if exist('adjacencyMatrixComplete', 'var') == 1
                 fprintf(fileID, 'Connected, %s\r\n', calculateBasicMeasuresOfNetwork(adjacencyMatrixComplete));
+                clear adjacencyMatrixComplete
             end
             fclose(fileID);
          end
