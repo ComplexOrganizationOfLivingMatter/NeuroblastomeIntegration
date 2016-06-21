@@ -51,3 +51,9 @@ Temporary Items
 export_fig-master/
 networkx-1.11/
 drtoolbox/
+*.jar
+*.distmat
+*.txt
+*.tar
+*.cvs
+*.exe
