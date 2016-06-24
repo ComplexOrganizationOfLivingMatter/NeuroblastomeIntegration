@@ -11,7 +11,7 @@ function [ ] = calculatePersistentHomology(PathCurrent)
 			inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
 			max_dimension = 2;
 			num_divisions = 20;
-            outputFileName = strcat('Adjacency\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(20), '.mat');
+            outputFileName = strcat(PathCurrent, 'Adjacency\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(20), '.mat');
 			if exist(outputFileName{:}, 'file') ~= 2
 				Img=imread(lee_imagenes(imK).name);
 				Img = Img(:, :, 1);
@@ -33,7 +33,7 @@ function [ ] = calculatePersistentHomology(PathCurrent)
 				clear stream persistence
 				
 				%Visualization
-				outputFileNameImg = strcat('visualize\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(20), '.mat');
+				outputFileNameImg = strcat(PathCurrent, 'visualize\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(20), '.mat');
 				options.filename = outputFileNameImg{:};
 				options.max_filtration_value = max_filtration_value;
 				options.max_dimension = max_dimension - 1;
