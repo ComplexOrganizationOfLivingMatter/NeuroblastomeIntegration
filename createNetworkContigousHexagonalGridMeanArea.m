@@ -20,14 +20,12 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
-                    
-                    maxHexagons = size(unique(mask(mask>0)),1);
-                    
+
                     ImgMasked = Img .* mask;
                     
                     classes = unique(ImgMasked(ImgMasked > 0));
                     numClasses = size(classes,1);
-                    adjacencyMatrixHexagons = sparse(numClasses, numClasses);
+                    adjacencyMatrix = sparse(numClasses, numClasses);
                     for i=1:numClasses %Going through the classes
                         [x,y] = find(mask==classes(i));
                         contigousHexagons = lookForContigousHexagons(x, y, mask);
@@ -36,12 +34,13 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
                         
                         for class = 1:size(contigousHexagons, 1)
                             if contigousHexagons(class) ~= classes(i)
-                                adjacencyMatrixHexagons(find(classes == classes(i)), find(classes==contigousHexagons(class))) = size(ImgMasked(ImgMasked == classes(i)), 1) + size(ImgMasked(ImgMasked == contigousHexagons(class)), 1) / 2;
+                                adjacencyMatrix(find(classes == classes(i)), find(classes==contigousHexagons(class))) = size(ImgMasked(ImgMasked == classes(i)), 1) + size(ImgMasked(ImgMasked == contigousHexagons(class)), 1) / 2;
                             end
                         end
                     end
+					maxHexagons = size(unique(mask(mask>0)),1);
+					clear ImgMasked mask numClasses
 
-                    adjacencyMatrix = adjacencyMatrixHexagons;
 
 %                     %clear v1 v2 classesArea mask
 %                     %classesStr = num2str(classes);
@@ -60,10 +59,12 @@ function [ ] = createNetworkContigousHexagonalGridMeanArea()
 					%generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSifComplete{:});
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                     
+					
                     fileID = fopen('percentageOfHexagonsOccupied.txt','a');
                     string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of ', num2str(maxHexagons) ,' on file ', outputFileName{:});
                     fprintf(fileID,'%s\r\n', string);
                     fclose(fileID);
+					clear classes maxHexagons
                     
 				elseif exist(outputFileNameSif{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')

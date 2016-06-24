@@ -20,12 +20,10 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
-                    
                     maxHexagons = size(unique(mask(mask>0)),1);
-
+					
                     v1 = [];
                     v2 = [];
-
                     for i = 2:size(Img,1)
                         for j = 2:size(Img,2)
                             if (mask(i,j) ==  0 && Img(i,j) ~= 0) %If trasspass the boundary we put an edge
@@ -45,6 +43,7 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                             end
                         end
                     end
+					clear mask
 
                     classes = unique([v1,v2]); 
                     %Creating the Incidence matrix
@@ -59,6 +58,8 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                         adjacencyMatrix(v1Index, v2Index) = adjacencyMatrix(v1Index, v2Index) + 1;
                         adjacencyMatrix(v2Index, v1Index) = adjacencyMatrix(v2Index, v1Index) + 1;
                     end
+					clear v1Index v2Index v1 v2
+					
                     if (size(adjacencyMatrix,1)> 0)
                         adjacencyMatrix = adjacencyMatrix / max(adjacencyMatrix(:));
                     end
@@ -83,10 +84,12 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                     %generateSIFFromAdjacencyMatrix(adjacencyMatrixComplete, outputFileNameSif{:});
 					generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
                     
+					
                     fileID = fopen('percentageOfHexagonsOccupied.txt','a');
                     string = strcat('Percentage of Hexagons occupied:', num2str(size(classes, 1)) ,' of ', num2str(maxHexagons) ,' on file ', outputFileName{:});
                     fprintf(fileID,'%s\r\n', string);
                     fclose(fileID);
+					clear classes maxHexagons
 				elseif exist(outputFileNameSifComplete{:}, 'file') ~= 2
 					load(outputFileName{:},'-mat')
                     if exist('adjacencyMatrixComplete', 'var') == 1
