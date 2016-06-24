@@ -15,10 +15,12 @@ function [ ] = calculatePersistentHomology(PathCurrent)
             C = bwlabel(Img);
 			S = regionprops(C,'Centroid');
 			centroids = vertcat(S.Centroid);
+            distanceBetweenObjects = pdist(centroids,'euclidean');
             %VietorisRips params
             max_dimension = 2; %We only want holes not anything more
-            max_filtration_value = ;
-            num_divisions = 100;
+            max_filtration_value = max(distanceBetweenObjects)/2;
+            num_divisions = 20;
+            clear Img C S distanceBetweenObjects
             
             stream = api.Plex4.createVietorisRipsStream(centroids, max_dimension, max_filtration_value, num_divisions);
             persistence = api.Plex4.getModularSimplicialAlgorithm(max_dimension, 2);
