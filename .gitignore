@@ -47,15 +47,18 @@ Temporary Items
 .apdisk
 *.asv
 
-#libraries
-export_fig-master/
-networkx-1.11/
-drtoolbox/
-TestData/
-ExternalTools/
+#Extensions
 *.jar
 *.distmat
 *.txt
 *.tar
 *.cvs
 *.exe
+
+#libraries
+export_fig-master/
+networkx-1.11/
+drtoolbox/
+TestData/
+ExternalTools/
+JavaPlex/
