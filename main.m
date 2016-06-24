@@ -256,3 +256,40 @@ cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\adjacenc
 calculateBasicMeasuresOfAllNetworksOfDirectory
 
 %-----------------------------------------------
+
+cd ExternalTools\JavaPlex
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreA\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 2. Y02A_02B03119A\CoreA\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 2. Y02A_02B03119A\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 3. Y02A_02B13320A\CoreA\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 4. Y03A_03B12888B\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 5. Y03A_03B17300B\CoreA\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 5. Y03A_03B17300B\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 6. Y03B_03B03346B\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 7. Y03B_03B07423A\CoreA\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 7. Y03B_03B07423A\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 8. Y03B_03B08572A\CoreA\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 8. Y03B_03B08572A\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 9. Y2_333688B\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 10. Y2_99B00646B\CoreB\')
+
+calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\')
+
+cd ..
+cd ..
