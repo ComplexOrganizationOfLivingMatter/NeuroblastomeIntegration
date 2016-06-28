@@ -23,16 +23,6 @@ function [ ] = calculateBasicMeasuresOfAllNetworksOfDirectory( )
 %             end
 %             fclose(fileID);
 %          end
-         outputLEDAFileName = strcat('../visualize/', inNameFile(1), '.gw')
-         if exist(outputLEDAFileName{:}, 'file') ~= 2
-            load(lee_matrices(imK).name);
-            if exist('adjacencyMatrix', 'var') == 1
-                generateLEDAFromAdjacencyMatrix(adjacencyMatrix, outputLEDAFileName{:})
-            end
-            if exist('adjacencyMatrixComplete', 'var') == 1
-                generateLEDAFromAdjacencyMatrix(adjacencyMatrixComplete, outputLEDAFileName{:})
-            end
-         end
     end
 
 end

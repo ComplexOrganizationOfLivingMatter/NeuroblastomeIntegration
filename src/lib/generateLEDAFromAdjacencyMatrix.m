@@ -3,6 +3,13 @@ function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
 %   Detailed explanation goes here
 
     adjacencyMatrix = full(adjacencyMatrix);
+    idTril = tril(true(size(adjacencyMatrix)), -1);
+    idTriu = triu(true(size(adjacencyMatrix)), -1);
+    adjacencyMatrixAux = adjacencyMatrix;
+    adjacencyMatrix(idTril) = 0;
+    adjacencyMatrixAux(idTriu) = 0;
+    adjacencyMatrix = adjacencyMatrixAux' | adjacencyMatrix;
+    
     fileID = fopen(nameFile,'w');
     %Header leda file
     fprintf(fileID, 'LEDA.GRAPH\n');
