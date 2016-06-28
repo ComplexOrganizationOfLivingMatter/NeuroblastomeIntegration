@@ -1,8 +1,12 @@
 function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%GENERATELEDAFROMADJACENCYMATRIX generates a LEDA file (or .gw) from an adjacency matrix.
+%   At this point we combine the lower triangular and higher triangular matrix
+%   with the purpose to get the complete matrix, but without duplicates edges
+%   It is important to notice that we're working with sparse matrix. Working with a full one
+%   would be more computational expensive.
+%
+%   Developed by Pablo Vicente-Munuera
 
-    %adjacencyMatrix = full(adjacencyMatrix);
     idTril = tril(true(size(adjacencyMatrix)), -1);
     idTriu = triu(true(size(adjacencyMatrix)), -1);
     adjacencyMatrixAux = adjacencyMatrix;
@@ -10,6 +14,7 @@ function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
     adjacencyMatrixAux(idTriu) = 0;
     adjacencyMatrix = adjacencyMatrixAux' | adjacencyMatrix;
     clear adjacencyMatrixAux idTriu idTril
+    %After that process we get the full adjacency matrix
     adjacencyMatrix = full(adjacencyMatrix);
     
     fileID = fopen(nameFile,'w');

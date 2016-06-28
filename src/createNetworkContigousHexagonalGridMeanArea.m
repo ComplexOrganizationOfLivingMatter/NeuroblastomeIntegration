@@ -1,6 +1,7 @@
-%Developed by Pablo Vicente-Munuera
-
 function [ ] = createNetworkContigousHexagonalGridMeanArea()
+%CREATENETWORKCONTIGOUSHEXAGONALGRIDMEANAREA 
+%   
+%   Developed by Pablo Vicente-Munuera
     [stat,struc] = fileattrib;
     PathCurrent = struc.Name;
     lee_imagenes = dir(PathCurrent);

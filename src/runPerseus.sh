@@ -1,3 +1,5 @@
+#usr/bin/sh
+#Developed by Pablo Vicente-Munuera
 ls '../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/visualize' | grep distmat | while read f; do echo "$f"; sed 's/,/ /g' "../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/visualize/$f" > 'tmp.txt' ; mv 'tmp.txt' "../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/visualize/$f"; ulimit -v 8048000 ; ./perseusWin distmat "../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/visualize/$f" "PersistentHomology/output$f"; done
 
 ls '../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/visualize' | grep distmat | while read f; do echo "$f"; sed 's/,/ /g' "../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/visualize/$f" > 'tmp.txt' ; mv 'tmp.txt' "../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/visualize/$f"; ulimit -v 8048000 ; ./perseusWin distmat "../Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/visualize/$f" "PersistentHomology/output$f"; done

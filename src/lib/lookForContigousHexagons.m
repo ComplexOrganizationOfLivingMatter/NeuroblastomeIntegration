@@ -1,9 +1,5 @@
 function [ contigousHexagons ] = lookForContigousHexagons(x, y, mask)
-%lookForContigousHexagons Within the hexagonal mask having the position of one pixel
-%   X: The position X of the pixel
-%   Y: The position Y of the pixel
-%   mask: The hexagonal mask, each hexagon has 0 as sides and the class number
-%   as the inner hexagon
+%LOOKFORCONTIGOUSHEXAGONS Within the hexagonal mask having the position of one class
 %   We go through the 6 possible hexagons (1 for each side). In reality,
 %   if we create the hexagonal grid with a number higher than 10, we'll only get 2 or 
 %   three contigous hexagons. In smaller radius(apothem), we should get even the 6 
@@ -11,6 +7,16 @@ function [ contigousHexagons ] = lookForContigousHexagons(x, y, mask)
 %   adding 3 to X and Y in all the existing possiblities.
 %   Then we check if we go beyond the limits of the image and, if not, we add it to the 
 %   contigousHexagons variable, which will end up as an edge between these two classes.
+%   -Input-
+%   x: The pixel positions X of a given hexagon (or class)
+%   y: The pixel positions Y of a given hexagon (or class)
+%   mask: The hexagonal mask, each hexagon has 0 as sides and the class number
+%   as the inner hexagon
+%   -Output-
+%   contigousHexagons: a vector with the contigous classes.
+%
+%   Developed by Pablo Vicente-Munuera
+
     contigousHexagons = [];
     for i=1:size(x,1)
        x1 = x(i);

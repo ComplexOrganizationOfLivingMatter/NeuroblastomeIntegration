@@ -1,6 +1,7 @@
-%Developed by Pablo Vicente-Munuera
-
 function [ ] = createNetworkHexagonalGridSharedSide()
+%CREATENETWORKHEXAGONALGRIDSHAREDSIDE
+%   
+%   Developed by Pablo Vicente-Munuera
     [stat,struc] = fileattrib;
     PathCurrent = struc.Name;
     lee_imagenes = dir(PathCurrent);
@@ -48,10 +49,6 @@ function [ ] = createNetworkHexagonalGridSharedSide()
                     classes = unique([v1,v2]); 
                     %Creating the Incidence matrix
                     adjacencyMatrix = sparse(size(classes,1), size(classes,1));
-                    %GetThe
-%                     v1Concatv2 = strcat(num2str(v1), num2str(v2));
-%                     [uniques,numUnique] = count_unique(v1Concatv2);
-%                     maxSidesTime = max(numUnique)
                     for i = 1:size(v1,1)
                         v1Index = find(classes == v1(i));
                         v2Index = find(classes == v2(i));

@@ -1,7 +1,9 @@
-%Developed by Pablo Vicente-Munuera
-%Helped by Maria José Jiménez
-
 function [ ] = calculatePersistentHomology(PathCurrent)
+%calculatePersistentHomology 
+%   
+%   
+%   Developed by Pablo Vicente-Munuera
+%   Helped by Maria José Jiménez
     load_javaplex
     lee_imagenes = dir(PathCurrent);
     lee_imagenes = lee_imagenes(3:size(lee_imagenes,1)-2)

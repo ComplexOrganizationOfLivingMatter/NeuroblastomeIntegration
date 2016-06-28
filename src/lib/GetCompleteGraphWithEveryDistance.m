@@ -1,6 +1,8 @@
 function [ adjacencyMatrix ] = GetCompleteGraphWithMinimumDistances( distanceBetweenClusters, adjacencyMatrix, C)
-%UNTITLED Summary of this function goes here
+%GETCOMPLETEGRAPHWITHMINIMUMDISTANCES Summary of this function goes here
 %   Detailed explanation goes here
+%
+%   Developed by Pablo Vicente-Munuera
 
     mDistanceBetweenClusters = squareform(distanceBetweenClusters);
     mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = 0;

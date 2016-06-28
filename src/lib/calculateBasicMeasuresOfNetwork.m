@@ -1,9 +1,11 @@
 function [ stringData ] = calculateBasicMeasuresOfNetwork( adjacencyMatrix )
-%calculateBasicMeasuresOfNetwork Calculate several important measures of a given network
+%CALCULATEBASICMEASURESOFNETWORK Calculate several important measures of a given network
 %   This file should calculate the following measures of a network:
 %   Clustering coefficient, network diameter, connectedness,
 %   network density, average path length (or characteristic path length),
 %   average degree and others.
+%
+%   Developed by Pablo Vicente-Munuera
 	
 	%Clustering coefficient unweighted undirected
 	ccuu = transitivity_bu(adjacencyMatrix);
