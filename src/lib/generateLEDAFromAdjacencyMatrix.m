@@ -2,13 +2,15 @@ function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-    adjacencyMatrix = full(adjacencyMatrix);
+    %adjacencyMatrix = full(adjacencyMatrix);
     idTril = tril(true(size(adjacencyMatrix)), -1);
     idTriu = triu(true(size(adjacencyMatrix)), -1);
     adjacencyMatrixAux = adjacencyMatrix;
     adjacencyMatrix(idTril) = 0;
     adjacencyMatrixAux(idTriu) = 0;
     adjacencyMatrix = adjacencyMatrixAux' | adjacencyMatrix;
+    clear adjacencyMatrixAux idTriu idTril
+    adjacencyMatrix = full(adjacencyMatrix);
     
     fileID = fopen(nameFile,'w');
     %Header leda file
