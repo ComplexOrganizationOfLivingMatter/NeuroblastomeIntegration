@@ -12,7 +12,7 @@ function [ ] = calculatePersistentHomology(PathCurrent)
             lee_imagenes(imK).name
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             max_dimension = 2;
-            num_divisions = 2;
+            num_divisions = 50;
 
             Img=imread(lee_imagenes(imK).name);
             Img = Img(:, :, 1);
@@ -24,22 +24,28 @@ function [ ] = calculatePersistentHomology(PathCurrent)
             if size(centroids, 1) > 1
                 centroids = centroids/max(centroids(:));
                 distanceBetweenObjects = pdist(centroids,'euclidean');
-                %VietorisRips params
                 %We only want holes not anything more
-                max_filtration_value = 1/30;
+                max_filtration_value = 0.3;
                 outputFileName = strcat(PathCurrent, 'Adjacency\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(num_divisions), '_MaxValue', num2str(max_filtration_value) ,'.mat');
                 if exist(outputFileName{:}, 'file') ~= 2
                     clear Img C S distanceBetweenObjects
 
+                    %-------------- ALL THIS CODE IS MAINLY TAKEN FROM THE JAVA_PLEX TUTORIAL -------------------------%
+
+                    %Vietoris rips which is the algorithm that puts an edge between the points if they're within a distance radius
+                    %It also creates the several networks (to be exactly num_divisions networks) with the differents radius.
                     stream = api.Plex4.createVietorisRipsStream(centroids, max_dimension, max_filtration_value, num_divisions)
+                    %Then it calculates the simplicial complexes of dimension 'max_dimension'.
                     persistence = api.Plex4.getModularSimplicialAlgorithm(max_dimension, 2)
+                    %And finally, we get the intervals of connected components, and holes. Persistent homology.
                     intervals = persistence.computeIntervals(stream)
                     intervalsStr = char(intervals.toString);
                     intervalsBetti = char(intervals.getBettiNumbers);
+                    %We save what we can, which is not much
                     save(outputFileName{:}, 'intervalsStr', 'intervalsBetti', '-v7.3');
                     clear stream persistence
 
-                    %Visualization
+                    %The last part is the visualization one.
                     outputFileNameImg = strcat(PathCurrent, 'visualize\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(num_divisions), '_MaxValue', num2str(max_filtration_value), '.jpg');
                     options.filename = outputFileNameImg{:};
                     options.max_filtration_value = max_filtration_value;

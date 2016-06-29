@@ -1,5 +1,5 @@
 function [ ] = createNetworkHexagonalGridMeanArea()
-%CREATENETWORKHEXAGONALGRIDMEANAREA 
+%CREATENETWORKHEXAGONALGRIDMEANAREA create a network with the algorithm of hexagonal grid mean area
 %   
 %   Developed by Pablo Vicente-Munuera
 
