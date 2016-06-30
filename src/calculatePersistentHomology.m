@@ -17,6 +17,7 @@ function [ ] = calculatePersistentHomology(PathCurrent)
             Img=imread(lee_imagenes(imK).name);
             Img = Img(:, :, 1);
             Img = im2bw(Img, 0.2);
+            Img = reduceDatasetViaClosure(Img, 30);
             %pointsImg = generatePointCloudFromImage(Img);
             C = bwlabel(Img);
             S = regionprops(C,'Centroid');
@@ -25,7 +26,7 @@ function [ ] = calculatePersistentHomology(PathCurrent)
                 centroids = centroids/max(centroids(:));
                 distanceBetweenObjects = pdist(centroids,'euclidean');
                 %We only want holes not anything more
-                max_filtration_value = 0.3;
+                max_filtration_value = 0.5;
                 outputFileName = strcat(PathCurrent, 'Adjacency\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(num_divisions), '_MaxValue', num2str(max_filtration_value) ,'.mat');
                 if exist(outputFileName{:}, 'file') ~= 2
                     clear Img C S distanceBetweenObjects
