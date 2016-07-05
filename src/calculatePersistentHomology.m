@@ -12,7 +12,7 @@ function [ ] = calculatePersistentHomology(PathCurrent)
             lee_imagenes(imK).name
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             max_dimension = 2;
-            num_divisions = 50;
+            num_divisions = 200;
 
             Img=imread(lee_imagenes(imK).name);
             Img = Img(:, :, 1);
@@ -24,11 +24,13 @@ function [ ] = calculatePersistentHomology(PathCurrent)
             centroids = vertcat(S.Centroid);
             if size(centroids, 1) > 1
                 %centroids = centroids/max(centroids(:));
-                distanceBetweenObjects = squareform( pdist(centroids,'euclidean'));
-                outputFileName = strcat(PathCurrent, 'Adjacency\centroids', inNameFile(1), '.csv');
-                csvwrite(outputFileName{:}, centroids);
+                %%distanceBetweenObjects = squareform( pdist(centroids,'euclidean'));
+                %%outputFileName = strcat(PathCurrent, 'Adjacency\centroids', inNameFile(1), '.csv');
+                %%csvwrite(outputFileName{:}, centroids);
                 %We only want holes not anything more
-                max_filtration_value = 0.5;
+                max_filtration_value = 3500;
+                outputFileName = strcat(PathCurrent, 'visualize\persistentHomologyGraph', inNameFile(1), '_NumDivisions', num2str(num_divisions) ,'_MaxValue', num2str(max_filtration_value) ,'.txt');
+                
                 if exist(outputFileName{:}, 'file') ~= 2
                     clear Img C S distanceBetweenObjects
 
@@ -37,23 +39,34 @@ function [ ] = calculatePersistentHomology(PathCurrent)
                     %Vietoris rips which is the algorithm that puts an edge between the points if they're within a distance radius
                     %It also creates the several networks (to be exactly num_divisions networks) with the differents radius.
                     stream = api.Plex4.createVietorisRipsStream(centroids, max_dimension, max_filtration_value, num_divisions)
-                    %Then it calculates the simplicial complexes of dimension 'max_dimension'.
-                    persistence = api.Plex4.getModularSimplicialAlgorithm(max_dimension, 2)
-                    %And finally, we get the intervals of connected components, and holes. Persistent homology.
-                    intervals = persistence.computeIntervals(stream)
-                    intervalsStr = char(intervals.toString);
-                    intervalsBetti = char(intervals.getBettiNumbers);
-                    %We save what we can, which is not much
-                    save(outputFileName{:}, 'intervalsStr', 'intervalsBetti', '-v7.3');
-                    clear stream persistence
+                    iterator = stream.iterator();
+                    fileID = fopen(outputFileName{:}, 'w');
+                    while (iterator.hasNext())
+                      % the next line will print the current simplex
+                      simplex = iterator.next();
+                      % here you can do whatever is needed with the simplex
+                      filtration_value = stream.getFiltrationValue(simplex);
+                      fprintf(fileID, '%d - %d', char(simplex.toString), filtration_value);
+                      fprintf(fileID, '\n');
+                    end
 
-                    %The last part is the visualization one.
-                    outputFileNameImg = strcat(PathCurrent, 'visualize\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(num_divisions), '_MaxValue', num2str(max_filtration_value), '.jpg');
-                    options.filename = outputFileNameImg{:};
-                    options.max_filtration_value = max_filtration_value;
-                    options.max_dimension = max_dimension - 1;
-                    plot_barcodes(intervals, options);
-                    clear intervals
+                    %Then it calculates the simplicial complexes of dimension 'max_dimension'.
+% %                     persistence = api.Plex4.getModularSimplicialAlgorithm(max_dimension, 2)
+% %                     %And finally, we get the intervals of connected components, and holes. Persistent homology.
+% %                     intervals = persistence.computeIntervals(stream)
+% %                     intervalsStr = char(intervals.toString);
+% %                     intervalsBetti = char(intervals.getBettiNumbers);
+% %                     %We save what we can, which is not much
+% %                     save(outputFileName{:}, 'intervalsStr', 'intervalsBetti', '-v7.3');
+% %                     clear stream persistence
+% % 
+% %                     %The last part is the visualization one.
+% %                     outputFileNameImg = strcat(PathCurrent, 'visualize\persistentHomology', inNameFile(1), 'MaxDim', num2str(max_dimension), '_NumDivision', num2str(num_divisions), '_MaxValue', num2str(max_filtration_value), '.jpg');
+% %                     options.filename = outputFileNameImg{:};
+% %                     options.max_filtration_value = max_filtration_value;
+% %                     options.max_dimension = max_dimension - 1;
+% %                     plot_barcodes(intervals, options);
+% %                     clear intervals
                 end
             end
         end
