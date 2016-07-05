@@ -13,7 +13,7 @@ function [ ] = calculateLEDAFilesFromDirectory( )
          lee_matrices(imK).name
          inNameFile = strsplit(lee_matrices(imK).name, '.');
          outputLEDAFileName = strcat('../visualize/', inNameFile(1), '.gw')
-         %if exist(outputLEDAFileName{:}, 'file') ~= 2
+         if exist(outputLEDAFileName{:}, 'file') ~= 2
             load(lee_matrices(imK).name);
             if exist('adjacencyMatrix', 'var') == 1
                 generateLEDAFromAdjacencyMatrix(adjacencyMatrix, outputLEDAFileName{:})
@@ -23,7 +23,7 @@ function [ ] = calculateLEDAFilesFromDirectory( )
                 generateLEDAFromAdjacencyMatrix(adjacencyMatrixComplete, outputLEDAFileName{:})
                 clear adjacencyMatrixComplete
             end
-         %end
+         end
     end
 
 end
