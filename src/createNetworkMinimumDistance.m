@@ -84,6 +84,27 @@ function [ ] = createNetworkMinimumDistance( )
             end
 
             %--------------------------------------------------------%
+            
+            %--------------------- minimumDistanceIt ------------------%
+            %Get output file names
+            inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
+            outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), 'It1.mat')
+            if exist(outputFileName{:}, 'file') ~= 2
+                %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+                adjacencyMatrix = GetConnectedGraphWithMinimumDistancesByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+            end
+            %--------------------------------------------------------%
+            
+            %--------------------- minimumDistanceBetweenPairsIt ------------------%
+            %Get output file names
+            inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
+            outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
+			outputFileNameSif = strcat('visualize\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.cvs');
+            if exist(outputFileName{:}, 'file') ~= 2
+                %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+                adjacencyMatrix = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+            end
+            %--------------------------------------------------------%
 		end
     end
 end
