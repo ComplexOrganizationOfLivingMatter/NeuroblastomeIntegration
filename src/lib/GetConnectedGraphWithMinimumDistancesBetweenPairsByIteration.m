@@ -19,7 +19,7 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
 
 	i = 1;
     iteration = 1;
-    while connectedComps > 1
+    while 1
         if i > size(adjacencyMatrix,1)
             outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It', num2str(iteration) ,'.mat')
             outputFileNameSif = strcat('visualize\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It', num2str(iteration) ,'.cvs');
