@@ -29,7 +29,7 @@ function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
         fprintf(fileID, '|{}|\n'); %Node
     end
     %Edges section
-    fprintf(fileID, '%d\n', size(adjacencyMatrix(adjacencyMatrix>0), 1)); %Number of nodes
+    fprintf(fileID, '%d\n', size(adjacencyMatrix(adjacencyMatrix>0), 1)); %Number of edges
     for i = 1:size(adjacencyMatrix,1)
         for j = 1:size(adjacencyMatrix,2)
             if adjacencyMatrix(i,j) > 0
