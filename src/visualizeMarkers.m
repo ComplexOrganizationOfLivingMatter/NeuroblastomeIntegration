@@ -71,9 +71,9 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     nameFiles = newNames;    
     points = cmdscale(newMatrix);
 
-    numClasses = size(markersWeWantToShow, 2);
-    colors = hsv(numClasses);
-    shapes = {'<','x','*','o','>','p','.','+','s','d','v','^','h'};
+    numClasses = size(markersWeWantToShow, 2)+size(algorithmWeWantToShow,2 + 1);
+    colors = hsv(size(markersWeWantToShow, 2));
+    shapes = {'<','x','*','>','p','.','+','s','d','v','^','h'};
     h = zeros(numClasses, numClasses);
     hfigure = figure;
     hold on;
@@ -81,7 +81,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
         [markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core] = splitNameFile(nameFiles{i});
         shapePoint = -1;
         for j = 1:size(algorithmWeWantToShow, 2)
-            if size(strfind (algorithmFile, algorithmWeWantToShow{j}), 1) == 1
+            if strcmp (algorithmFile, algorithmWeWantToShow{j}) == 1
                 shapePoint = shapes{j};
                 break
             end
@@ -103,8 +103,20 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
             end
         end
     end
+    %h = round(h);
+    for actualMarker = 1:size(markersWeWantToShow, 2)
+       h(actualMarker, :) = plot(0,0, 'o', 'color', colors(actualMarker, :), 'MarkerFaceColor', colors(actualMarker, :));
+    end
+    h(actualMarker + 1, :) = plot(0,0, 'o', 'color', 'white', 'MarkerFaceColor', 'white');
+    for numAlgorithm = 1:size(algorithmWeWantToShow,2)
+        h(actualMarker + numAlgorithm + 1, :) = plot(0,0, shapes{numAlgorithm}, 'color', 'white');
+    end
     hold off;
-    hlegend1 = legend(h(:,1), markersWeWantToShow);
+    divide = {'-------'};
+    hlegend1 = legend(h(:,1), horzcat(markersWeWantToShow, divide, algorithmWeWantToShow));
+    hlegend1.TextColor = 'white';
+    hlegend1.Color = 'black';
     %legend(shapes, algorithm, 'Location','West'); 
+    1
     
 end
