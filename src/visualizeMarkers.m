@@ -42,15 +42,18 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                         iter = 2;
                                         markerFilter = algorithmFilter(ismember(markersNames(cell2mat(algorithmFilter(:,1))), markersWeWantToShow(actualMarker)), :);
                                         differences = [];
+                                        differencesNumIters = [];
                                         iters = sort(cell2mat(markerFilter(:,3)));
                                         for actualIter = 2:size(iters,1)
-                                            posGraphletAnt = cell2mat(markerFilter(actualIter - 1, 3));
-                                            posGraphlet = cell2mat(markerFilter(actualIter, 3));
+                                            posGraphletAnt = cell2mat(markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter-1), 3));
+                                            posGraphlet = cell2mat(markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter), 3));
                                             differences = [differences; newMatrix(posGraphletAnt+1, posGraphlet+1)];
+                                            differencesNumIters = [differencesNumIters; {strcat(num2str(posGraphletAnt),'-', num2str(posGraphlet))}];
                                         end
                                         if size(differences, 1) > 0
-                                            h1 = figure;
-                                            bar(differences);
+                                            h1 = figure('units','normalized','outerposition',[0 0 1 1]);
+                                            b = bar(differences);
+                                            set(gca,'xtick', b.XData, 'xticklabel', differencesNumIters);
                                             nameOutputFile = strcat('Case', num2str(actualCase), '-Core', actualCore, '-Positive', num2str(actualPositive), '-Algorithm', algorithmWeWantToShow(actualAlgorithm), '-Marker', markersWeWantToShow(actualMarker));
                                             title(nameOutputFile);
                                             saveas(h1, strcat(nameOutputFile{:}, '.png'));
@@ -75,7 +78,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     colors = hsv(size(markersWeWantToShow, 2));
     shapes = {'<','x','*','>','p','.','+','s','d','v','^','h'};
     h = zeros(numClasses, numClasses);
-    hfigure = figure;
+    hfigure = figure('units','normalized','outerposition',[0 0 1 1]);
     hold on;
     for i=1:size(points, 1)
         [markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core] = splitNameFile(nameFiles{i});
@@ -116,6 +119,8 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     hlegend1 = legend(h(:,1), horzcat(markersWeWantToShow, divide, algorithmWeWantToShow));
     hlegend1.TextColor = 'white';
     hlegend1.Color = 'black';
+    saveas(hfigure, strcat('distance', strjoin(markersWeWantToShow, '_') , '-', strjoin(algorithmWeWantToShow, '_'), '.png'));
+    close all
     %legend(shapes, algorithm, 'Location','West'); 
     1
     
