@@ -12,7 +12,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
         for col = 1:sizeMatrix
             if row ~= rowsWithNaN && col ~= rowsWithNaN
                 %case marker core iteration1 distance
-                    
+
                 newMatrix(newRow, newCol) = distanceMatrix(row, col);
                 newCol = newCol + 1;
             end
@@ -42,13 +42,11 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                         iter = 2;
                                         markerFilter = algorithmFilter(ismember(markersNames(cell2mat(algorithmFilter(:,1))), markersWeWantToShow(actualMarker)), :);
                                         differences = [];
-                                        while size(find(cell2mat(markerFilter(:,3)) == iter), 1) == 1
-                                            graphletAnt =  markerFilter(cell2mat(markerFilter(:,3)) == iter-1, :);
-                                            posGraphletAnt = find(cell2mat(markerFilter(:,3)) == iter-1);
-                                            graphlet = markerFilter(cell2mat(markerFilter(:,3)) == iter, :);
-                                            posGraphlet = find(cell2mat(markerFilter(:,3)) == iter);
-                                            differences = [differences; newMatrix(posGraphletAnt, posGraphlet)];
-                                            iter = iter + 1;
+                                        iters = sort(cell2mat(markerFilter(:,3)));
+                                        for actualIter = 2:size(iters,1)
+                                            posGraphletAnt = cell2mat(markerFilter(actualIter - 1, 3));
+                                            posGraphlet = cell2mat(markerFilter(actualIter, 3));
+                                            differences = [differences; newMatrix(posGraphletAnt+1, posGraphlet+1)];
                                         end
                                         if size(differences, 1) > 0
                                             h1 = figure;
@@ -58,7 +56,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                             saveas(h1, strcat(nameOutputFile{:}, '.png'));
                                             close all
                                         end
-                                      
+
                                     end
                                 end
                             end
