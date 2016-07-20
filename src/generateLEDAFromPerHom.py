@@ -43,7 +43,7 @@ for directory in directories:
 					fileOut.write(str(len(timeLessThanActual)) + '\n')
 					numEdge = 0
 					while True:
-						fileOut.write(edgesArray[numEdge] + ' ' + edgesArray[numEdge+1] + ' 0 |{}|\n')
+						fileOut.write(str(int(edgesArray[numEdge])+1) + ' ' + str(int(edgesArray[numEdge+1])+1) + ' 0 |{}|\n')
 						numEdge = numEdge + 2
 						if len(timeLessThanActual) <= numEdge/2:
 							break
