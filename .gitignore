@@ -64,3 +64,4 @@ ExternalTools/
 src/lib/Codigo_BCT/
 Results/
 *.png
+*.fig
