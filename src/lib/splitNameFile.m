@@ -17,7 +17,7 @@ function [ marker, pacient, iteration, algorithm, boolPositive, core] = splitNam
     nameWithDirectories = strsplit(nameIteration{1}, '/');
     nameAlgorithm = 0;
     for i = 1:size(nameWithDirectories, 2)
-        if strcmp(nameWithDirectories{i}, 'Casos')
+        if strcmp(nameWithDirectories{i}, 'Data')
             pacient = nameWithDirectories{i+1};
         elseif i == size(nameWithDirectories, 2)
             nameAlgorithm = strsplit(nameWithDirectories{i}, '_');

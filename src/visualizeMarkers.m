@@ -3,16 +3,13 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     rowsWithNaN = find(isnan(distanceMatrix(1,:)));
     splittedNames = {};
     sizeMatrix = size(distanceMatrix,1);
-    newMatrix = zeros(sizeMatrix - size(rowsWithNaN, 1), sizeMatrix - size(rowsWithNaN, 1));
+    newMatrix = zeros(sizeMatrix - size(rowsWithNaN, 2), sizeMatrix - size(rowsWithNaN, 2));
     newRow = 1;
-    newNames = cell(sizeMatrix - size(rowsWithNaN, 1), 1);
+    newNames = cell(sizeMatrix - size(rowsWithNaN, 2), 1);
     for row = 1:sizeMatrix
         newCol = 1;
-
         for col = 1:sizeMatrix
-            if row ~= rowsWithNaN && col ~= rowsWithNaN
-                %case marker core iteration1 distance
-
+            if size(rowsWithNaN(row == rowsWithNaN),2) == 0 && size(rowsWithNaN(col == rowsWithNaN), 2) == 0
                 newMatrix(newRow, newCol) = distanceMatrix(row, col);
                 newCol = newCol + 1;
             end
@@ -120,8 +117,5 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     hlegend1.TextColor = 'white';
     hlegend1.Color = 'black';
     saveas(hfigure, strcat('distance', strjoin(markersWeWantToShow, '_') , '-', strjoin(algorithmWeWantToShow, '_'), '.png'));
-    close all
     %legend(shapes, algorithm, 'Location','West'); 
-    1
-    
 end
