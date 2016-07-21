@@ -16,7 +16,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
         end
         if row ~= rowsWithNaN
             [markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core] = splitNameFile(nameFiles{row});
-            splittedNames = [splittedNames; {markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core}];
+            splittedNames = [splittedNames; {markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core, newRow}];
             newNames{newRow} = nameFiles{row};
             newRow = newRow + 1;
         end
@@ -42,16 +42,18 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                         differencesNumIters = [];
                                         iters = sort(cell2mat(markerFilter(:,3)));
                                         for actualIter = 2:size(iters,1)
-                                            posGraphletAnt = cell2mat(markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter-1), 3));
-                                            posGraphlet = cell2mat(markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter), 3));
-                                            differences = [differences; newMatrix(posGraphletAnt+1, posGraphlet+1)];
-                                            differencesNumIters = [differencesNumIters; {strcat(num2str(posGraphletAnt),'-', num2str(posGraphlet))}];
+                                            rowFilteredAnt = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter-1), :)
+                                            rowFiltered = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter), :)
+
+                                            differences = [differences; newMatrix(cell2mat(rowFilteredAnt(7)), cell2mat(rowFiltered(7)))];
+                                            differencesNumIters = [differencesNumIters; {strcat(num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))))}];
                                         end
                                         if size(differences, 1) > 0
+                                            nameOutputFile = strcat('Case', num2str(actualCase), '-Core', actualCore, '-Positive', num2str(actualPositive), '-Algorithm', algorithmWeWantToShow(actualAlgorithm), '-Marker', markersWeWantToShow(actualMarker))
+                                            
                                             h1 = figure('units','normalized','outerposition',[0 0 1 1]);
                                             b = bar(differences);
                                             set(gca,'xtick', b.XData, 'xticklabel', differencesNumIters);
-                                            nameOutputFile = strcat('Case', num2str(actualCase), '-Core', actualCore, '-Positive', num2str(actualPositive), '-Algorithm', algorithmWeWantToShow(actualAlgorithm), '-Marker', markersWeWantToShow(actualMarker));
                                             title(nameOutputFile);
                                             saveas(h1, strcat(nameOutputFile{:}, '.png'));
                                             close all
@@ -73,7 +75,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
 
     numClasses = size(markersWeWantToShow, 2)+size(algorithmWeWantToShow,2 + 1);
     colors = hsv(size(markersWeWantToShow, 2));
-    shapes = {'<','x','*','>','p','.','+','s','d','v','^','h'};
+    shapes = {'<','x','h','*','>','p','.','+','s','d','v','^'};
     h = zeros(numClasses, numClasses);
     hfigure = figure('units','normalized','outerposition',[0 0 1 1]);
     hold on;
@@ -116,6 +118,6 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     hlegend1 = legend(h(:,1), horzcat(markersWeWantToShow, divide, algorithmWeWantToShow));
     hlegend1.TextColor = 'white';
     hlegend1.Color = 'black';
-    saveas(hfigure, strcat('distance', strjoin(markersWeWantToShow, '_') , '-', strjoin(algorithmWeWantToShow, '_'), '.png'));
+    saveas(hfigure, strcat('distance', strjoin(markersWeWantToShow, '_') , '-', strjoin(algorithmWeWantToShow, '_'), '.fig'));
     %legend(shapes, algorithm, 'Location','West'); 
 end

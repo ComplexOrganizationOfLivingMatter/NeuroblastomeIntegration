@@ -5,12 +5,12 @@ function [ marker, pacient, iteration, algorithm, boolPositive, core] = splitNam
     nameIteration = strsplit(nameFile, 'It');
     iteration = 0;
     if size(nameIteration, 2) > 1
-        iteration = str2double(nameIteration{2});
+        iteration = str2num(nameIteration{2});
     else
         nameIteration = strsplit(nameFile, 'Mask');
         if size(nameIteration, 2) > 1
             start = strfind(nameIteration{2}, 'Diamet');
-            iteration = str2double(nameIteration{2}(1:start-1));
+            iteration = str2num(nameIteration{2}(1:start-1));
         end
     end
 
@@ -25,7 +25,7 @@ function [ marker, pacient, iteration, algorithm, boolPositive, core] = splitNam
     end
     
     [start,finish] = regexp(nameAlgorithm{1}, '[0-9][0-5]?');
-    marker = str2double(nameAlgorithm{1}(start:finish));
+    marker = str2num(nameAlgorithm{1}(start:finish));
     [start,finish] = regexp(nameAlgorithm{1}, '[a-zA-Z]+');
     algorithm = nameAlgorithm{1}(start:finish);
     if algorithm(1) == 'a'
@@ -39,7 +39,7 @@ function [ marker, pacient, iteration, algorithm, boolPositive, core] = splitNam
         if (regexp(upper(nameAlgorithm{i}),'[0-9][0-9][B]?[0-9]{4,}[A-B]'))
            core = nameAlgorithm{i}(end); 
         end
-        if size(strfind(lower(nameAlgorithm{i}), 'egativ'), 1)
+        if size(strfind(lower(nameAlgorithm{i}), 'negat'), 1)
             boolPositive = 0;
         end
     end
