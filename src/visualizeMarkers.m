@@ -21,6 +21,9 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
             newRow = newRow + 1;
         end
     end
+    fName = 'E:\Pablo\Neuroblastoma\Results\NetworksInformation.csv';
+    fid = fopen(fName,'w');            %# Open the file
+    fprintf(fid, 'Case,Core,Positive,Algorithm,Marker,NumIterations, \r\n');
     
     %Plot differences
     for actualCase = 1 %:11
@@ -36,29 +39,41 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                 algorithmFilter = positiveFilter(ismember(positiveFilter(:, 4), algorithmWeWantToShow(actualAlgorithm)), :);
                                 if isempty(algorithmFilter) == 0
                                     for actualMarker = 1:size(markersWeWantToShow, 2)
-                                        iter = 2;
                                         markerFilter = algorithmFilter(ismember(markersNames(cell2mat(algorithmFilter(:,1))), markersWeWantToShow(actualMarker)), :);
                                         differences = [];
                                         differencesNumIters = [];
                                         iters = sort(cell2mat(markerFilter(:,3)));
-                                        for actualIter = 2:size(iters,1)
-                                            rowFilteredAnt = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter-1), :)
-                                            rowFiltered = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter), :)
+                                        
+                                        for actualIter = 1:size(iters,1)
+                                            if actualIter > 1
+                                                rowFilteredAnt = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter-1), :);
+                                                rowFiltered = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter), :);
 
-                                            differences = [differences; newMatrix(cell2mat(rowFilteredAnt(7)), cell2mat(rowFiltered(7)))];
-                                            differencesNumIters = [differencesNumIters; {strcat(num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))))}];
+                                                differences = [differences; newMatrix(cell2mat(rowFilteredAnt(7)), cell2mat(rowFiltered(7)))];
+                                                differencesNumIters = [differencesNumIters; {strcat(num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))))}];
+                                            end
                                         end
+                                        
                                         if size(differences, 1) > 0
-                                            nameOutputFile = strcat('Case', num2str(actualCase), '-Core', actualCore, '-Positive', num2str(actualPositive), '-Algorithm', algorithmWeWantToShow(actualAlgorithm), '-Marker', markersWeWantToShow(actualMarker))
-                                            
-                                            h1 = figure('units','normalized','outerposition',[0 0 1 1]);
+                                            nameOutputFile = strcat('Graphlets Case', num2str(actualCase), '-Core', actualCore, '-Positive', num2str(actualPositive), '-Algorithm', algorithmWeWantToShow(actualAlgorithm), '-Marker', markersWeWantToShow(actualMarker));
+                                            %csvwrite(strcat(nameOutputFile{:}, '.csv'), vertcat(cell2mat(differencesNumIters)', differences'));
+                                            h1 = figure('units','normalized','outerposition',[0 0 1 1], 'Visible', 'off');
                                             b = bar(differences);
                                             set(gca,'xtick', b.XData, 'xticklabel', differencesNumIters);
                                             title(nameOutputFile);
+                                            xlabel('Difference between iterations');
+                                            ylabel('Distance');
                                             saveas(h1, strcat(nameOutputFile{:}, '.png'));
                                             close all
+                                            if actualAlgorithm == 2
+                                                fprintf(fid,'%d,%s,%d,%s,%s,%d,%d,%s\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0, num2str(differences(:)'));       %# Print the string
+                                            else
+                                                fprintf(fid,'%d,%s,%d,%s,%s,%d,%d\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0);       %# Print the string
+                                            end
+                                        else
+                                            fprintf(fid,'%d,%s,%d,%s,%s,%d,%d\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0);       %# Print the string
                                         end
-
+                                        
                                     end
                                 end
                             end
@@ -69,6 +84,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
         end
     end
     
+    fclose(fid);
     
     nameFiles = newNames;    
     points = cmdscale(newMatrix);
@@ -93,10 +109,10 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
         end
         if shapePoint ~= -1
             for actualMarker = 1:size(markersWeWantToShow, 2)
-                if size(strfind (markersNames{markerFile}, markersWeWantToShow{actualMarker}), 1) == 1
+                if strcmp (markersNames{markerFile}, markersWeWantToShow{actualMarker}) == 1
                     nameFiles{i}
                     h(actualMarker, :) = plot(points(i, 1), points(i, 2), shapePoint, 'color', colors(actualMarker,:));
-                    t1 = text(points(i,1), points(i,2), strcat('Core', core , num2str(iterationFile)));
+                    t1 = text(points(i,1), points(i,2), strcat('Pos', num2str(boolPositiveFile) ,'Core', core , num2str(iterationFile)));
                     t1.FontSize = 7;
                     t1.HorizontalAlignment = 'center';
                     t1.VerticalAlignment = 'bottom';
@@ -109,15 +125,11 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     for actualMarker = 1:size(markersWeWantToShow, 2)
        h(actualMarker, :) = plot(0,0, 'o', 'color', colors(actualMarker, :), 'MarkerFaceColor', colors(actualMarker, :));
     end
-    h(actualMarker + 1, :) = plot(0,0, 'o', 'color', 'white', 'MarkerFaceColor', 'white');
     for numAlgorithm = 1:size(algorithmWeWantToShow,2)
-        h(actualMarker + numAlgorithm + 1, :) = plot(0,0, shapes{numAlgorithm}, 'color', 'white');
+        h(actualMarker + numAlgorithm, :) = plot(0,0, shapes{numAlgorithm}, 'color', 'black');
     end
     hold off;
-    divide = {'-------'};
-    hlegend1 = legend(h(:,1), horzcat(markersWeWantToShow, divide, algorithmWeWantToShow));
-    hlegend1.TextColor = 'white';
-    hlegend1.Color = 'black';
+    hlegend1 = legend(h(:,1), horzcat(markersWeWantToShow, algorithmWeWantToShow));
     saveas(hfigure, strcat('distance', strjoin(markersWeWantToShow, '_') , '-', strjoin(algorithmWeWantToShow, '_'), '.fig'));
     %legend(shapes, algorithm, 'Location','West'); 
 end
