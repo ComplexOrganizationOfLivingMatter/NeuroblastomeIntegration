@@ -1,4 +1,4 @@
-function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow)
+function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, typeOfGCD)
 
     rowsWithNaN = find(isnan(distanceMatrix(1,:)));
     splittedNames = {};
@@ -42,15 +42,51 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                         markerFilter = algorithmFilter(ismember(markersNames(cell2mat(algorithmFilter(:,1))), markersWeWantToShow(actualMarker)), :);
                                         differences = [];
                                         differencesNumIters = [];
+                                        vstrThreeMaxNumGraphlets = {};
                                         iters = sort(cell2mat(markerFilter(:,3)));
                                         
                                         for actualIter = 1:size(iters,1)
                                             if actualIter > 1
                                                 rowFilteredAnt = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter-1), :);
                                                 rowFiltered = markerFilter(cell2mat(markerFilter(:,3)) == iters(actualIter), :);
+                                                
+                                                fileAntSplitted = strsplit(cell2mat(newNames(cell2mat(rowFilteredAnt(7)))), '/');
+                                                fileAnt = strcat('E:\Pablo\Neuroblastoma\Results\graphletsCount\Casos\', num2str(actualCase), '\' , fileAntSplitted(4), '.ndump2.sumGraphlets');
+                                                fileActualSplitted = strsplit(cell2mat(newNames(cell2mat(rowFiltered(7)))), '/');
+                                                fileActual = strcat('E:\Pablo\Neuroblastoma\Results\graphletsCount\Casos\', num2str(actualCase), '\' ,fileActualSplitted(4), '.ndump2.sumGraphlets');
+                                                
+                                                fAnt = fopen(fileAnt{:}, 'r');
+                                                if fAnt ~= -1
+                                                    tLineAnt = fgets(fAnt);
+                                                    fclose(fAnt);
 
-                                                differences = [differences; newMatrix(cell2mat(rowFilteredAnt(7)), cell2mat(rowFiltered(7)))];
-                                                differencesNumIters = [differencesNumIters; {strcat(num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))))}];
+                                                    fActual = fopen(fileActual{:}, 'r');
+                                                    tLineActual = fgets(fActual);
+                                                    fclose(fActual);
+
+                                                    tLineAnt = strsplit(tLineAnt);
+                                                    tLineActual = strsplit(tLineActual);
+                                                    if strcmp(typeOfGCD, 'GCD11')
+                                                        numsLineAnt = str2double(tLineAnt(1:11));
+                                                        numsLineActual = str2double(tLineActual(1:11));
+                                                    else
+                                                        numsLineAnt = str2double(tLineAnt(1:73));
+                                                        numsLineActual = str2double(tLineActual(1:73));
+                                                    end
+
+                                                    differenceGraphlets = abs(numsLineAnt - numsLineActual);
+                                                    sortedDifferenceGraphlets = sort(differenceGraphlets, 'descend');
+                                                    firstGraphlet = find(differenceGraphlets == sortedDifferenceGraphlets(1), 1);
+                                                    differenceGraphlets(firstGraphlet) = 0;
+                                                    secondGraphlet = find(differenceGraphlets == sortedDifferenceGraphlets(2), 1);
+                                                    differenceGraphlets(secondGraphlet) = 0;
+                                                    thirdGraphlet = find(differenceGraphlets == sortedDifferenceGraphlets(3), 1);
+                                                    strThreeMaxNumGraphlets = ['NumGraphlets', num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))) ,': ', num2str(firstGraphlet-1), '-', num2str(secondGraphlet-1), '-' , num2str(thirdGraphlet-1)]
+
+                                                    vstrThreeMaxNumGraphlets{end+1} =  strThreeMaxNumGraphlets;
+                                                    differences = [differences; newMatrix(cell2mat(rowFilteredAnt(7)), cell2mat(rowFiltered(7)))];
+                                                    differencesNumIters = [differencesNumIters; {strcat(num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))))}];
+                                                end
                                             end
                                         end
                                         
@@ -59,6 +95,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                             %csvwrite(strcat(nameOutputFile{:}, '.csv'), vertcat(cell2mat(differencesNumIters)', differences'));
                                             h1 = figure('units','normalized','outerposition',[0 0 1 1], 'Visible', 'off');
                                             b = bar(differences);
+                                            annotation(h1, 'textbox', [0.4 0.8 0.1 0.1], 'String', vstrThreeMaxNumGraphlets, 'FitBoxToText', 'on');
                                             set(gca,'xtick', b.XData, 'xticklabel', differencesNumIters);
                                             title(nameOutputFile);
                                             xlabel('Difference between iterations');
@@ -66,7 +103,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                             saveas(h1, strcat(nameOutputFile{:}, '.png'));
                                             close all
                                             if actualAlgorithm == 2
-                                                fprintf(fid,'%d,%s,%d,%s,%s,%d,%d,%s\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0, num2str(differences(:)'));       %# Print the string
+                                                fprintf(fid,'%d,%s,%d,%s,%s,%d,%d,%s,%s\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0, num2str(differences(:)'), vstrThreeMaxNumGraphlets{:});       %# Print the string
                                             else
                                                 fprintf(fid,'%d,%s,%d,%s,%s,%d,%d\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0);       %# Print the string
                                             end
