@@ -41,19 +41,26 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     end
     
     newOrder = newOrder(newOrder ~= 0);
-    newNamesSorted = [];
+    newNamesSorted = {};
     distanceMatrixFiltered = zeros(size(newOrder,1), size(newOrder,1));
     for row = 1:size(newOrder,1)
        for col = 1:size(newOrder,1)
            distanceMatrixFiltered(row, col) = newMatrix(newOrder(row), newOrder(col));
        end
-       newNamesSorted = [newNamesSorted; newNames(row)];
+       nameFinal = splittedNamesDataset(splittedNamesDataset.MatrixPosition == newOrder(row), :);
+       
+       if nameFinal.Positive == 1
+           newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '+'));
+       else
+           newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '-'));
+       end
     end
     %HeatMap(distanceMatrixFiltered);
     heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*255;
     h = image(heatmap);
     colormap('jet');
     
-    set(gca,'xtick', h.XData, 'xticklabel', {'pene'});
+    set(h,'ytick', [1:size(newNamesSorted,2)], 'yticklabel', newNamesSorted,'YGrid','on','XGrid','on');
+    set(h,'xtick', [1:size(newNamesSorted,2)], 'xticklabel', newNamesSorted, 'XTickLabelRotation', '90.0');
 end
 
