@@ -39,16 +39,21 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
             end
         end
     end
-    newOrder = newOrder(newOrder ~= 0);
     
+    newOrder = newOrder(newOrder ~= 0);
+    newNamesSorted = [];
     distanceMatrixFiltered = zeros(size(newOrder,1), size(newOrder,1));
     for row = 1:size(newOrder,1)
        for col = 1:size(newOrder,1)
-           distanceMatrixFiltered(row, col) = distanceMatrix(newOrder(row), newOrder(col));
+           distanceMatrixFiltered(row, col) = newMatrix(newOrder(row), newOrder(col));
        end
+       newNamesSorted = [newNamesSorted; newNames(row)];
     end
     %HeatMap(distanceMatrixFiltered);
-    distanceMatrix = distanceMatrixFiltered/max(distanceMatrixFiltered(:))*255;
-    image(distanceMatrix);
+    heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*255;
+    h = image(heatmap);
+    colormap('jet');
+    
+    set(gca,'xtick', h.XData, 'xticklabel', {'pene'});
 end
 
