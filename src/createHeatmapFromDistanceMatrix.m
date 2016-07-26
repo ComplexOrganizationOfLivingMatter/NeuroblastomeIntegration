@@ -8,21 +8,22 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     
     for actualAlgorithm = 1:size(algorithmWeWantToShow, 2)
         algorithmFilter = splittedNamesDataset(ismember(splittedNamesDataset.Algorithm, algorithmWeWantToShow(actualAlgorithm)), :);
-        if size(algorithmFilter, 1) > 0
+        if isempty(algorithmFilter) == 0
             newOrder = zeros(size(distanceMatrix, 1), 1);
             actualRow = 1;
             for actualCase = 1 %:11
-                caseFilter = algorithmFilter(algorithmFilter.Case == actualCase, :);
-                if isempty(caseFilter)
+                caseFilter = algorithmFilter(str2num(cell2mat(algorithmFilter.Case(:))) == actualCase, :);
+                if isempty(caseFilter) == 0
                     for actualMarker = 1:size(markersWeWantToShow, 2)
-                        markerFilter = caseFilter(caseFilter.Marker == markersWeWantToShow(actualMarker), :);
-                        if isempty(markerFilter)
+                        markerFilter = caseFilter(ismember(markersNames(caseFilter.Marker), markersWeWantToShow(actualMarker)), :);
+
+                        if isempty(markerFilter) == 0
                             for actualPositive = 0:1
                                 positiveFilter = markerFilter(markerFilter.Positive == actualPositive, :);
-                                if isempty(positiveFilter)
+                                if isempty(positiveFilter) == 0
                                     for actualCore = ['A', 'B']
-                                        coreFilter = positiveFilter(positiveFilter.Core == actualCore, :);
-                                        if isempty(coreFilter)
+                                        coreFilter = positiveFilter(ismember(positiveFilter.Core, actualCore), :);
+                                        if isempty(coreFilter) == 0
                                             iters = sort(coreFilter.Iteration);
                                             for actualIter = 1:size(iters,1)
                                                 newOrder(actualRow) = coreFilter(coreFilter.Iteration == iters(actualIter), :).MatrixPosition;
@@ -38,5 +39,16 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
             end
         end
     end
+    newOrder = newOrder(newOrder ~= 0);
+    
+    distanceMatrixFiltered = zeros(size(newOrder,1), size(newOrder,1));
+    for row = 1:size(newOrder,1)
+       for col = 1:size(newOrder,1)
+           distanceMatrixFiltered(row, col) = distanceMatrix(newOrder(row), newOrder(col));
+       end
+    end
+    %HeatMap(distanceMatrixFiltered);
+    distanceMatrix = distanceMatrixFiltered/max(distanceMatrixFiltered(:))*255;
+    image(distanceMatrix);
 end
 
