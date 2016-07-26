@@ -1,26 +1,7 @@
 function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, typeOfGCD)
 
-    rowsWithNaN = find(isnan(distanceMatrix(1,:)));
-    splittedNames = {};
-    sizeMatrix = size(distanceMatrix,1);
-    newMatrix = zeros(sizeMatrix - size(rowsWithNaN, 2), sizeMatrix - size(rowsWithNaN, 2));
-    newRow = 1;
-    newNames = cell(sizeMatrix - size(rowsWithNaN, 2), 1);
-    for row = 1:sizeMatrix
-        newCol = 1;
-        for col = 1:sizeMatrix
-            if size(rowsWithNaN(row == rowsWithNaN),2) == 0 && size(rowsWithNaN(col == rowsWithNaN), 2) == 0
-                newMatrix(newRow, newCol) = distanceMatrix(row, col);
-                newCol = newCol + 1;
-            end
-        end
-        if row ~= rowsWithNaN
-            [markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core] = splitNameFile(nameFiles{row});
-            splittedNames = [splittedNames; {markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core, newRow}];
-            newNames{newRow} = nameFiles{row};
-            newRow = newRow + 1;
-        end
-    end
+    
+    
     fName = 'E:\Pablo\Neuroblastoma\Results\NetworksInformation.csv';
     fid = fopen(fName,'w');            %# Open the file
     fprintf(fid, 'Case,Core,Positive,Algorithm,Marker,NumIterations, \r\n');
@@ -81,7 +62,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                                     secondGraphlet = find(differenceGraphlets == sortedDifferenceGraphlets(2), 1);
                                                     differenceGraphlets(secondGraphlet) = 0;
                                                     thirdGraphlet = find(differenceGraphlets == sortedDifferenceGraphlets(3), 1);
-                                                    strThreeMaxNumGraphlets = ['NumGraphlets', num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))) ,': ', num2str(firstGraphlet-1), '-', num2str(secondGraphlet-1), '-' , num2str(thirdGraphlet-1)]
+                                                    strThreeMaxNumGraphlets = ['NumGraphlets', num2str(cell2mat(rowFilteredAnt(3))),'-', num2str(cell2mat(rowFiltered(3))) ,': ', num2str(firstGraphlet-1), '-', num2str(secondGraphlet-1), '-' , num2str(thirdGraphlet-1)];
 
                                                     vstrThreeMaxNumGraphlets{end+1} =  strThreeMaxNumGraphlets;
                                                     differences = [differences; newMatrix(cell2mat(rowFilteredAnt(7)), cell2mat(rowFiltered(7)))];
@@ -100,7 +81,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                                             title(nameOutputFile);
                                             xlabel('Difference between iterations');
                                             ylabel('Distance');
-                                            saveas(h1, strcat(nameOutputFile{:}, '.png'));
+                                            %saveas(h1, strcat(nameOutputFile{:}, '.png'));
                                             close all
                                             if actualAlgorithm == 2
                                                 fprintf(fid,'%d,%s,%d,%s,%s,%d,%d,%s,%s\r\n', actualCase, actualCore, actualPositive, cell2mat(algorithmWeWantToShow(actualAlgorithm)), cell2mat(markersWeWantToShow(actualMarker)), size(iters,1), 0, num2str(differences(:)'), vstrThreeMaxNumGraphlets{:});       %# Print the string
