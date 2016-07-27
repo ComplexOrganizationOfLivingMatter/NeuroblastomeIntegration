@@ -12,6 +12,7 @@ import edu.stanford.math.plex4.homology.barcodes.BarcodeCollection;
 import edu.stanford.math.plex4.homology.chain_basis.Simplex;
 import edu.stanford.math.plex4.homology.interfaces.AbstractPersistenceAlgorithm;
 import edu.stanford.math.plex4.streams.impl.VietorisRipsStream;
+import edu.stanford.math.plex4.streams.interfaces.PrimitiveStream;
 
 public class persistentHomology {
 
@@ -59,10 +60,11 @@ public class persistentHomology {
     	    numObject++;
     	}
     	
-        double maxDistance = 6000;
+        double maxDistance = 3000;
         int maxDimension = 2;
         int numDivisions = 200;
         
+        //double[] filtrationValues = {5, 10, 15, 20, 30, 50, 70, 110, 170, 230, 290, 370, 500, 750, 1000, 1250, 1500, 2000, 2500, 3000, 3500};
 		VietorisRipsStream<double[]> stream = Plex4.createVietorisRipsStream(centroids, maxDimension, maxDistance, numDivisions);
         //Then it calculates the simplicial complexes of dimension 'max_dimension'.
         AbstractPersistenceAlgorithm<Simplex> persistence = Plex4.getModularSimplicialAlgorithm(maxDimension, 2);
@@ -82,6 +84,19 @@ public class persistentHomology {
 	        writer.println(intervals.getBettiNumbers());
 	        writer.println(intervals);
 	        writer.close();
+	        
+	        fileName = fileName.replace(".betti", ".perHom");
+			PrintWriter writer2 = new PrintWriter(fileName, "UTF-8");
+			Iterator<Simplex> iter = stream.iterator();
+			while (iter.hasNext()){
+				 Simplex simplex = (Simplex) iter.next();
+				 double filtration_value = stream.getFiltrationValue(simplex);
+				writer2.print(simplex);
+				writer2.print(" ; ");
+				writer2.println(filtration_value);
+			}
+	        writer2.close();
+	        
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
