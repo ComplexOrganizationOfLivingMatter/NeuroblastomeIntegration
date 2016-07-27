@@ -66,9 +66,9 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
            newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '-', num2str(nameFinal.Iteration)));
        end
        if nameFinal.Marker ~= nameFinalAnt.Marker
-           annotation(h1,'rectangle', [XInit YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1) YWidthPerSquare*numberOfImages], 'Color','red'); %Horizontally
+           annotation(h1,'rectangle', [XInit YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1) YWidthPerSquare*numberOfImages], 'Color','white'); %Horizontally
            
-           annotation(h1,'rectangle', [XAnt 0.11 XWidthPerSquare*numberOfImages YWidthPerSquare*size(newOrder,1)], 'Color','red'); %Vertically
+           annotation(h1,'rectangle', [XAnt 0.11 XWidthPerSquare*numberOfImages YWidthPerSquare*size(newOrder,1)], 'Color','white'); %Vertically
            YAnt = YAnt-(YWidthPerSquare*numberOfImages);
            XAnt = XAnt+(XWidthPerSquare*numberOfImages);
            numberOfImages = 1;
@@ -78,17 +78,19 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
        
        nameFinalAnt = nameFinal;
     end
-    annotation(h1,'rectangle', [XInit YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1) YWidthPerSquare*numberOfImages], 'Color','red'); %1 square
+    %annotation(h1,'rectangle', [XInit
+    %YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1)
+    %YWidthPerSquare*numberOfImages], 'Color','red'); %Gray
     
     heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64;
     image(heatmap);
-    colormap('gray');
-    %colormap('jet');
+    %colormap('gray');
+    colormap('jet');
     axis image
     colorbar
 
     title(strcat('Distance between graphlets of algorithm',': ' ,algorithmWeWantToShow));
-    set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 6);
+    set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 2);
     set(gca,'XTick', [1:size(newNamesSorted,2)], 'XTickLabel', newNamesSorted, 'XTickLabelRotation', 90.0);
     
     namefile = strcat('heatmapGraphlets', algorithmWeWantToShow);
