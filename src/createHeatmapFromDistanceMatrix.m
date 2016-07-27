@@ -56,9 +56,7 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
        end
     end
     %HeatMap(distanceMatrixFiltered);
-    %heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64;
-    %% jet
-    heatmap = (1-(distanceMatrixFiltered/max(distanceMatrixFiltered(:))))*64; %gray
+    heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64; %gray
     h1 = figure('units','normalized','outerposition',[0 0 1 1]);
     image(heatmap);
     colormap('gray');
