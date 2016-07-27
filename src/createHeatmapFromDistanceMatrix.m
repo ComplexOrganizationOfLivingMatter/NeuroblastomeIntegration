@@ -56,12 +56,18 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
        end
     end
     %HeatMap(distanceMatrixFiltered);
-    heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*255;
-    h1 = figure;
+    %heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64;
+    %% jet
+    heatmap = (1-(distanceMatrixFiltered/max(distanceMatrixFiltered(:))))*64; %gray
+    h1 = figure('units','normalized','outerposition',[0 0 1 1]);
     image(heatmap);
-    colormap('jet');
+    colormap('gray');
+    %colormap('jet');
+    axis image
+    colorbar
+
     title(strcat('Distance between graphlets of algorithm',': ' ,algorithmWeWantToShow));
-    set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 3);
+    set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 6);
     set(gca,'XTick', [1:size(newNamesSorted,2)], 'XTickLabel', newNamesSorted, 'XTickLabelRotation', 90.0);
     
     namefile = strcat('heatmapGraphlets', algorithmWeWantToShow);
