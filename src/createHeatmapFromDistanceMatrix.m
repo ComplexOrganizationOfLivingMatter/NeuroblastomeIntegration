@@ -18,7 +18,7 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
                         markerFilter = caseFilter(ismember(markersNames(caseFilter.Marker), markersWeWantToShow(actualMarker)), :);
 
                         if isempty(markerFilter) == 0
-                            for actualPositive = 0:1
+                            for actualPositive = [1, 0]
                                 positiveFilter = markerFilter(markerFilter.Positive == actualPositive, :);
                                 if isempty(positiveFilter) == 0
                                     for actualCore = ['A', 'B']
@@ -40,9 +40,20 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
         end
     end
     
+    %HeatMap(distanceMatrixFiltered);
+    
+    h1 = figure('units','normalized','outerposition',[0 0 1 1]);
     newOrder = newOrder(newOrder ~= 0);
     newNamesSorted = {};
     distanceMatrixFiltered = zeros(size(newOrder,1), size(newOrder,1));
+    XInit = 0.282949790794979;
+    YInit = 0.11+0.8150;
+    XWidthPerSquare = 0.85/2/size(newOrder,1);
+    YWidthPerSquare = 0.8150/size(newOrder,1);
+    nameFinalAnt = splittedNamesDataset(splittedNamesDataset.MatrixPosition == newOrder(1), :);;
+    YAnt = YInit;
+    XAnt = XInit;
+    numberOfImages = 0;
     for row = 1:size(newOrder,1)
        for col = 1:size(newOrder,1)
            distanceMatrixFiltered(row, col) = newMatrix(newOrder(row), newOrder(col));
@@ -50,14 +61,26 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
        nameFinal = splittedNamesDataset(splittedNamesDataset.MatrixPosition == newOrder(row), :);
        
        if nameFinal.Positive == 1
-           newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '+'));
+           newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '+', num2str(nameFinal.Iteration)));
        else
-           newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '-'));
+           newNamesSorted{end+1} = cell2mat(strcat(markersNames(nameFinal.Marker), nameFinal.Core, '-', num2str(nameFinal.Iteration)));
        end
+       if nameFinal.Marker ~= nameFinalAnt.Marker
+           annotation(h1,'rectangle', [XInit YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1) YWidthPerSquare*numberOfImages], 'Color','red'); %Horizontally
+           
+           annotation(h1,'rectangle', [XAnt 0.11 XWidthPerSquare*numberOfImages YWidthPerSquare*size(newOrder,1)], 'Color','red'); %Vertically
+           YAnt = YAnt-(YWidthPerSquare*numberOfImages);
+           XAnt = XAnt+(XWidthPerSquare*numberOfImages);
+           numberOfImages = 1;
+       else
+           numberOfImages = numberOfImages + 1;
+       end
+       
+       nameFinalAnt = nameFinal;
     end
-    %HeatMap(distanceMatrixFiltered);
-    heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64; %gray
-    h1 = figure('units','normalized','outerposition',[0 0 1 1]);
+    annotation(h1,'rectangle', [XInit YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1) YWidthPerSquare*numberOfImages], 'Color','red'); %1 square
+    
+    heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64;
     image(heatmap);
     colormap('gray');
     %colormap('jet');
@@ -70,6 +93,6 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     
     namefile = strcat('heatmapGraphlets', algorithmWeWantToShow);
     %saveas(h1, namefile{:});
-    export_fig(h1, namefile{:}, '-png', '-eps', '-jpg', '-tiff', '-a4', '-m3');
+    export_fig(h1, namefile{:}, '-png', '-a4', '-m1.5');
 end
 
