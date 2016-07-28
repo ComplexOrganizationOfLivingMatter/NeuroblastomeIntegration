@@ -23,12 +23,13 @@ for imK = 1:size(filesAdjacency,1)
         nameFileIteration = strsplit(inNameFile{1}, 'It');
         
         if strcmp(nameFileIteration{1}, nameFileAnt) == 0 && strcmp(nameFileAnt, 'p') == 0
-            finishStreamAndSavePlot(explicitStream, max_dimension, nameFileAnt);
+            explicitStream = finishStreamAndSavePlot(explicitStream, max_dimension, nameFileAnt);
         end
         filesAdjacency(imK).name
         
         numIteration = str2num(nameFileIteration{2});
         if numIteration == 1
+            explicitStream = api.Plex4.createExplicitSimplexStream();
             for vertex = 1:size(adjacencyMatrix, 1)
                 explicitStream.addVertex(vertex - 1);
             end
@@ -36,29 +37,25 @@ for imK = 1:size(filesAdjacency,1)
         for i = 1:size(adjacencyMatrix, 1)
             for j = 2:size(adjacencyMatrix, 2)
                 if adjacencyMatrix(i,j) > 0 && i ~= j
-                    explicitStream.addElement([i, j], numIteration);
+                    explicitStream.addElement([i-1, j-1], numIteration);
                     for k = 3:size(adjacencyMatrix, 3)
                         if adjacencyMatrix(i,k) > 0 && i ~= k && adjacencyMatrix(j,k) > 0 && j ~= k
-                            explicitStream.addElement([i, j, k], numIteration);
+                            explicitStream.addElement([i-1, j-1, k-1], numIteration + 0.5);
                         end
                     end
                 end
             end
         end
-        
-        
-        
-        
+
         nameFileAnt = nameFileIteration{1};
     end
+end
+
+finishStreamAndSavePlot(explicitStream, max_dimension, nameFileAnt);
 
 end
 
-    finishStreamAndSavePlot(explicitStream, max_dimension, nameFileAnt);
-
-end
-
-function [] = finishStreamAndSavePlot(explicitStream, max_dimension, nameFile)
+function [explicitStream] = finishStreamAndSavePlot(explicitStream, max_dimension, nameFile)
 
 load_javaplex
 
