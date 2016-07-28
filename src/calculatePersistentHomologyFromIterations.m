@@ -27,9 +27,10 @@ for imK = 1:size(filesAdjacency,1)
         end
         filesAdjacency(imK).name
         
-        numIteration = str2num(nameFileIteration{2});
+        numIteration = str2double(nameFileIteration{2});
         if numIteration == 1
             explicitStream = api.Plex4.createExplicitSimplexStream();
+            
             for vertex = 1:size(adjacencyMatrix, 1)
                 explicitStream.addVertex(vertex - 1);
             end
@@ -37,11 +38,13 @@ for imK = 1:size(filesAdjacency,1)
         for i = 1:size(adjacencyMatrix, 1)
             for j = 2:size(adjacencyMatrix, 2)
                 if adjacencyMatrix(i,j) > 0 && i ~= j
-                    explicitStream.addElement([i-1, j-1], numIteration);
-                    for k = 3:size(adjacencyMatrix, 3)
-                        if adjacencyMatrix(i,k) > 0 && i ~= k && adjacencyMatrix(j,k) > 0 && j ~= k
-                            explicitStream.addElement([i-1, j-1, k-1], numIteration + 0.5);
-                        end
+                    if explicitStream.exists([i-1, j-1]) == 0
+                        explicitStream.addElement([i-1, j-1], numIteration);
+                    end
+                end
+                for k = 3:size(adjacencyMatrix, 3)
+                    if adjacencyMatrix(i,k) > 0 && adjacencyMatrix(i,j) > 0 && i ~= j && i ~= k && adjacencyMatrix(j,k) > 0 && j ~= k && explicitStream.exists([i-1, j-1]) == 0
+                        explicitStream.addElement([i-1, j-1, k-1], numIteration);
                     end
                 end
             end
