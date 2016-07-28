@@ -10,11 +10,11 @@ filesAdjacency = filesAdjacency(3:size(filesAdjacency,1)-2)
 
 explicitStream = api.Plex4.createExplicitSimplexStream();
 nameFileAnt = 'p';
+max_dimension = 2;
 for imK = 1:size(filesAdjacency,1)
-    if (filesAdjacency(imK).isdir == 0 && size(strfind(filesAdjacency(imK).name, 'minimumDistanceClasses'),1) == 1 && size(strfind(lower(filesAdjacency(imK).name), '.mat'),1) == 1 && (size(strfind(filesAdjacency(imK).name, 'COL'),1) == 0 && size(strfind(filesAdjacency(imK).name, 'CD31'),1) == 0 && size(strfind(filesAdjacency(imK).name, 'RET'),1) == 0 && size(strfind(filesAdjacency(imK).name, 'GAG'),1) == 0))
+    if (filesAdjacency(imK).isdir == 0 && size(strfind(filesAdjacency(imK).name, 'minimumDistanceClasses'),1) == 1 && size(strfind(lower(filesAdjacency(imK).name), 'posi'),1) == 1 && (size(strfind(filesAdjacency(imK).name, 'COL'),1) == 0 && size(strfind(filesAdjacency(imK).name, 'CD31'),1) == 0 && size(strfind(filesAdjacency(imK).name, 'RET'),1) == 0 && size(strfind(filesAdjacency(imK).name, 'GAG'),1) == 0))
 
         inNameFile = strsplit(strrep(filesAdjacency(imK).name,' ','_'), '.');
-        max_dimension = 2;
         
         load([PathCurrent, '\', filesAdjacency(imK).name]);
         
@@ -23,17 +23,7 @@ for imK = 1:size(filesAdjacency,1)
         nameFileIteration = strsplit(inNameFile{1}, 'It');
         
         if strcmp(nameFileIteration{1}, nameFileAnt) == 0 && strcmp(nameFileAnt, 'p') == 0
-            explicitStream.finalizeStream();
-            % get persistence algorithm over Z/2Z
-            persistence = api.Plex4.getModularSimplicialAlgorithm(max_dimension, 2);
-            
-            % compute and print the intervals
-            intervals1 = persistence.computeIntervals(explicitStream);
-            
-            % compute and print the intervals annotated with a representative cycle
-            intervals2 = persistence.computeAnnotatedIntervals(explicitStream);
-            options.max_dimension = max_dimension - 1;
-            plot_barcodes(intervals1, options);
+            finishStreamAndSavePlot(explicitStream, max_dimension, nameFileAnt);
         end
         filesAdjacency(imK).name
         
@@ -59,9 +49,19 @@ for imK = 1:size(filesAdjacency,1)
         
         
         
-        nameFileAnt = inNameFile{1};
+        nameFileAnt = nameFileIteration{1};
     end
+
 end
+
+    finishStreamAndSavePlot(explicitStream, max_dimension, nameFileAnt);
+
+end
+
+function [] = finishStreamAndSavePlot(explicitStream, max_dimension, nameFile)
+
+load_javaplex
+
 explicitStream.finalizeStream();
 % get persistence algorithm over Z/2Z
 persistence = api.Plex4.getModularSimplicialAlgorithm(max_dimension, 2);
@@ -72,6 +72,8 @@ intervals1 = persistence.computeIntervals(explicitStream);
 % compute and print the intervals annotated with a representative cycle
 intervals2 = persistence.computeAnnotatedIntervals(explicitStream);
 options.max_dimension = max_dimension - 1;
+options.filename = nameFile;
 plot_barcodes(intervals1, options);
+close all
 
 end
