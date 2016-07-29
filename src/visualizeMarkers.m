@@ -1,6 +1,6 @@
 function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, typeOfGCD)
 
-    
+    [newNames, newMatrix, splittedNames] = removeNaNs(distanceMatrix, nameFiles);
     
     fName = 'E:\Pablo\Neuroblastoma\Results\NetworksInformation.csv';
     fid = fopen(fName,'w');            %# Open the file
