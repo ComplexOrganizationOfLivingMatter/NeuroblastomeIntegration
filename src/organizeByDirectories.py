@@ -16,27 +16,23 @@ for file in onlyfiles:
 		else:
 			fileSplitted = str.split(file, '_')
 
+		directoryName = 'p';
 		if file.startswith('centroids'):
-			if fileSplitted[4].startswith('Y'):
-				withoutExtension = str.split(fileSplitted[4], '.')
-				directoryName = sys.argv[1] + withoutExtension[0] + '_' + fileSplitted[1]
-			elif fileSplitted[2].startswith('Y'):
+			if fileSplitted[1].startswith('Y'):
 				directoryName = sys.argv[1] + fileSplitted[1] + '_' + fileSplitted[2]
-			else:
-				directoryName = sys.argv[1] + fileSplitted[3] + '_' + fileSplitted[1]
 		else:
 			if fileSplitted[2].startswith('Y0'):
 				directoryName = fileSplitted[0] + '_' + fileSplitted[1] + '_' + fileSplitted[2]
 			else:
 				directoryName = fileSplitted[0][:-1] + '_' + fileSplitted[0][-1:] +  '_' + fileSplitted[1]
 
-		if not os.path.exists(directoryName):
-			os.makedirs(directoryName)	
-		
-		
-		if len(sys.argv) > 1:
-			os.rename(sys.argv[1] + file, directoryName + os.sep + file)
-		else:
-			os.rename(file, directoryName + os.sep + file)
+
+		if len(directoryName) > 2:
+			if not os.path.exists(directoryName):
+				os.makedirs(directoryName)
+			if len(sys.argv) > 1:
+				os.rename(sys.argv[1] + file, directoryName + os.sep + file)
+			else:
+				os.rename(file, directoryName + os.sep + file)
 		
 
