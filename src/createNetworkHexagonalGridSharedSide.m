@@ -21,7 +21,7 @@ function [ ] = createNetworkHexagonalGridSharedSide()
             %Segment the file with a threshold of 0.2, we'll get an Img with only 1s and 0s
             Img = im2bw(Img, 0.2);
             %We're using these radius masks
-            for numMask = [5, 10, 15, 25, 50, 100]
+            for numMask = [30, 50, 100] %remaining: 5, 10, 15, 20,
                 %Input file
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
 
