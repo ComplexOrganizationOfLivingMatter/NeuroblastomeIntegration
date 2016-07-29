@@ -10,22 +10,33 @@ else:
 
 for file in onlyfiles:
 	if file != 'organizeByDirectories.py':
-		
-		file = str.trim('centroids')
-		
+		print file
 		if file.startswith('_'):
 			fileSplitted = str.split(file[1:], '_')
 		else:
 			fileSplitted = str.split(file, '_')
 
-		if fileSplitted[2].startswith('Y0'):
-			directoryName = fileSplitted[0] + '_' + fileSplitted[1] + '_' + fileSplitted[2]
+		if file.startswith('centroids'):
+			if fileSplitted[4].startswith('Y'):
+				withoutExtension = str.split(fileSplitted[4], '.')
+				directoryName = sys.argv[1] + withoutExtension[0] + '_' + fileSplitted[1]
+			elif fileSplitted[2].startswith('Y'):
+				directoryName = sys.argv[1] + fileSplitted[1] + '_' + fileSplitted[2]
+			else:
+				directoryName = sys.argv[1] + fileSplitted[3] + '_' + fileSplitted[1]
 		else:
-			directoryName = fileSplitted[0][:-1] + '_' + fileSplitted[0][-1:] +  '_' + fileSplitted[1]
+			if fileSplitted[2].startswith('Y0'):
+				directoryName = fileSplitted[0] + '_' + fileSplitted[1] + '_' + fileSplitted[2]
+			else:
+				directoryName = fileSplitted[0][:-1] + '_' + fileSplitted[0][-1:] +  '_' + fileSplitted[1]
 
 		if not os.path.exists(directoryName):
 			os.makedirs(directoryName)	
-
-		os.rename(file, directoryName + os.sep + file)
-
+		
+		
+		if len(sys.argv) > 1:
+			os.rename(sys.argv[1] + file, directoryName + os.sep + file)
+		else:
+			os.rename(file, directoryName + os.sep + file)
+		
 
