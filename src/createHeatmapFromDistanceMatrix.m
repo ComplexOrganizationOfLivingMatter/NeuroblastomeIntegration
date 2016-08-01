@@ -6,11 +6,11 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     
     splittedNamesDataset = cell2dataset([{'Marker', 'Case', 'Iteration', 'Algorithm', 'Positive', 'Core', 'MatrixPosition'}; splittedNames]);
     
+    newOrder = zeros(size(distanceMatrix, 1), 1);
+    actualRow = 1;
     for actualAlgorithm = 1:size(algorithmWeWantToShow, 2)
         algorithmFilter = splittedNamesDataset(ismember(splittedNamesDataset.Algorithm, algorithmWeWantToShow(actualAlgorithm)), :);
         if isempty(algorithmFilter) == 0
-            newOrder = zeros(size(distanceMatrix, 1), 1);
-            actualRow = 1;
             for actualCase = 1 %:11
                 caseFilter = algorithmFilter(str2num(cell2mat(algorithmFilter.Case(:))) == actualCase, :);
                 if isempty(caseFilter) == 0
@@ -82,15 +82,15 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     %YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1)
     %YWidthPerSquare*numberOfImages], 'Color','red'); %Gray
     
-    heatmap = (distanceMatrixFiltered/max(distanceMatrixFiltered(:)))*64;
+    heatmap = (distanceMatrixFiltered/max(newMatrix(:)))*64;
     image(heatmap);
     %colormap('gray');
-    colormap('jet');
+    colormap('pink');
     axis image
     colorbar
 
     title(strcat('Distance between graphlets of algorithm',': ' ,algorithmWeWantToShow));
-    set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 2);
+    set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 6);
     set(gca,'XTick', [1:size(newNamesSorted,2)], 'XTickLabel', newNamesSorted, 'XTickLabelRotation', 90.0);
     
     namefile = strcat('heatmapGraphlets', algorithmWeWantToShow);
