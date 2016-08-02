@@ -56,13 +56,15 @@ Temporary Items
 *.exe
 
 #libraries
-export_fig-master/
 networkx-1.11/
 drtoolbox/
 TestData/
 ExternalTools/
-src/lib/*
 Results/
+src/lib/Codigo_BCT
+src/lib/CustomizableHeatmap
+src/lib/export_fig-master/
+src/lib/plot2svg-master
 *.png
 *.fig
 *.bmp
