@@ -14,8 +14,8 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
 		return
     end
 	
-    mDistanceBetweenClusters = squareform(distanceBetweenClusters);
-    mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int32');
+    mDistanceBetweenClusters = distanceBetweenClusters;
+    mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int16');
 
 	i = 1;
     iteration = 1;
@@ -45,8 +45,8 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
         end
         
         
-        mDistanceBetweenClusters(rowMin, colMin) = intmax('int32');
-        mDistanceBetweenClusters(colMin, rowMin) = intmax('int32');
+        mDistanceBetweenClusters(rowMin, colMin) = intmax('int16');
+        mDistanceBetweenClusters(colMin, rowMin) = intmax('int16');
         
         i = i + 1;
     end

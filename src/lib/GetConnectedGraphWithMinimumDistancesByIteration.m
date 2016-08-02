@@ -12,8 +12,8 @@ function [ adjacencyMatrixWeights ] = GetConnectedGraphWithMinimumDistancesByIte
 		return
     end
 
-    mDistanceBetweenClusters = squareform(distanceBetweenClusters);
-    mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int32');
+    mDistanceBetweenClusters = distanceBetweenClusters;
+    mDistanceBetweenClusters(logical(eye(size(mDistanceBetweenClusters)))) = intmax('int16');
 
     iteration = 1;
     while 1
@@ -46,8 +46,8 @@ function [ adjacencyMatrixWeights ] = GetConnectedGraphWithMinimumDistancesByIte
         end
         
         
-        mDistanceBetweenClusters(rowMin, colMin) = intmax('int32');
-        mDistanceBetweenClusters(colMin, rowMin) = intmax('int32');
+        mDistanceBetweenClusters(rowMin, colMin) = intmax('int16');
+        mDistanceBetweenClusters(colMin, rowMin) = intmax('int16');
     end
 end
 
