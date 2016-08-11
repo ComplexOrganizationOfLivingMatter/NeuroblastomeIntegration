@@ -36,8 +36,13 @@ function [ ] = createNetworkMinimumDistance( )
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), 'It1.mat')
             if exist(outputFileName{:}, 'file') ~= 2
-                %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                adjacencyMatrix = GetConnectedGraphWithMinimumDistancesByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+                try
+                    %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+                    adjacencyMatrix = GetConnectedGraphWithMinimumDistancesByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+                catch exception
+                    disp(exception.identifier)
+                    error('An unexpected error has occured')
+                end
             end
             %--------------------------------------------------------%
             
@@ -47,7 +52,12 @@ function [ ] = createNetworkMinimumDistance( )
             outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
 			if exist(outputFileName{:}, 'file') ~= 2
                 %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                adjacencyMatrix = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+                try
+                    adjacencyMatrix = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+                catch exception
+                    disp(exception.identifier)
+                    error('An unexpected error has occured')
+                end
             end
             %--------------------------------------------------------%
 		end

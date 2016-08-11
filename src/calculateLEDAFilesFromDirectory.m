@@ -16,12 +16,22 @@ function [ ] = calculateLEDAFilesFromDirectory( )
             if exist(outputLEDAFileName{:}, 'file') ~= 2
                 load(lee_matrices(imK).name);
                 if exist('adjacencyMatrix', 'var') == 1
-                    generateLEDAFromAdjacencyMatrix(sparse(adjacencyMatrix), outputLEDAFileName{:})
-                    clear adjacencyMatrix
+                    try
+                        generateLEDAFromAdjacencyMatrix(sparse(adjacencyMatrix), outputLEDAFileName{:})
+                        clear adjacencyMatrix
+                    catch exception
+                        disp(exception.identifier)
+                        error('An unexpected error has occured')
+                    end
                 end
                 if exist('adjacencyMatrixComplete', 'var') == 1
-                    generateLEDAFromAdjacencyMatrix(adjacencyMatrixComplete, outputLEDAFileName{:})
-                    clear adjacencyMatrixComplete
+                    try
+                        generateLEDAFromAdjacencyMatrix(adjacencyMatrixComplete, outputLEDAFileName{:})
+                        clear adjacencyMatrixComplete
+                    catch exception
+                        disp(exception.identifier)
+                        error('An unexpected error has occured')
+                    end
                 end
             end
         end

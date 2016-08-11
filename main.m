@@ -257,7 +257,7 @@ calculateBasicMeasuresOfAllNetworksOfDirectory
 
 %-----------------------------------------------
 
-cd ExternalTools\JavaPlex
+cd E:\Pablo\Neuroblastoma\NeuroblastomeIntegration\ExternalTools\JavaPlex
 
 calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreA\')
 
@@ -293,3 +293,122 @@ calculatePersistentHomology('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2
 
 cd ..
 cd ..
+
+%--------------------------------
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreA\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 2. Y02A_02B03119A\CoreA\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 2. Y02A_02B03119A\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 3. Y02A_02B13320A\CoreA\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 4. Y03A_03B12888B\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 5. Y03A_03B17300B\CoreA\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 5. Y03A_03B17300B\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 6. Y03B_03B03346B\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 7. Y03B_03B07423A\CoreA\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 7. Y03B_03B07423A\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 8. Y03B_03B08572A\CoreA\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 8. Y03B_03B08572A\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 9. Y2_333688B\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 10. Y2_99B00646B\CoreB\Adjacency\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\'
+calculateLEDAFilesFromDirectory
+
+%-------------------------------------------
+load('E:\Pablo\Neuroblastoma\Results\graphletsCount\Casos\1\matlabGCD73.mat');
+
+markersNames = {'RET', 'COL', 'GAG', 'CD31', 'CD45', 'CD4', 'CD7', 'CD8', 'CD11b', 'CD11c', 'CD20', 'CD68', 'CD163', 'OCT4', 'S100A6'};
+algorithm = {'minimumDistanceClassesBetweenPairs', 'minimumDistanceClasses', 'adjacencyMatrix_hexagonalSharedSide', 'adjacencyMatrix_ContigousHexagonalMeanArea', 'centroids'};
+%centroids = persistent homology
+markersWeWantToShow = {'RET', 'COL', 'GAG', 'CD31', 'CD11b', 'CD11c', 'CD163', 'OCT4'}; % 'CD11b' 
+algorithmWeWantToShow = {'adjacencyMatrix_ContigousHexagonalMeanArea', 'minimumDistanceClassesBetweenPairs'};
+
+%visualizeMarkers(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, 'GCD73');
+
+createHeatmapFromDistanceMatrix(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow);
+
+%------------------------------------------%
+
+
+cd E:\Pablo\Neuroblastoma\NeuroblastomeIntegration\ExternalTools\JavaPlex
+
+calculatePersistentHomologyFromIterations('E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreB\Adjacency');
+
+%------------------------------------------%
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreA\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 1. Y01_01B16459B\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 2. Y02A_02B03119A\CoreA\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 2. Y02A_02B03119A\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 3. Y02A_02B13320A\CoreA\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 4. Y03A_03B12888B\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 5. Y03A_03B17300B\CoreA\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 5. Y03A_03B17300B\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 6. Y03B_03B03346B\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 7. Y03B_03B07423A\CoreA\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 7. Y03B_03B07423A\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 8. Y03B_03B08572A\CoreA\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 8. Y03B_03B08572A\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 9. Y2_333688B\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 10. Y2_99B00646B\CoreB\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\'
+getMinimumDistancesFromHexagonalGrid

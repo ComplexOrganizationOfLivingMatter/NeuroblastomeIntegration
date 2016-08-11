@@ -26,8 +26,15 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
                                         if isempty(coreFilter) == 0
                                             iters = sort(coreFilter.Iteration);
                                             for actualIter = 1:size(iters,1)
-                                                newOrder(actualRow) = coreFilter(coreFilter.Iteration == iters(actualIter), :).MatrixPosition;
-                                                actualRow = actualRow + 1;
+                                                if actualAlgorithm == 1
+                                                    if iters(actualIter) == 50 
+                                                        newOrder(actualRow) = coreFilter(coreFilter.Iteration == iters(actualIter), :).MatrixPosition;
+                                                        actualRow = actualRow + 1;
+                                                    end
+                                                else
+                                                    newOrder(actualRow) = coreFilter(coreFilter.Iteration == iters(actualIter), :).MatrixPosition;
+                                                    actualRow = actualRow + 1;
+                                                end
                                             end
                                         end
                                     end
@@ -85,7 +92,7 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     heatmap = (distanceMatrixFiltered/max(newMatrix(:)))*64;
     image(heatmap);
     %colormap('gray');
-    colormap('pink');
+    %colormap('pink');
     axis image
     colorbar
 
