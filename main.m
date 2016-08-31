@@ -350,7 +350,7 @@ markersNames = {'RET', 'COL', 'GAG', 'CD31', 'CD45', 'CD4', 'CD7', 'CD8', 'CD11b
 algorithm = {'minimumDistanceClassesBetweenPairs', 'minimumDistanceClasses', 'adjacencyMatrix_hexagonalSharedSide', 'adjacencyMatrix_ContigousHexagonalMeanArea', 'centroids'};
 %centroids = persistent homology
 markersWeWantToShow = {'RET', 'COL', 'GAG', 'CD31', 'CD11b', 'CD11c', 'CD163', 'OCT4'}; % 'CD11b' 
-algorithmWeWantToShow = {'adjacencyMatrix_ContigousHexagonalMeanArea', 'minimumDistanceClassesBetweenPairs'};
+algorithmWeWantToShow = {'minimumDistanceClasses', 'minimumDistanceClassesBetweenPairs'};
 
 %visualizeMarkers(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, 'GCD73');
 
