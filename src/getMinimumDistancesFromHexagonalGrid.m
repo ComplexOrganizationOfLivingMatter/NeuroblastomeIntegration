@@ -31,6 +31,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                 %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
                     %Get output file names
                     inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
+                    inNameFile = [strcat(inNameFile(1),'_Radius' , num2str(numMask))];
                     outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
                     if exist(outputFileName{:}, 'file') ~= 2
                         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
@@ -41,6 +42,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                     %--------------------- adjacencyMatrix_minimumDistanceIt ------------------%
                     %Get output file names
                     inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
+                    inNameFile = [strcat(inNameFile(1),'_Radius' , num2str(numMask))];
                     outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), 'It1.mat')
                     if exist(outputFileName{:}, 'file') ~= 2
                         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
