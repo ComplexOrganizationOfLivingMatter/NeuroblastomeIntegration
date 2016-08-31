@@ -27,10 +27,8 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
                                             iters = sort(coreFilter.Iteration);
                                             for actualIter = 1:size(iters,1)
                                                 if actualAlgorithm == 1
-                                                    if iters(actualIter) == 50 
                                                         newOrder(actualRow) = coreFilter(coreFilter.Iteration == iters(actualIter), :).MatrixPosition;
                                                         actualRow = actualRow + 1;
-                                                    end
                                                 else
                                                     newOrder(actualRow) = coreFilter(coreFilter.Iteration == iters(actualIter), :).MatrixPosition;
                                                     actualRow = actualRow + 1;
@@ -57,7 +55,7 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     YInit = 0.11+0.8150;
     XWidthPerSquare = 0.85/2/size(newOrder,1);
     YWidthPerSquare = 0.8150/size(newOrder,1);
-    nameFinalAnt = splittedNamesDataset(splittedNamesDataset.MatrixPosition == newOrder(1), :);;
+    nameFinalAnt = splittedNamesDataset(splittedNamesDataset.MatrixPosition == newOrder(1), :);
     YAnt = YInit;
     XAnt = XInit;
     numberOfImages = 0;
@@ -100,8 +98,8 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
     set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 6);
     set(gca,'XTick', [1:size(newNamesSorted,2)], 'XTickLabel', newNamesSorted, 'XTickLabelRotation', 90.0);
     
-    namefile = strcat('heatmapGraphlets', algorithmWeWantToShow);
+    namefile = strcat('heatmapGraphlets_', strjoin(algorithmWeWantToShow, '-'), '_', strjoin(markersWeWantToShow, '-'));
     %saveas(h1, namefile{:});
-    export_fig(h1, namefile{:}, '-png', '-a4', '-m1.5');
+    export_fig(h1, namefile, '-png', '-a4', '-m1.5');
 end
 
