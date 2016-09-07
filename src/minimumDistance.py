@@ -16,8 +16,9 @@ G.add_nodes_from(np.arange(len(distanceMatrix)))
 iteration = 1
 while True:
 
-	sortedDegree = sorted(G.degree().values())
-	if sortedDegree[0] >= iteration: #create the network of iteration
+	minDegree = min(G.degree().values())
+	#print minDegree
+	if minDegree >= iteration: #create the network of iteration
 		#Output files of the network
 
 		outputFileName = fileName.split('/')
