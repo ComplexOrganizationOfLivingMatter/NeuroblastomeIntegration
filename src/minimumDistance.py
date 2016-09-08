@@ -44,7 +44,7 @@ for fileName in onlyfiles:
 				outputFileName = fileName.split('.')
 				adjacencyMatrixOut = nx.adjacency_matrix(G)
 				print outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat'
-				#scipy.io.savemat(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut.todense()})
+				scipy.io.savemat(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut.todense()})
 				iteration = iteration + 1
 				print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 				ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
