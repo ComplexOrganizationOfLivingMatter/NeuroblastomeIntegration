@@ -10,8 +10,8 @@ print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 
 
 
-fileName = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/minimumDistanceClasses12_01B16459A_CD68_negativos_Y01DistanceMatrix.mat'
-#fileName = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/minimumDistanceClasses13_01B16459A_CD163_positivos_Y01DistanceMatrix.mat'
+#fileName = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/minimumDistanceClasses5_Y02A_02B03119A_CD45_Negativas_IPPDistanceMatrix.mat'
+fileName = 'E:/Pablo/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/minimumDistanceClasses13_01B16459A_CD163_positivos_Y01DistanceMatrix.mat'
 
 
 #print start
@@ -38,6 +38,7 @@ while True:
 		print outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat'
 		scipy.io.savemat(outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut.todense()})
 		iteration = iteration + 1
+		print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 		ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
 		
 		if len(ccomp) == 1:
