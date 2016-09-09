@@ -9,7 +9,7 @@ function [ ] = calculateLEDAFilesFromDirectory( )
     lee_matrices = dir(PathCurrent);
     lee_matrices = lee_matrices(3:size(lee_matrices,1));
     for imK = 1:size(lee_matrices,1)
-        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'minimum'),1) == 1)
+        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'minimum'),1) == 1) && size(strfind(lower(lee_matrices(imK).name), 'distancematrix'),1) == 0
             lee_matrices(imK).name
             inNameFile = strsplit(lee_matrices(imK).name, '.');
             outputLEDAFileName = strcat('../visualize/', inNameFile(1), '.gw')
@@ -20,8 +20,9 @@ function [ ] = calculateLEDAFilesFromDirectory( )
                         generateLEDAFromAdjacencyMatrix(sparse(adjacencyMatrix), outputLEDAFileName{:})
                         clear adjacencyMatrix
                     catch exception
-                        disp(exception.identifier)
-                        error('An unexpected error has occured')
+                        disp(exception)
+                        generateLEDAFromAdjacencyMatrix(adjacencyMatrix, outputLEDAFileName{:})
+                        %error('An unexpected error has occured')
                     end
                 end
                 if exist('adjacencyMatrixComplete', 'var') == 1
@@ -29,8 +30,8 @@ function [ ] = calculateLEDAFilesFromDirectory( )
                         generateLEDAFromAdjacencyMatrix(adjacencyMatrixComplete, outputLEDAFileName{:})
                         clear adjacencyMatrixComplete
                     catch exception
-                        disp(exception.identifier)
-                        error('An unexpected error has occured')
+                        disp(exception)
+                        %error('An unexpected error has occured')
                     end
                 end
             end
