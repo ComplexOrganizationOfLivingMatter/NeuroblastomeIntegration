@@ -9,7 +9,7 @@ from os.path import isfile, join
 import os.path
 
 
-mypath = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/'
+mypath = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreA/Adjacency/'
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 #fileName = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/minimumDistanceClasses5_Y02A_02B03119A_CD45_Negativas_IPPDistanceMatrix.mat'
 #fileName = '/media/Data/Pablo/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/minimumDistanceClasses13_01B16459A_CD163_negativos_Y01DistanceMatrix.mat'
@@ -17,14 +17,16 @@ onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
 for fileName in onlyfiles:
 	outputFileName = fileName.split('.')
-	print outputFileName[0].strip('DistanceMatrix') + 'It' + '1' + '.mat'
+	#print outputFileName[0].strip('DistanceMatrix') + 'It' + '1' + '.mat'
 	if "DistanceMatrix.mat" in fileName and os.path.isfile(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + '1' + '.mat') == 0:
 		start = time.time()
 		print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 		#print start
-		print mypath + fileName
+		#print mypath + fileName
 		mat = scipy.io.loadmat(mypath + fileName)
+		#fileName = 'minimumDistanceClasses5_Y2_99B00646B_CD45_Negativas_IPPDistanceMatrix.mat'
 		distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
+		distanceMatrixAux = distanceMatrix;
 
 		#Creating network
 		G = nx.Graph()
@@ -33,39 +35,54 @@ for fileName in onlyfiles:
 
 		iteration = 1
 		while True:
+			maxDistanceIteration = 0;
+			indicesMaxDistanceIteration = 0
+			for numRow in range(len(distanceMatrix)):
+				minValue = distanceMatrixAux[numRow][distanceMatrixAux[numRow] != 0].min()
+				#print minValue
+				indices = np.where(distanceMatrixAux[numRow] == minValue)
+				#print numRow
+				#print indices
+				distanceMatrixAux[indices[0][0], indices[1][0]] = 0.0
 
-			minDegree = min(G.degree().values())
-			#print minDegree
-			if minDegree >= iteration: #create the network of iteration
-				#Output files of the network
-
-				#outputFileName = fileName.split('/')
-				#outputFileName = outputFileName[11].split('.')
-				outputFileName = fileName.split('.')
-				adjacencyMatrixOut = nx.adjacency_matrix(G)
-				print outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat'
-				scipy.io.savemat(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut.todense()})
-				iteration = iteration + 1
-				print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
-				ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
+				if minValue > maxDistanceIteration:
+					maxDistanceIteration = minValue
+					indicesMaxDistanceIteration = indices
 				
-				if len(ccomp) == 1:
-					break
-
-
-			minValue = distanceMatrix[distanceMatrix != 0].min()
-			indices = np.where(distanceMatrix == minValue)
-
-			#Remove that edge
+			#print maxDistanceIteration
+			#Remove edges
 			#print indices
+			indices = np.where(distanceMatrix <= maxDistanceIteration)
 			for index in range(len(indices[0])):
-				distanceMatrix[indices[0][index], indices[1][index]] = 0.0
-				#Add the edge
-				edge = (indices[0][index], indices[1][index])
-				G.add_edge(*edge)
+				if distanceMatrix[indices[0][index], indices[1][index]] != 0:
+					distanceMatrix[indices[0][index], indices[1][index]] = 0.0
+					#Add the edge
+					edge = (indices[0][index], indices[1][index])
+					G.add_edge(*edge)
 
+			#Last edge
+			# distanceMatrixAux[indicesMaxDistanceIteration[0][0], indicesMaxDistanceIteration[1][0]] = 0.0
+			# edge = (indicesMaxDistanceIteration[0][0], indicesMaxDistanceIteration[1][0])
+			# G.add_edge(*edge)
+
+			# ----------- iteration is over! ------------#
+
+			#Output files of the network
+			#outputFileName = fileName.split('/')
+			#outputFileName = outputFileName[11].split('.')
+			outputFileName = fileName.split('.')
+			adjacencyMatrixOut = nx.adjacency_matrix(G)
+			print outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat'
+			scipy.io.savemat(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut.todense()})
+			iteration = iteration + 1
+			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
+			ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
+			#print len(ccomp)
+			if len(ccomp) == 1:
+				break
 
 
 		print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 		end = time.time()
 		print (end - start)
+		break
