@@ -10,9 +10,21 @@ import os.path
 
 
 mypaths = []
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreB/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 3. Y02A_02B13320A/CoreA/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 4. Y03A_03B12888B/CoreB/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreA/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreB/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 6. Y03B_03B03346B/CoreB/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreA/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreB/Adjacency/')
 mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreA/Adjacency/')
 mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreB/Adjacency/')
 mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 9. Y2_333688B/CoreB/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/')
 mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
 
 for mypath in mypaths:
@@ -23,8 +35,8 @@ for mypath in mypaths:
 
 	for fileName in onlyfiles:
 		outputFileName = fileName.split('.')
-		#print outputFileName[0].strip('DistanceMatrix')
-		if "DistanceMatrix.mat" in fileName and os.path.isfile(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + '1' + '.mat') == 0:
+		#print outputFileName[0][:-14]
+		if "DistanceMatrix.mat" in fileName and os.path.isfile(mypath + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
@@ -37,7 +49,7 @@ for mypath in mypaths:
 			#print np.triu(distanceMatrix)
 			
 			print len(distanceMatrix)
-			if len(distanceMatrix) > 10:
+			if len(distanceMatrix) > 15:
 				#Creating network
 				G = nx.Graph()
 				#With an initial number of nodes
@@ -98,10 +110,10 @@ for mypath in mypaths:
 					#Output files of the network
 					#outputFileName = fileName.split('/')
 					#outputFileName = outputFileName[11].split('.')
-					outputFileName = fileName.split('.')
+					#outputFileName = fileName.split('.')
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
-					print outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat'
-					scipy.io.savemat(mypath + outputFileName[0].strip('DistanceMatrix') + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
+					scipy.io.savemat(mypath + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 					iteration = iteration + 1
 					# print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 					#ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
@@ -113,6 +125,10 @@ for mypath in mypaths:
 					#print np.where(sum(adjacencyMatrix) == min(sum(adjacencyMatrix)))
 					#print sum(adjacencyMatrixOut.todense()).min()
 					#print np.where(sum(adjacencyMatrixOut.todense()) == sum(adjacencyMatrixOut.todense()).min())
+					if iteration > 300:
+						print 'Error!'
+						break
+
 					if nx.is_connected(G):
 						#if len(ccomp) == 1:
 						break
