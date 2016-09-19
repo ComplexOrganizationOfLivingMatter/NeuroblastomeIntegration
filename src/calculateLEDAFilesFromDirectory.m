@@ -16,6 +16,7 @@ function [ ] = calculateLEDAFilesFromDirectory( )
             if exist(outputLEDAFileName{:}, 'file') ~= 2
                 load(lee_matrices(imK).name);
                 if exist('adjacencyMatrix', 'var') == 1
+                    adjacencyMatrix(adjacencyMatrix > 0) = 1;
                     try
                         generateLEDAFromAdjacencyMatrix(sparse(adjacencyMatrix), outputLEDAFileName{:})
                         clear adjacencyMatrix

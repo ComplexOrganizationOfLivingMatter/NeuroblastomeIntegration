@@ -29,8 +29,8 @@ function [ ] = createNetworkMinimumDistance( )
 
 			% Measure pairwise distance
 			distanceBetweenObjects = pdist(Centroids,'euclidean');
-            %distanceBetweenObjects = squareform(distanceBetweenObjects);
             
+            %%%%%%%%    REPLACED BY MINIMUMDISTANCE.PY    %%%%%%%%%%%%%%
             %--------------------- minimumDistanceIt ------------------%
 %             %Get output file names
 %             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
@@ -48,6 +48,7 @@ function [ ] = createNetworkMinimumDistance( )
             
             %--------------------- minimumDistanceBetweenPairsIt ------------------%
             %Get output file names
+            distanceBetweenObjects = squareform(distanceBetweenObjects);
             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
             outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
 			if exist(outputFileName{:}, 'file') ~= 2
