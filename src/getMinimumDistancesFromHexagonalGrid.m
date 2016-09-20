@@ -13,7 +13,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
             Img = im2bw(Img, 0.2);
             for numMask = [50] %5, 10, 15 remaining
                 inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
-                outputFileName = strcat('visualize\distanceMatrix_adjacencyMatrix', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'Diamet.mat')
+                outputFileName = strcat('adjacency\adjacencyMatrix', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
                 distanceMatrix = '';
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\..\..\..\..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
@@ -21,8 +21,9 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
                     distanceMatrix = getDistanceMatrixFromHexagonalGrid(Img, mask);
+                    distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceMatrix', '-v7.3');
+                    save(outputFileName{:}, 'distanceBetweenObjects');
                 else
                     distanceMatrix = importdata(outputFileName{:});
                 end
@@ -41,13 +42,13 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
 
                     %--------------------- adjacencyMatrix_minimumDistanceIt ------------------%
                     %Get output file names
-                    inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
-                    inNameFile = [strcat(inNameFile(1),'_Radius' , num2str(numMask))];
-                    outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), 'It1.mat')
-                    if exist(outputFileName{:}, 'file') ~= 2
-                        %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                        GetConnectedGraphWithMinimumDistancesByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), inNameFile);
-                    end
+%                     inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
+%                     inNameFile = [strcat(inNameFile(1),'_Radius' , num2str(numMask))];
+%                     outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), 'It1.mat')
+%                     if exist(outputFileName{:}, 'file') ~= 2
+%                         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+%                         GetConnectedGraphWithMinimumDistancesByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), inNameFile);
+%                     end
                     %--------------------------------------------------------%
                 end
             end
