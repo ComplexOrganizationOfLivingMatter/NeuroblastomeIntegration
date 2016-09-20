@@ -29,9 +29,6 @@ mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2
 
 for mypath in mypaths:
 	onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-	#fileName = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/minimumDistanceClasses5_Y02A_02B03119A_CD45_Negativas_IPPDistanceMatrix.mat'
-	#fileName = '/media/Data/Pablo/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/minimumDistanceClasses13_01B16459A_CD163_negativos_Y01DistanceMatrix.mat'
-
 
 	for fileName in onlyfiles:
 		outputFileName = fileName.split('.')
@@ -61,14 +58,15 @@ for mypath in mypaths:
 					maxDistanceIteration = 0;
 					indicesMaxDistanceIteration = 0
 					numRow = 0;
+					#distanceMatrixAux will be the matrix in which we will add remove the minimum closest
+					#vertex of the row.
 					for row in distanceMatrixAux:
 						try:
+							#minimum except zeros
 							minValue = row[row != 0].min()
 							#print minValue
+							#indices of the min value
 							indices = np.where(row == minValue)
-							#print row
-							#print indices
-							#print distanceMatrixAux[numRow, indices[1][0]]
 							#first of indice's array is 0 always. Then it should be 'row', the real row.
 							distanceMatrixAux[numRow, indices[1][0]] = 0
 							#distanceMatrixAux[indices[1][0], row] = 0
@@ -125,10 +123,13 @@ for mypath in mypaths:
 					#print np.where(sum(adjacencyMatrix) == min(sum(adjacencyMatrix)))
 					#print sum(adjacencyMatrixOut.todense()).min()
 					#print np.where(sum(adjacencyMatrixOut.todense()) == sum(adjacencyMatrixOut.todense()).min())
+
+					#If the iteration goes over 300, it has to be an error
 					if iteration > 300:
 						print 'Error!'
 						break
 
+					#if the graph is connected, we finish the algorithm
 					if nx.is_connected(G):
 						#if len(ccomp) == 1:
 						break
