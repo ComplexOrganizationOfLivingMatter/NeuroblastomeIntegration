@@ -10,22 +10,23 @@ import os.path
 
 
 mypaths = []
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 3. Y02A_02B13320A/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 4. Y03A_03B12888B/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 6. Y03B_03B03346B/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 9. Y2_333688B/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 3. Y02A_02B13320A/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 4. Y03A_03B12888B/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 6. Y03B_03B03346B/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreA/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 9. Y2_333688B/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/DistanceMatrix/')
 
 for mypath in mypaths:
 	onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -111,7 +112,7 @@ for mypath in mypaths:
 					#outputFileName = fileName.split('.')
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
 					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
-					scipy.io.savemat(mypath + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					scipy.io.savemat('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/SortingAlgorithm/' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 					iteration = iteration + 1
 					# print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 					#ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
