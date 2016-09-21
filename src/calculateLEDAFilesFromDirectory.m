@@ -9,7 +9,7 @@ function [ ] = calculateLEDAFilesFromDirectory( )
     lee_matrices = dir(PathCurrent);
     lee_matrices = lee_matrices(3:size(lee_matrices,1));
     for imK = 1:size(lee_matrices,1)
-        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'minimum'),1) == 1) && size(strfind(lower(lee_matrices(imK).name), 'distancematrix'),1) == 0
+        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'minimumdistanceclasses'),1) == 1) && size(strfind(lower(lee_matrices(imK).name), 'minimumdistanceclassesbetween'),1) == 0 && size(strfind(lower(lee_matrices(imK).name), 'distancematrix'),1) == 0
             lee_matrices(imK).name
             inNameFile = strsplit(lee_matrices(imK).name, '.');
             outputLEDAFileName = strcat('../visualize/', inNameFile(1), '.gw')
