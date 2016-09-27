@@ -34,7 +34,7 @@ for mypath in mypaths:
 	for fileName in onlyfiles:
 		outputFileName = fileName.split('.')
 		#print outputFileName[0][:-14]
-		if "DistanceMatrix.mat" in fileName and os.path.isfile(mypath + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and os.path.isfile('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/SortingAlgorithm/' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
