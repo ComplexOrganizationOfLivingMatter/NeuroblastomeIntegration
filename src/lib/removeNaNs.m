@@ -13,7 +13,7 @@ function [newNames, newMatrix, splittedNames] = removeNaNs(distanceMatrix, nameF
                 newCol = newCol + 1;
             end
         end
-        if row ~= rowsWithNaN
+        if ismember(row, rowsWithNaN) == 0
             [markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core] = splitNameFile(nameFiles{row});
             splittedNames = [splittedNames; {markerFile, pacientFile, iterationFile, algorithmFile, boolPositiveFile, core, newRow}];
             newNames{newRow} = nameFiles{row};
