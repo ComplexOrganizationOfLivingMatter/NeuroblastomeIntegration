@@ -340,21 +340,25 @@ calculateLEDAFilesFromDirectory
 cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 10. Y2_99B00646B\CoreB\Adjacency\'
 calculateLEDAFilesFromDirectory
 
-cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\'
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\Adjacency\'
 calculateLEDAFilesFromDirectory
 
 %-------------------------------------------
-load('E:\Pablo\Neuroblastoma\Results\graphletsCount\Casos\1\matlabGCD73.mat');
+%load('E:\Pablo\Neuroblastoma\Results\graphletsCount\Casos\1\matlabGCD73.mat');
+load('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\matlabGCD73.mat');
+load('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\inestabilidadCasos.mat');
+
 
 markersNames = {'RET', 'COL', 'GAG', 'CD31', 'CD45', 'CD4', 'CD7', 'CD8', 'CD11b', 'CD11c', 'CD20', 'CD68', 'CD163', 'OCT4', 'S100A6'};
 algorithm = {'minimumDistanceClassesBetweenPairs', 'minimumDistanceClasses', 'adjacencyMatrix_hexagonalSharedSide', 'adjacencyMatrix_ContigousHexagonalMeanArea', 'centroids'};
 %centroids = persistent homology
-markersWeWantToShow = {'RET', 'COL', 'GAG', 'CD31', 'CD11b', 'CD11c', 'CD163', 'OCT4'}; % 'CD11b' 
-algorithmWeWantToShow = {'minimumDistanceClasses', 'minimumDistanceClassesBetweenPairs'};
+markersWeWantToShow = {'RET'}; % 'CD11b' 
+algorithmWeWantToShow = {'minimumDistanceClasses'};
+kindsInestability = unique(estabilidad);
 
-%visualizeMarkers(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, 'GCD73');
+visualizeMarkers(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, 'GCD11', kindsInestability, NBiopsia, estabilidad);
 
-createHeatmapFromDistanceMatrix(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow);
+createHeatmapFromDistanceMatrix(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, NBiopsia, estabilidad);
 
 %------------------------------------------%
 
@@ -412,3 +416,14 @@ getMinimumDistancesFromHexagonalGrid
 
 cd 'E:\Pablo\Neuroblastoma\Datos\Data\Casos\CASO 11. Y2_99B13169A\CoreA\'
 getMinimumDistancesFromHexagonalGrid
+
+%----------------------------- NUEVOS CASOS -----------------------------%
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Images\'
+getMinimumDistancesFromHexagonalGrid
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\'
+calculateLEDAFilesFromDirectory
+
+cd 'E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\SortingAlgorithm\'
+calculateLEDAFilesFromDirectory

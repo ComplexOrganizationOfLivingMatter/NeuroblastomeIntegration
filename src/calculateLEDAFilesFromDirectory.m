@@ -9,11 +9,12 @@ function [ ] = calculateLEDAFilesFromDirectory( )
     lee_matrices = dir(PathCurrent);
     lee_matrices = lee_matrices(3:size(lee_matrices,1));
     for imK = 1:size(lee_matrices,1)
-        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'minimumdistanceclasses'),1) == 1) && size(strfind(lower(lee_matrices(imK).name), 'minimumdistanceclassesbetween'),1) == 0 && size(strfind(lower(lee_matrices(imK).name), 'distancematrix'),1) == 0
+        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'distancematrix'),1) == 0)
             lee_matrices(imK).name
             inNameFile = strsplit(lee_matrices(imK).name, '.');
-            outputLEDAFileName = strcat('../visualize/', inNameFile(1), '.gw')
-            if exist(outputLEDAFileName{:}, 'file') ~= 2
+            outputLEDAFileName = strcat('../GraphletVectors/', inNameFile(1), '.gw')
+            outputLEDAFileNameExists = strcat('../GraphletVectors/RET/', inNameFile(1), '.gw')
+            if exist(outputLEDAFileNameExists{:}, 'file') ~= 2
                 load(lee_matrices(imK).name);
                 if exist('adjacencyMatrix', 'var') == 1
                     adjacencyMatrix(adjacencyMatrix > 0) = 1;

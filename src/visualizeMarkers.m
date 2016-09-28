@@ -136,15 +136,17 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
                 nameBiopsia = nameBiopsia(1);
                 %strtrim(nameBiopsia{:});
                  if strfind (strtrim(nameBiopsia{:}), pacientFile) > 0
-                    %nameFiles{i}
-                    numEstability = find(ismember(kindsInestability, estability{actualBiopsia}));
-                    colorsVectors(i, :) = colors(numEstability,:);
-                    h(numEstability, :) = plot(points(i, 1), points(i, 2), shapePoint, 'color', colors(numEstability,:));
-                     t1 = text(points(i,1), points(i,2), num2str(iterationFile));
-                     t1.FontSize = 5;
-                     t1.HorizontalAlignment = 'center';
-                     t1.VerticalAlignment = 'bottom';
-                    break
+                     %if iterationFile == 1
+                        %nameFiles{i}
+                        numEstability = find(ismember(kindsInestability, estability{actualBiopsia}));
+                        colorsVectors(i, :) = colors(numEstability,:);
+                        h(numEstability, :) = plot(points(i, 1), points(i, 2), shapePoint, 'color', colors(numEstability,:));
+                         t1 = text(points(i,1), points(i,2), num2str(iterationFile));
+                         t1.FontSize = 5;
+                         t1.HorizontalAlignment = 'center';
+                         t1.VerticalAlignment = 'bottom';
+                        break
+                     %end
                  end
             end
         end
@@ -160,7 +162,7 @@ function [] = visualizeMarkers(distanceMatrix, nameFiles, markersNames, markersW
     hlegend1 = legend(h(:,1), horzcat(kindsInestability', algorithmWeWantToShow));
     saveas(hfigure, strcat('distance', strjoin(kindsInestability', '_') , '-', strjoin(algorithmWeWantToShow, '_'), '.fig'));
     %legend(shapes, algorithm, 'Location','West'); 
-    figure;
+    %figure;
     pointsWeWant = sum(colorsVectors') > 0;
-    scatter3(Y(pointsWeWant', 1), Y(pointsWeWant',2), Y(pointsWeWant', 3), ones(size(Y(pointsWeWant', 1)))*4, colorsVectors(pointsWeWant', :));
+    %scatter3(Y(pointsWeWant', 1), Y(pointsWeWant',2), Y(pointsWeWant', 3), ones(size(Y(pointsWeWant', 1)))*4, colorsVectors(pointsWeWant', :));
 end

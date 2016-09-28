@@ -10,7 +10,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
         imageName = strsplit(fullPathImage, '\');
         imageName = imageName(10);
         imageName = imageName{1};
-        if size(strfind(imageName, 'RET_Mask'),1) == 1
+        if size(strfind(lower(imageName), 'ret_mask'),1) == 1
             imageName
             Img=imread(fullPathImage);
             Img = Img(:, :, 1);

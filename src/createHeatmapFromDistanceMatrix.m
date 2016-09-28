@@ -1,4 +1,4 @@
-function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow )
+function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, NBiopsia, estability )
 %CREATEHEATMAPFROMDISTANCEMATRIX Summary of this function goes here
 %   Detailed explanation goes here
     %sortedNameFiles = sort(nameFiles);
@@ -66,10 +66,15 @@ function [] = createHeatmapFromDistanceMatrix( distanceMatrix, nameFiles, marker
        end
        nameFinal = splittedNamesDataset(splittedNamesDataset.MatrixPosition == newOrder(row), :);
        
+       namesBiopsias = cellfun(@(var) strsplit(var, '-'), NBiopsia, 'UniformOutput', false);
+       namesBiopsias = cellfun(@(var) var(1), namesBiopsias);
+       namesBiopsiasTrimeed = strtrim(namesBiopsias);
+       inestabilityActual = cellfun(@(var) strfind(var, nameFinal.Case{:}) > 0, namesBiopsiasTrimeed, 'UniformOutput', false);
+       strInestability = estability(~cellfun('isempty',inestabilityActual));
        if nameFinal.Positive == 1
-           newNamesSorted{end+1} = cell2mat(strcat(nameFinal.Case, nameFinal.Marker, nameFinal.Core, '+', num2str(nameFinal.Iteration)));
+           newNamesSorted{end+1} = cell2mat(strcat(strInestability, nameFinal.Case, nameFinal.Marker, nameFinal.Core, '+', num2str(nameFinal.Iteration)));
        else
-           newNamesSorted{end+1} = cell2mat(strcat(nameFinal.Case, nameFinal.Marker, nameFinal.Core, '-', num2str(nameFinal.Iteration)));
+           newNamesSorted{end+1} = cell2mat(strcat(strInestability, nameFinal.Case, nameFinal.Marker, nameFinal.Core, '-', num2str(nameFinal.Iteration)));
        end
        if ismember(nameFinal.Case, nameFinalAnt.Case) == 0
            annotation(h1,'rectangle', [XInit YAnt-(YWidthPerSquare*numberOfImages) XWidthPerSquare*size(newOrder,1) YWidthPerSquare*numberOfImages], 'Color','white'); %Horizontally
