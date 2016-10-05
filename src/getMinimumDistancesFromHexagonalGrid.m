@@ -48,8 +48,9 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                 maskImage = createMask(h);
                 close all
                 
-                outputControlFile = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl');
+                outputControlFile = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl.mat');
                 if exist(outputControlFile{:}, 'file') ~= 2
+                    outputControlFile = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl');
                     generateVoronoiInsideCircle(100, size(distanceMatrix, 1), radiusOfCircle, maskImage(1:radiusOfCircle*2, 1:radiusOfCircle*2), outputControlFile);
                 end
                 
