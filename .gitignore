@@ -72,3 +72,4 @@ src/lib/plot2svg-master
 *.tif
 *.eps
 *.svg
+*.mat
