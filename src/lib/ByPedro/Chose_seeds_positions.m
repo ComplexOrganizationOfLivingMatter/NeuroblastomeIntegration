@@ -1,39 +1,37 @@
-function [m] = Chose_seeds_positions(xMin,xMax,yMax,numPoints,minDistanceBetweenPoints)
+function [centroidSeeds] = Chose_seeds_positions(xMin, xMax, yMax, numPoints, minDistanceBetweenPoints)
 
-% Resolve K random values between imin and imax
-if ((xMax-(xMin-1))*(yMax-(xMin-1)) < numPoints)
-    fprintf(' Error: Excede el rango\n');
-    m = NaN;
-    return
-end
-
-m(1,1) = randi([xMin,xMax],1);
-m(1,2) = randi([xMin,yMax],1);
-
-n=1;
-
-while (n<=numPoints-1)
-
-    a = randi([xMin,xMax],1);
-    b = randi([xMin,yMax],1);
-    dato=[a,b];
-
-    for i=1:size(m,1)
-        distance=sqrt(((m(i,1)-a)^2)+((m(i,2)-b)^2));
+    % Resolve K random values between imin and imax
+    if ((xMax-(xMin-1))*(yMax-(xMin-1)) < numPoints)
+        fprintf(' Error: Excede el rango\n');
+        centroidSeeds = NaN;
+        return
+    end
     
-        if distance<=minDistanceBetweenPoints
-            ind(i)=1;
-        else
-            ind(i)=0;
+    centroidSeeds = [];
+    t=0:.001:2*pi;
+    xInsideCircle = cos(t)*xMax/2 + xMax/2;
+    yInsideCircle = sin(t)*yMax/2 + yMax/2;
+
+    %we want to add 'numPoints' number of points
+    while size(centroidSeeds, 1) < numPoints
+
+        centroidX = randi([xMin,xMax],1);
+        centroidY = randi([xMin,yMax],1);
+        newCentroid = [centroidX,centroidY];
+
+        tooCloseToOthers = 0;
+        for i=1:size(centroidSeeds,1)
+            distance=sqrt(((centroidSeeds(i,1)-centroidX)^2)+((centroidSeeds(i,2)-centroidY)^2));
+
+            if distance <= minDistanceBetweenPoints
+                tooCloseToOthers = 1;
+            end
+        end
+        
+        %If the centroid is inside the polygon we want it in the good
+        %centroids. Also we don't want too close to the others
+        if inpolygon(centroidX, centroidY, xInsideCircle, yInsideCircle) && tooCloseToOthers == 0
+            centroidSeeds = [centroidSeeds; newCentroid];
         end
     end
-
-    if sum(ind)==0
-        dato=[a,b];
-        m = [m; dato];
-        n=n+1;
-    end
-
 end
-
-m = m(1:end,:);
