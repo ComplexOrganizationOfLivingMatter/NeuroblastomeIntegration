@@ -8,7 +8,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
 
     for j=1:numIterations
         image = zeros(radiusOfCircle*2, radiusOfCircle*2); % Se define imagen que contiene puntos
-
+        j
         for k = 1:size(initCentroids,1)
             image(initCentroids(k,1), initCentroids(k,2)) = 1;
         end

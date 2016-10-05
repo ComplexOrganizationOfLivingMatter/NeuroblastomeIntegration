@@ -44,7 +44,6 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                 fcn = getPositionConstraintFcn(h);
 
                 api.setPositionConstraintFcn(fcn);
-                pause
 
                 maskImage = createMask(h);
                 close all
