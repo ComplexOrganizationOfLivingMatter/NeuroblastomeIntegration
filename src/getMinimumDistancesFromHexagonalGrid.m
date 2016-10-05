@@ -31,6 +31,27 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                 else
                     distanceMatrix = importdata(outputFileName{:});
                 end
+                
+                outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
+                
+                radiusOfCircle = min(size(Img))/2;
+                figure
+                roiImage = imread(fullPathImage);
+                imshow(roiImage);
+                h = imellipse(gca, [0 0 radiusOfCircle*2 radiusOfCircle*2]);
+                api = iptgetapi(h);
+
+                fcn = getPositionConstraintFcn(h);
+
+                api.setPositionConstraintFcn(fcn);
+                pause
+
+                maskImage = createMask(h);
+                close all
+                
+                outputControlFile = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl');
+                generateVoronoiInsideCircle(100, size(distanceMatrix, 1), radiusOfCircle, maskImage(1:radiusOfCircle*2, 1:radiusOfCircle*2), outputControlFile);
+
                 clear Img
                 if size(distanceMatrix, 1) > 0
                 %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%

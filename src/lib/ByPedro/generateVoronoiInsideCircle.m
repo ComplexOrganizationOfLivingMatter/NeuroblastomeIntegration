@@ -1,4 +1,4 @@
-function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCircle, circleLimits)
+function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCircle, circleLimits, fileName)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 %
@@ -30,10 +30,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         %centros_nuevos=fliplr(centros_nuevos); %[filas,columnas]
         initCentroids=centros_nuevos;
     end
-    FOLDER='E:\Pablo\Neuroblastoma\NeuroblastomeIntegration\TempResults';
-    Archivo=strcat('Imagen_',num2str(i),'_Diagrama_',num2str(j),'_Vonoroi_1');
     
-    save(strcat(FOLDER,'\',Archivo),'L_original')
-    
-    imwrite(L_original, (strcat(FOLDER,'\',Archivo,'.png')))
+    save(strcat(fileName, '.mat'),'L_original')
+    imwrite(L_original, (strcat(fileName,'.png')))
 end
