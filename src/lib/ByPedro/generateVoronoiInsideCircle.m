@@ -29,8 +29,9 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         centros_nuevos=round(centros_nuevos);
         %centros_nuevos=fliplr(centros_nuevos); %[filas,columnas]
         initCentroids=centros_nuevos;
+        size(initCentroids, 1)
     end
     
-    save(strcat(fileName{:}, '.mat'),'L_original')
+    save(strcat(fileName{:}, '.mat'),'initCentroids')
     imwrite(L_original, (strcat(fileName{:},'.png')))
 end
