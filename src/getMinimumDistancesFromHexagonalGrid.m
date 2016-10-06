@@ -63,19 +63,19 @@ function [ ] = getMinimumDistancesFromHexagonalGrid( )
                     save(outputControlFileDistance{:}, 'distanceMatrixControl');
                 end
                 
-%                 load(outputControlFileDistance{:});
-%                 if size(distanceMatrixControl, 1) > 0
-%                 %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
-%                     %Get output file names
-%                     inNameFile = strsplit(strrep(imageName,' ','_'), '.');
-%                     inNameFile = [strcat('Control', inNameFile(1),'_Radius' , num2str(numMask))];
-%                     outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
-%                     if exist(outputFileName{:}, 'file') ~= 2
-%                         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-%                         GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrix, 1)), zeros(1), inNameFile);
-%                     end
-%                     %--------------------------------------------------------%
-%                 end
+                load(outputControlFileDistance{:});
+                if size(distanceMatrixControl, 1) > 0
+                %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
+                    %Get output file names
+                    inNameFile = strsplit(strrep(imageName,' ','_'), '.');
+                    inNameFile = [strcat('Control', inNameFile(1),'_Radius' , num2str(numMask))];
+                    outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
+                    if exist(outputFileName{:}, 'file') ~= 2
+                        %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+                        GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrix, 1)), zeros(1), inNameFile);
+                    end
+                    %--------------------------------------------------------%
+                end
                 
                 if size(distanceMatrix, 1) > 0
                 %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
