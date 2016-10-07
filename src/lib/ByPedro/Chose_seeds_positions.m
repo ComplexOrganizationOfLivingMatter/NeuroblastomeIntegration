@@ -34,4 +34,5 @@ function [centroidSeeds] = Chose_seeds_positions(xMin, xMax, yMax, numPoints, mi
             centroidSeeds = [centroidSeeds; newCentroid];
         end
     end
+    centroidSeeds = centroidSeeds(1:numPoints, :);
 end
