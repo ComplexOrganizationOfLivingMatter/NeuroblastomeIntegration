@@ -29,18 +29,18 @@ function [ ] = testControls( )
         load(outputControl);
         distanceMatrixControl = pdist(initCentroids, 'euclidean');
         distanceMatrixControl = squareform(distanceMatrixControl);
-        save(outputControlFileDistance{:}, 'distanceMatrixControl');
+        save(outputControlFileDistance, 'distanceMatrixControl');
         outputControlFileDistance = strcat('E:\Pablo\Neuroblastoma\NeuroblastomeIntegration\TempResults\Test', inNameFile, num2str(i),'DiametControlDistanceMatrix.mat');
-        load(outputControlFileDistance{:});
+        load(outputControlFileDistance);
         if size(distanceMatrixControl, 1) > 0
             %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
             %Get output file names
-            inNameFile = strsplit(strrep(imageName,' ','_'), '.');
-            inNameFile = [strcat('Test', num2str(i), 'Control', inNameFile,'_Radius' , num2str(numMask))];
+            inNameFileMinimum = strsplit(strrep(inNameFile,' ','_'), '.');
+            inNameFileMinimum = [strcat('Test', num2str(i), 'Control', inNameFileMinimum)];
             outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', inNameFile, 'It1.mat')
-            if exist(outputFileName{:}, 'file') ~= 2
+            if exist(outputFileName, 'file') ~= 2
                 %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), inNameFile);
+                GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), inNameFileMinimum);
             end
             %--------------------------------------------------------%
         end
