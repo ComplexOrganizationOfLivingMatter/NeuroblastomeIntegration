@@ -20,6 +20,8 @@ function [ output_args ] = easyHeatmap( distanceMatrix, names, outputFile, filte
     axis image
     colorbar
     
+    title(outputFile);
+    
     set(gca,'YTick', [1:size(newNamesSorted,2)], 'YTickLabel', newNamesSorted, 'FontSize', 6);
     set(gca,'XTick', [1:size(newNamesSorted,2)], 'XTickLabel', newNamesSorted, 'XTickLabelRotation', 90.0);
     
