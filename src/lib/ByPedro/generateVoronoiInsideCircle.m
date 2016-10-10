@@ -6,7 +6,8 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
 
     initCentroids = Chose_seeds_positions(1, radiusOfCircle*2, radiusOfCircle*2, numPoints, 5);
     size(initCentroids, 1)
-    for j=1:numIterations
+    j = 1;
+    while j <= numIterations
         image = zeros(radiusOfCircle*2, radiusOfCircle*2); % Se define imagen que contiene puntos
         j
         for k = 1:size(initCentroids,1)
@@ -30,12 +31,19 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         %centros_nuevos=fliplr(centros_nuevos); %[filas,columnas]
         initCentroids=centros_nuevos;
         size(initCentroids, 1)
-        if size(initCentroids, 1) ~= numPoints
+        if size(initCentroids, 1) > numPoints
            areas = vertcat(centro.Area);
            if sum(areas < 10) > 0
                initCentroids(areas < 10, :) = [];
            end
         end
+        
+        if size(initCentroids, 1) ~= numPoints
+            j = 0;
+            initCentroids = Chose_seeds_positions(1, radiusOfCircle*2, radiusOfCircle*2, numPoints, 5);
+            'init centroid again'
+        end
+        j = j + 1;
     end
     
     save(strcat(fileName{:}, '.mat'),'initCentroids')
