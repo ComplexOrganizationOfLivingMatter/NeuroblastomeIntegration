@@ -33,7 +33,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         if size(initCentroids, 1) ~= numPoints
            areas = vertcat(centro.Area);
            if sum(areas < 10) > 0
-               initCentroids(areas < 10) = [];
+               initCentroids(areas < 10, :) = [];
            end
         end
     end
