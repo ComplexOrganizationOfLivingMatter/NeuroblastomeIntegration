@@ -26,7 +26,8 @@ mypaths = []
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 9. Y2_333688B/CoreB/Adjacency/')
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/')
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/DistanceMatrix/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/ControlNetwork/')
+#mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
 for mypath in mypaths:
 	onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -41,7 +42,7 @@ for mypath in mypaths:
 			#print mypath + fileName
 			mat = scipy.io.loadmat(mypath + fileName)
 			#fileName = 'minimumDistanceClasses5_Y2_99B00646B_CD45_Negativas_IPPDistanceMatrix.mat'
-			distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
+			distanceMatrix = np.matrix(mat['distanceMatrixControl'])
 			distanceMatrixAux = distanceMatrix;
 			adjacencyMatrix = np.zeros((len(distanceMatrix), len(distanceMatrix)))
 			#print np.triu(distanceMatrix)
