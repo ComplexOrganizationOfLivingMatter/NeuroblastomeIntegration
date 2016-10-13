@@ -60,7 +60,7 @@ function [ ] = analyzeGraphletsDistances( )
             sortingWTSizeArray(end+1, 1) = {size(sortingWTMean, 2)};
             differenceGraphletsSortingArray(end+1, 1) = {differenceGraphletsSorting};
             iterationWTMeanArray(end+1, 1) = {iterationWTMean'};
-            iterationWTSizeArray(end+1, 1) = {size(iterationWTMean, 1)};
+            iterationWTSizeArray(end+1, 1) = {size(iterationWTMean, 2)};
             
             differenceGraphletsIterationArray(end+1, 1) = {differenceGraphletsIteration};
 
@@ -80,7 +80,7 @@ function [ ] = analyzeGraphletsDistances( )
 
     allCharacteristics = [sortingCharacteristics, iterationCharacteristics];
     
-    outputFile = strjoin(graphletNameSplitted(1:end-2), '\');
-    csvwrite(strcat(outputFile, 'characteristicsRET.csv'), allCharacteristics);
+    outputFile = strjoin(graphletNameSplitted(1:end-3), '\');
+    csvwrite(strcat(outputFile, '\characteristicsRET.csv'), allCharacteristics);
 end
 
