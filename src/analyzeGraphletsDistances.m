@@ -16,13 +16,14 @@ function [ ] = analyzeGraphletsDistances( )
         
         fullPathGraphlet = graphletFiles{numFile};
         graphletNameSplitted = strsplit(fullPathGraphlet, '\');
-        graphletNameSplitted(end-1)
         graphletName = graphletNameSplitted(end);
         graphletName = graphletName{1};
 
 
         
         if size(strfind(graphletName, 'gcd73'), 1) > 0
+            
+            graphletNameSplitted(end-1)
             distanceMatrix = dlmread(fullPathGraphlet, '\t', 1, 1);
             names = importfileNames(fullPathGraphlet);
             algorithmsFilter = cellfun(@(x) size(strfind(x, 'BetweenPairs'), 1) > 0, names);
@@ -54,22 +55,32 @@ function [ ] = analyzeGraphletsDistances( )
             outputFile = strjoin(graphletNameSplitted(1:end-1), '\');
             save(strcat(outputFile, '\meanDistanceWithControl.mat'), 'sortingWTNames', 'sortingWTMean', 'iterationWTNames', 'iterationWTMean');
             
-            pacientArray(end+1) = {graphletNameSplitted(end-1)};
-            sortingWTMeanArray(end+1) = {sortingWTMean};
-            sortingWTSizeArray(end+1) = {size(sortingWTMean, 2)};
-            differenceGraphletsSortingArray(end+1) = {differenceGraphletsSorting};
-            iterationWTMeanArray(end+1) = {iterationWTMean};
-            iterationWTSizeArray(end+1) = {size(iterationWTMean, 2)};
-            differenceGraphletsIterationArray(end+1) = {differenceGraphletsIteration};
+            pacientArray(end+1, 1) = graphletNameSplitted(end-1);
+            sortingWTMeanArray(end+1, 1) = {sortingWTMean'};
+            sortingWTSizeArray(end+1, 1) = {size(sortingWTMean, 2)};
+            differenceGraphletsSortingArray(end+1, 1) = {differenceGraphletsSorting};
+            iterationWTMeanArray(end+1, 1) = {iterationWTMean'};
+            iterationWTSizeArray(end+1, 1) = {size(iterationWTMean, 1)};
+            
+            differenceGraphletsIterationArray(end+1, 1) = {differenceGraphletsIteration};
 
         end
     end
     
+    pacientArray
+    sortingWTMeanArray = padcat(sortingWTMeanArray{:});
+    differenceGraphletsSortingArray = padcat(differenceGraphletsSortingArray{:});
+    sortingWTSizeArray = cell2mat(sortingWTSizeArray);
+    sortingCharacteristics = [sortingWTMeanArray', sortingWTSizeArray, differenceGraphletsSortingArray'];
     
-    padcat(sortingWTMeanArray{:}, differenceGraphletsSortingArray{:});
-    fid = fopen(strcat(strjoin(graphletNameSplitted(1:end-2), '\') ,'caracteristics.csv'), 'w');
+    iterationWTMeanArray = padcat(iterationWTMeanArray{:});
+    differenceGraphletsIterationArray = padcat(differenceGraphletsIterationArray{:});
+    iterationWTSizeArray = cell2mat(iterationWTSizeArray);
+    iterationCharacteristics = [iterationWTMeanArray', iterationWTSizeArray, differenceGraphletsIterationArray'];
 
-    fclose(fid);
-
+    allCharacteristics = [sortingCharacteristics, iterationCharacteristics];
+    
+    outputFile = strjoin(graphletNameSplitted(1:end-2), '\');
+    csvwrite(strcat(outputFile, 'characteristicsRET.csv'), allCharacteristics);
 end
 
