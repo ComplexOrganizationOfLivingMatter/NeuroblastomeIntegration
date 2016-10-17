@@ -66,6 +66,7 @@ src/lib/Codigo_BCT
 src/lib/CustomizableHeatmap
 src/lib/export_fig-master/
 src/lib/plot2svg-master
+.Rproj.user/*
 *.png
 *.fig
 *.bmp
