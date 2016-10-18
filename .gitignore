@@ -75,3 +75,4 @@ src/lib/plot2svg-master
 *.eps
 *.svg
 *.mat
+*.Rhistory
