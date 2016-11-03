@@ -1,0 +1,2 @@
+#usr/bin/sh
+ls /home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient | while read f; do echo "$f"; python networkComparison.py "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient/$f" 'gcd73' 8; done

@@ -1,0 +1,5 @@
+#usr/bin/sh
+ls /home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient | while read f; do echo "$f"; ls "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient/$f/" | grep BetweenPairs_ | while read files; do echo "$files"; cat "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient/$f/$files" >> "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/minimumDistanceBetweenPairsTotalGraphlets_$f.ndump2"; done; done;
+ls /home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient | while read f; do echo "$f"; ls "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient/$f/" | grep ContigousHexagonalMeanAreaMask50Diamet | while read files; do echo "$files"; cat "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/DivideByPacient/$f/$files" >> "/home/pablo/vboxshare/Neuroblastoma/Results/graphletsCount/NuevosCasos/RET/NDUMP2/minimumDistanceTotalGraphlets_$f.ndump2"; done; done;
+
+
