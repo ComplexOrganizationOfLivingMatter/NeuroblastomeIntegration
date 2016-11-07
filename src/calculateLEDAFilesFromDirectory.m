@@ -1,11 +1,9 @@
-function [ ] = calculateLEDAFilesFromDirectory( )
+function [ ] = calculateLEDAFilesFromDirectory(PathCurrent)
 %calculateLEDAFilesFromDirectory generates a LEDA file from every .mat file of the current directory
 %   It takes the .mat files of a given directory and generates a LEDA file (.gw), which will contain
 %   an undirected, no-duplicates (edges) network, from an adjacency matrix found on the .mat file.
 %
 %   Developed by Pablo Vicente-Munuera
-    [stat,struc] = fileattrib;
-    PathCurrent = struc.Name;
     lee_matrices = dir(PathCurrent);
     lee_matrices = lee_matrices(3:size(lee_matrices,1));
     for imK = 1:size(lee_matrices,1)
