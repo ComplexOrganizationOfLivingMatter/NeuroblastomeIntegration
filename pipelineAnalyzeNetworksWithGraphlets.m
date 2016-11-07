@@ -1,9 +1,16 @@
-function [ output_args ] = pipelineAnalyzeNetworksWithGraphlets( marker )
-%UNTITLED Summary of this function goes here
+function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker )
+%PIPELINEANALYZENETWORKSWITHGRAPHLETS Summary of this function goes here
 %   Detailed explanation goes here
     cd 'E:\Pablo\Neuroblastoma\NeuroblastomeIntegration\'
     
     getMinimumDistancesFromHexagonalGrid('..\Datos\Data\NuevosCasos160\Casos\Images\', strcat(marker, '_mask'));
+    
+    %Execute minimumDistances.py to get the networks with the Sorting
+    %algorithm
+    answer = 'n';
+    while answer ~= 'y'
+        answer = input('Have you executed minimumDistance.py? [y/n] ');
+    end
     
     disp('Leda files...');
     disp('Iteration');

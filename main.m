@@ -446,3 +446,7 @@ easyHeatmap(distanceMatrix, names, 'testingControlsSorting', 'minimumDistanceCla
 
 
 analyzeGraphletsDistances();
+
+
+%% Pipeline
+pipelineAnalyzeNetworksWithGraphlets( 'ret' );

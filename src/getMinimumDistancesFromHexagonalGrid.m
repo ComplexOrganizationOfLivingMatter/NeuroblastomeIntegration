@@ -8,14 +8,14 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
         fullPathImage = lee_imagenes(imK);
         fullPathImage = fullPathImage{:};
         fullPathImageSplitted = strsplit(fullPathImage, '\');
-        imageName = fullPathImageSplitted(10);
+        imageName = fullPathImageSplitted(end);
         imageName = imageName{1};
         if size(strfind(lower(imageName), markerName),1) == 1
-            imageName
+            imageName;
             Img=imread(fullPathImage);
             Img = Img(:, :, 1);
             Img = im2bw(Img, 0.2);
-            for numMask = [50, 100] %5, 10, 15 remaining
+            for numMask = [50] %100
                 inNameFile = strsplit(strrep(imageName,' ','_'), '.');
                 outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
                 distanceMatrix = '';
@@ -32,7 +32,8 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     distanceMatrix = importdata(outputFileName{:});
                 end
                 
-                maskImage = generateCircularRoiFromImage( Img, fullPathImage );
+                radiusOfCircle = min(size(Img))/2;
+                maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfCircle );
                 
                 for numControl = 1:10
                     outputControlFile = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), '.mat');

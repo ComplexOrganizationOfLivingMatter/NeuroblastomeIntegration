@@ -1,7 +1,7 @@
-function [ maskImage ] = generateCircularRoiFromImage( Img, fullPathImage )
+function [ maskImage ] = generateCircularRoiFromImage(fullPathImage, radiusOfCircle )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-    radiusOfCircle = min(size(Img))/2;
+    
     figure
     roiImage = imread(fullPathImage);
     imshow(roiImage);

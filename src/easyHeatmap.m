@@ -1,6 +1,8 @@
 function [  ] = easyHeatmap( distanceMatrix, names, outputFile, filter, realMax )
-%UNTITLED Summary of this function goes here
+%EASYHEATMAP Summary of this function goes here
 %   Detailed explanation goes here
+%
+%   Developed by Pablo Vicente-Munuera
     
     names = cellfun(@(x) strsplit(x, '/'), names, 'UniformOutput', false);
     names = cellfun(@(x) x{end}, names, 'UniformOutput', false);
