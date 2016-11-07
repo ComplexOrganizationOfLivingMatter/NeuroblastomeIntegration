@@ -8,7 +8,7 @@ function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
 %   Developed by Pablo Vicente-Munuera
 
     idTril = tril(true(size(adjacencyMatrix)), -1);
-    idTriu = triu(true(size(adjacencyMatrix)), -1);
+    idTriu = triu(true(size(adjacencyMatrix)), 1);
     adjacencyMatrixAux = adjacencyMatrix;
     adjacencyMatrix(idTril) = 0;
     adjacencyMatrixAux(idTriu) = 0;
