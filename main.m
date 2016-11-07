@@ -353,10 +353,10 @@ markersNames = {'RET', 'COL', 'GAG', 'CD31', 'CD45', 'CD4', 'CD7', 'CD8', 'CD11b
 algorithm = {'minimumDistanceClassesBetweenPairs', 'minimumDistanceClasses', 'adjacencyMatrix_hexagonalSharedSide', 'adjacencyMatrix_ContigousHexagonalMeanArea', 'centroids'};
 %centroids = persistent homology
 markersWeWantToShow = {'RET'}; % 'CD11b' 
-algorithmWeWantToShow = {'minimumDistanceClasses'};
+algorithmWeWantToShow = {'minimumDistanceClassesBetweenPairs'};
 kindsInestability = unique(estabilidad);
 
-visualizeMarkers(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, 'GCD11', kindsInestability, NBiopsia, estabilidad);
+visualizeMarkers(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, 'GCD73', kindsInestability, NBiopsia, estabilidad);
 
 createHeatmapFromDistanceMatrix(distanceMatrix, names, markersNames, markersWeWantToShow, algorithm, algorithmWeWantToShow, NBiopsia, estabilidad);
 
@@ -427,3 +427,22 @@ calculateLEDAFilesFromDirectory
 
 cd 'E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\SortingAlgorithm\'
 calculateLEDAFilesFromDirectory
+
+
+distanceMatrix = dlmread('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\TotalGraphletsPerAlgorithm\Sorting\gcd11.txt', '\t', 1, 1);
+names = importfileNames('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\TotalGraphletsPerAlgorithm\Sorting\gcd11.txt');
+easyHeatmap(distanceMatrix, names, 'totalGraphletsIteration', '', max(distanceMatrix(:)));
+
+
+load('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\TestControl\matlabGCD73.mat');
+
+
+easyHeatmap(distanceMatrix, names, 'testingControlsOnlyControls', 'Test');
+easyHeatmap(distanceMatrix, names, 'testingControlsOnlyControlsSorting', 'minimumDistanceClassesTest');
+easyHeatmap(distanceMatrix, names, 'testingControlsOnlyControlsIteration', 'minimumDistanceClassesBetweenPairsTest');
+
+easyHeatmap(distanceMatrix, names, 'testingControlsIteration', 'minimumDistanceClassesBetweenPairs');
+easyHeatmap(distanceMatrix, names, 'testingControlsSorting', 'minimumDistanceClassesBetweenPairs'); %You should change the code, to not show the filter string
+
+
+analyzeGraphletsDistances();
