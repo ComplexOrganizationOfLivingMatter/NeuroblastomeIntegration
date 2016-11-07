@@ -1,4 +1,4 @@
-function [ ] = calculateLEDAFilesFromDirectory(PathCurrent)
+function [ ] = calculateLEDAFilesFromDirectory(PathCurrent, marker)
 %calculateLEDAFilesFromDirectory generates a LEDA file from every .mat file of the current directory
 %   It takes the .mat files of a given directory and generates a LEDA file (.gw), which will contain
 %   an undirected, no-duplicates (edges) network, from an adjacency matrix found on the .mat file.
@@ -11,7 +11,7 @@ function [ ] = calculateLEDAFilesFromDirectory(PathCurrent)
             lee_matrices(imK).name
             inNameFile = strsplit(lee_matrices(imK).name, '.');
             outputLEDAFileName = strcat('../GraphletVectors/', inNameFile(1), '.gw')
-            outputLEDAFileNameExists = strcat('../GraphletVectors/RET/', inNameFile(1), '.gw')
+            outputLEDAFileNameExists = strcat('../GraphletVectors/', upper(marker), '/', inNameFile(1), '.gw')
             if exist(outputLEDAFileNameExists{:}, 'file') ~= 2
                 load(lee_matrices(imK).name);
                 if exist('adjacencyMatrix', 'var') == 1

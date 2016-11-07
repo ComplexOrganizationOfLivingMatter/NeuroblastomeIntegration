@@ -10,7 +10,7 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
         %outputFileNameSif = strcat('visualize\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.cvs');
         save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
         %exporting to siff
-        generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
+        %generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
 		return
     end
 	

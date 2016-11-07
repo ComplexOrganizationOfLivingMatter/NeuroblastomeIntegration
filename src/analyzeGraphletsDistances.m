@@ -1,16 +1,15 @@
-function [ ] = analyzeGraphletsDistances( )
+function [ ] = analyzeGraphletsDistances(currentPath, typeOfDistance)
 %analyzeGraphletsDistances Summary of this function goes here
 %   Detailed explanation goes here
-    graphletFiles = getAllFiles('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\DivideByPacient\');
+    graphletFiles = getAllFiles(currentPath);
 
-    
-        pacientArray = {};
-        sortingWTMeanArray = {};
-        sortingWTSizeArray = {};
-        differenceGraphletsSortingArray = {};
-        iterationWTMeanArray = {};
-        iterationWTSizeArray = {};
-        differenceGraphletsIterationArray = {};
+    pacientArray = {};
+    sortingWTMeanArray = {};
+    sortingWTSizeArray = {};
+    differenceGraphletsSortingArray = {};
+    iterationWTMeanArray = {};
+    iterationWTSizeArray = {};
+    differenceGraphletsIterationArray = {};
     
     for numFile = 1:size(graphletFiles,1)
         
@@ -19,11 +18,9 @@ function [ ] = analyzeGraphletsDistances( )
         graphletName = graphletNameSplitted(end);
         graphletName = graphletName{1};
 
-
-        
-        if size(strfind(graphletName, 'gcd73'), 1) > 0
+        if size(strfind(graphletName, typeOfDistance), 1) > 0
             
-            graphletNameSplitted(end-1)
+            graphletNameSplitted(end-1);
             distanceMatrix = dlmread(fullPathGraphlet, '\t', 1, 1);
             names = importfileNames(fullPathGraphlet);
             algorithmsFilter = cellfun(@(x) size(strfind(x, 'BetweenPairs'), 1) > 0, names);
@@ -53,7 +50,7 @@ function [ ] = analyzeGraphletsDistances( )
             end
             
             outputFile = strjoin(graphletNameSplitted(1:end-1), '\');
-            save(strcat(outputFile, '\meanDistanceWithControl.mat'), 'sortingWTNames', 'sortingWTMean', 'iterationWTNames', 'iterationWTMean');
+            save(strcat(outputFile, '\meanDistanceWithControlGDDA.mat'), 'sortingWTNames', 'sortingWTMean', 'iterationWTNames', 'iterationWTMean');
             
             pacientArray(end+1, 1) = graphletNameSplitted(end-1);
             sortingWTMeanArray(end+1, 1) = {sortingWTMean'};
@@ -67,7 +64,7 @@ function [ ] = analyzeGraphletsDistances( )
         end
     end
     
-    pacientArray
+    pacientArray;
     sortingWTMeanArray = padcat(sortingWTMeanArray{:});
     differenceGraphletsSortingArray = padcat(differenceGraphletsSortingArray{:});
     sortingWTSizeArray = cell2mat(sortingWTSizeArray);
@@ -81,6 +78,6 @@ function [ ] = analyzeGraphletsDistances( )
     allCharacteristics = [sortingCharacteristics, iterationCharacteristics];
     
     outputFile = strjoin(graphletNameSplitted(1:end-3), '\');
-    csvwrite(strcat(outputFile, '\characteristicsRET.csv'), allCharacteristics);
+    csvwrite(strcat(outputFile, '\characteristicsRETGDDA.csv'), allCharacteristics);
 end
 
