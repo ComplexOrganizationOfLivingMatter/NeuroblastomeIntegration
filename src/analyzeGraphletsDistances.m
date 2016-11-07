@@ -1,4 +1,4 @@
-function [ ] = analyzeGraphletsDistances(currentPath, typeOfDistance)
+function [ ] = analyzeGraphletsDistances(currentPath, marker, typeOfDistance)
 %analyzeGraphletsDistances Summary of this function goes here
 %   Detailed explanation goes here
     graphletFiles = getAllFiles(currentPath);
@@ -50,7 +50,7 @@ function [ ] = analyzeGraphletsDistances(currentPath, typeOfDistance)
             end
             
             outputFile = strjoin(graphletNameSplitted(1:end-1), '\');
-            save(strcat(outputFile, '\meanDistanceWithControlGDDA.mat'), 'sortingWTNames', 'sortingWTMean', 'iterationWTNames', 'iterationWTMean');
+            save(strcat(outputFile, '\meanDistanceWithControl', upper(typeOfDistance) ,'.mat'), 'sortingWTNames', 'sortingWTMean', 'iterationWTNames', 'iterationWTMean');
             
             pacientArray(end+1, 1) = graphletNameSplitted(end-1);
             sortingWTMeanArray(end+1, 1) = {sortingWTMean'};
@@ -78,6 +78,6 @@ function [ ] = analyzeGraphletsDistances(currentPath, typeOfDistance)
     allCharacteristics = [sortingCharacteristics, iterationCharacteristics];
     
     outputFile = strjoin(graphletNameSplitted(1:end-3), '\');
-    csvwrite(strcat(outputFile, '\characteristicsRETGDDA.csv'), allCharacteristics);
+    csvwrite(strcat(outputFile, '\characteristics_', marker, '_', upper(typeOfDistance), '.csv'), allCharacteristics);
 end
 

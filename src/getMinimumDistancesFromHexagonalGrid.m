@@ -1,12 +1,14 @@
 function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
+%
+%   Developed by Pablo Vicente-Munuera
     lee_imagenes = getAllFiles(PathCurrent);
     for imK = 1:size(lee_imagenes,1)
         fullPathImage = lee_imagenes(imK);
         fullPathImage = fullPathImage{:};
-        imageName = strsplit(fullPathImage, '\');
-        imageName = imageName(10);
+        fullPathImageSplitted = strsplit(fullPathImage, '\');
+        imageName = fullPathImageSplitted(10);
         imageName = imageName{1};
         if size(strfind(lower(imageName), markerName),1) == 1
             imageName
@@ -15,7 +17,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
             Img = im2bw(Img, 0.2);
             for numMask = [50, 100] %5, 10, 15 remaining
                 inNameFile = strsplit(strrep(imageName,' ','_'), '.');
-                outputFileName = strcat('..\Datos\Data\NuevosCasos160\Casos\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
+                outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
                 distanceMatrix = '';
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
@@ -30,31 +32,17 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     distanceMatrix = importdata(outputFileName{:});
                 end
                 
-                outputFileName = strcat('..\Datos\Data\NuevosCasos160\Casos\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
+                maskImage = generateCircularRoiFromImage( Img, fullPathImage );
                 
-                radiusOfCircle = min(size(Img))/2;
-                figure
-                roiImage = imread(fullPathImage);
-                imshow(roiImage);
-                h = imellipse(gca, [0 0 radiusOfCircle*2 radiusOfCircle*2]);
-                api = iptgetapi(h);
-
-                fcn = getPositionConstraintFcn(h);
-
-                api.setPositionConstraintFcn(fcn);
-
-                maskImage = createMask(h);
-                close all
-                
-                for numControl = 1:9
-                    outputControlFile = strcat('..\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), '.mat');
+                for numControl = 1:10
+                    outputControlFile = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), '.mat');
                     if exist(outputControlFile{:}, 'file') ~= 2
-                        outputControl = strcat('..\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl));
+                        outputControl = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl));
                         generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfCircle, maskImage(1:radiusOfCircle*2, 1:radiusOfCircle*2), outputControl);
                     end
                     clear Img
 
-                    outputControlFileDistance = strcat('..\Datos\Data\NuevosCasos160\Casos\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), 'DistanceMatrix.mat');
+                    outputControlFileDistance = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), 'DistanceMatrix.mat');
                     if exist(outputControlFileDistance{:}, 'file') ~= 2
                         load(outputControlFile{:});
                         distanceMatrixControl = pdist(initCentroids, 'euclidean');
@@ -68,10 +56,10 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                         %Get output file names
                         minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
                         minDistNameFile = [strcat('Control', num2str(numControl), '_', minDistNameFile(1),'_Radius' , num2str(numMask))];
-                        outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat')
+                        outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
                         if exist(outputFileName{:}, 'file') ~= 2
                             %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                            GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), minDistNameFile);
+                            GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), outputFileName);
                         end
                         %--------------------------------------------------------%
                     end
@@ -81,22 +69,11 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                         %Get output file names
                         minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
                         minDistNameFile = [strcat(minDistNameFile(1),'_Radius' , num2str(numMask))];
-                        outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat')
+                        outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat')
                         if exist(outputFileName{:}, 'file') ~= 2
                             %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                            GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), minDistNameFile);
+                            GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), outputFileName);
                         end
-                        %--------------------------------------------------------%
-
-                        %--------------------- adjacencyMatrix_minimumDistanceIt ------------------%
-                        %Get output file names
-    %                     inNameFile = strsplit(strrep(imageName.name,' ','_'), '.');
-    %                     inNameFile = [strcat(inNameFile(1),'_Radius' , num2str(numMask))];
-    %                     outputFileName = strcat('Adjacency\minimumDistanceClasses', inNameFile(1), 'It1.mat')
-    %                     if exist(outputFileName{:}, 'file') ~= 2
-    %                         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-    %                         GetConnectedGraphWithMinimumDistancesByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), inNameFile);
-    %                     end
                         %--------------------------------------------------------%
                     end
                 end

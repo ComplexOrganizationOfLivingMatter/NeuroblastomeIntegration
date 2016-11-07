@@ -22,6 +22,6 @@ function [ output_args ] = pipelineAnalyzeNetworksWithGraphlets( marker )
     end
     
     disp('Analyzing .ndump2 results...');
-    analyzeGraphletsDistances(strcat('..\Results\graphletsCount\NuevosCasos\', upper(marker), '\NDUMP2\DivideByPacient\'), 'gdda');
+    analyzeGraphletsDistances(strcat('..\Results\graphletsCount\NuevosCasos\', upper(marker), '\NDUMP2\DivideByPacient\'), marker ,'gdda');
 end
 

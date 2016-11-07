@@ -1,4 +1,4 @@
-function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration( distanceBetweenClusters, adjacencyMatrix, C, inNameFile)
+function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration( distanceBetweenClusters, adjacencyMatrix, C, outputFileName)
 %GETCONNECTEDGRAPHWITHMINIMUMDISTANCEBETWEENPAIRS Summary of this function goes here
 %   Detailed explanation goes here
 %
@@ -6,11 +6,7 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
 
 	connectedComps = graphconncomp(adjacencyMatrix, 'Directed', 'false');
     if connectedComps == 1
-        outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat')
-        %outputFileNameSif = strcat('visualize\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.cvs');
         save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
-        %exporting to siff
-        %generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
 		return
     end
 	
@@ -25,10 +21,9 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
     iteration = 1;
     while 1
         if i > size(adjacencyMatrix,1)
-            outputFileName = strcat('E:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It', num2str(iteration) ,'.mat')
-            %outputFileNameSif = strcat('visualize\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It', num2str(iteration) ,'.cvs');
-            save(outputFileName{:}, 'adjacencyMatrix', '-v7.3');
-            %generateSIFFromAdjacencyMatrix(adjacencyMatrix, outputFileNameSif{:});
+            outputFileIter = strsplit(outputFileName{:}, 'It');
+            outputFileIter = strcat(strjoin(outputFileIter(1:end-1), 'It'), 'It', num2str(i), '.mat');
+            save(outputFileIter, 'adjacencyMatrix', '-v7.3');
             
             if 1 == graphconncomp(adjacencyMatrix, 'Directed', 'false')
 				return

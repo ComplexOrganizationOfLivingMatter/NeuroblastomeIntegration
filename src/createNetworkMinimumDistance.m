@@ -39,7 +39,7 @@ function [ ] = createNetworkMinimumDistance( )
 %                 try
 %                     %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
 %                     adjacencyMatrix = GetConnectedGraphWithMinimumDistancesByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
-%                     %save(outputFileName{:}, 'distanceBetweenObjects');
+%                     save(outputFileName{:}, 'distanceBetweenObjects');
 %                 catch exception
 %                     disp(exception)
 %                 end
