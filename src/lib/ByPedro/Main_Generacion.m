@@ -4,14 +4,14 @@
 clear all
 
 Iteration=700;
-Images=12;
+Images=20;
 H=1024; % Tamaño de la imagen que se quiere generar
 W=1024;
 FOLDER='E:\Pablo\PhD-miscelanious\voronoiGraphlets\data\biologicalImagesAndVoronoi\voronoiDiagrams\images';
 
-for i=2:Images
+parfor i=13:Images
     %ptc = Chose_seeds_positions(0, 5500, 5500, 200, 25);
-    image = imread(strcat(FOLDER, '\imagen_',num2str(i),'_Diagrama_20.png'));
+    image = imread(strcat(FOLDER, '\imagen_',num2str(i),'_Diagrama_020.png'));
     image = im2bw(image(:,:,1), 0.2);
     segmentedImage = watershed(1 - image, 8);
     centroids = regionprops(segmentedImage, 'Centroid');
