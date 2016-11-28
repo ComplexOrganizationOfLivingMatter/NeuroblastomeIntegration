@@ -445,8 +445,9 @@ easyHeatmap(distanceMatrix, names, 'testingControlsIteration', 'minimumDistanceC
 easyHeatmap(distanceMatrix, names, 'testingControlsSorting', 'minimumDistanceClassesBetweenPairs'); %You should change the code, to not show the filter string
 
 
-analyzeGraphletsDistances();
-
+analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\DivideByPacient\AgainstControl\', 'ret', 'gdda');
+analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\DivideByPacient\AgainstHexagons\', 'ret', 'gdda');
 
 %% Pipeline
-pipelineAnalyzeNetworksWithGraphlets( 'ret' );
+pipelineAnalyzeNetworksWithGraphlets( 'ret', 'RET' );
+pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos\');
