@@ -10,14 +10,17 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
         fullPathImageSplitted = strsplit(fullPathImage, '\');
         imageName = fullPathImageSplitted(end);
         imageName = imageName{1};
-        if size(strfind(lower(imageName), markerName),1) == 1
+        %Path name
+        basePath = strjoin(fullPathImageSplitted(1:6), '\');
+
+        if size(strfind(lower(imageName), lower(markerName)),1) == 1
             imageName;
             Img=imread(fullPathImage);
             Img = Img(:, :, 1);
             Img = im2bw(Img, 0.2);
             for numMask = [50] %100
                 inNameFile = strsplit(strrep(imageName,' ','_'), '.');
-                outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
+                outputFileName = strcat(basePath, '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
                 distanceMatrix = '';
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
@@ -36,14 +39,14 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                 maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfCircle );
                 
                 for numControl = 1:10
-                    outputControlFile = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), '.mat');
+                    outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), '.mat');
                     if exist(outputControlFile{:}, 'file') ~= 2
-                        outputControl = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl));
+                        outputControl = strcat(basePath, '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl));
                         generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfCircle, maskImage(1:radiusOfCircle*2, 1:radiusOfCircle*2), outputControl);
                     end
                     clear Img
 
-                    outputControlFileDistance = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), 'DistanceMatrix.mat');
+                    outputControlFileDistance = strcat(basePath, '\Networks\ControlNetwork\', inNameFile(1), num2str(numMask),'DiametControl', num2str(numControl), 'DistanceMatrix.mat');
                     if exist(outputControlFileDistance{:}, 'file') ~= 2
                         load(outputControlFile{:});
                         distanceMatrixControl = pdist(initCentroids, 'euclidean');
@@ -57,7 +60,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                         %Get output file names
                         minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
                         minDistNameFile = [strcat('Control', num2str(numControl), '_', minDistNameFile(1),'_Radius' , num2str(numMask))];
-                        outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
+                        outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
                         if exist(outputFileName{:}, 'file') ~= 2
                             %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
                             GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), outputFileName);
@@ -70,7 +73,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                         %Get output file names
                         minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
                         minDistNameFile = [strcat(minDistNameFile(1),'_Radius' , num2str(numMask))];
-                        outputFileName = strcat(strjoin(fullPathImageSplitted(1:5), '\'), '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat')
+                        outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat')
                         if exist(outputFileName{:}, 'file') ~= 2
                             %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
                             GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), outputFileName);
