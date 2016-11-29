@@ -1,9 +1,10 @@
-function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker )
+function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
 %PIPELINEANALYZENETWORKSWITHGRAPHLETS Summary of this function goes here
 %   Detailed explanation goes here
     cd 'E:\Pablo\Neuroblastoma\NeuroblastomeIntegration\'
     
-    getMinimumDistancesFromHexagonalGrid('..\Datos\Data\NuevosCasos160\Casos\Images\', strcat(marker, '_mask'));
+    basePath = strcat('..\Datos\Data\NuevosCasos160\Casos\', dirName);
+    getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_mask'));
     
     %Execute minimumDistances.py to get the networks with the Sorting
     %algorithm
@@ -14,9 +15,11 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker )
     
     disp('Leda files...');
     disp('Iteration');
-    calculateLEDAFilesFromDirectory('..\Datos\Data\NuevosCasos160\Casos\Networks\IterationAlgorithm\', marker);
+    mkdir(strcat(basePath, '\Networks\IterationAlgorithm\'));
+    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\IterationAlgorithm\'), marker);
     disp('Sorting');
-    calculateLEDAFilesFromDirectory('..\Datos\Data\NuevosCasos160\Casos\Networks\SortingAlgorithm\', marker);
+    mkdir(strcat(basePath, '\Networks\SortingAlgorithm\'));
+    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\SortingAlgorithm\'), marker);
     
     %divide by paciente the ndump2 files
     graphletResultsDir = strcat('..\Results\graphletsCount\NuevosCasos\', upper(marker), '\NDUMP2\DivideByPacient\');
