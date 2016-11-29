@@ -26,7 +26,10 @@ mypaths = []
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 9. Y2_333688B/CoreB/Adjacency/')
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/')
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/ControlNetwork/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/RET/Networks/DistanceMatrix/')
+# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/RET/Networks/ControlNetwork/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/DistanceMatrix/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/ControlNetwork/')
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
 for mypath in mypaths:
@@ -35,14 +38,17 @@ for mypath in mypaths:
 	for fileName in onlyfiles:
 		outputFileName = fileName.split('.')
 		#print outputFileName[0][:-14]
-		if "DistanceMatrix.mat" in fileName and os.path.isfile('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/SortingAlgorithm/' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/SortingAlgorithm/' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
 			#print mypath + fileName
 			mat = scipy.io.loadmat(mypath + fileName)
-			#fileName = 'minimumDistanceClasses5_Y2_99B00646B_CD45_Negativas_IPPDistanceMatrix.mat'
-			distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+			if "Control" in fileName:
+				distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+			else:
+				distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
+
 			distanceMatrixAux = distanceMatrix;
 			adjacencyMatrix = np.zeros((len(distanceMatrix), len(distanceMatrix)))
 			#print np.triu(distanceMatrix)
@@ -113,7 +119,7 @@ for mypath in mypaths:
 					#outputFileName = fileName.split('.')
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
 					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
-					scipy.io.savemat('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Networks/SortingAlgorithm/' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					scipy.io.savemat('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/SortingAlgorithm/minimumDistanceClasses_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 					iteration = iteration + 1
 					# print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 					#ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
@@ -132,7 +138,7 @@ for mypath in mypaths:
 						break
 
 					#if the graph is connected, we finish the algorithm
-					if nx.is_connected(G):
+					if nx.is_connected(G) or "Control" in fileName:
 						#if len(ccomp) == 1:
 						break
 
