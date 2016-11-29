@@ -20,7 +20,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
             Img = im2bw(Img, 0.2);
             for numMask = [50] %100
                 inNameFile = strsplit(strrep(imageName,' ','_'), '.');
-                outputFileName = strcat(basePath, '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat')
+                outputFileName = strcat(basePath, '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat');
                 distanceMatrix = '';
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
@@ -73,7 +73,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                         %Get output file names
                         minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
                         minDistNameFile = [strcat(minDistNameFile(1),'_Radius' , num2str(numMask))];
-                        outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat')
+                        outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
                         if exist(outputFileName{:}, 'file') ~= 2
                             %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
                             GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), outputFileName);
