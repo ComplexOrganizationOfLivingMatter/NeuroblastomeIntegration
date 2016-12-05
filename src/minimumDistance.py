@@ -28,8 +28,10 @@ mypaths = []
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/RET/Networks/DistanceMatrix/')
 # mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/RET/Networks/ControlNetwork/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/DistanceMatrix/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/ControlNetwork/')
+#mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/DistanceMatrix/')
+#mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/ControlNetwork/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Vitronectine/Networks/DistanceMatrix/')
+mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Vitronectine/Networks/ControlNetwork/')
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
 for mypath in mypaths:
