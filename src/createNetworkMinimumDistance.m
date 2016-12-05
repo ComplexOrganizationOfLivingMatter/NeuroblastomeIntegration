@@ -12,12 +12,18 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
 %   Developed by Pablo Vicente-Munuera
 
     lee_imagenes = dir(currentPath);
-    lee_imagenes = lee_imagenes(3:size(lee_imagenes,1)-2);
+    lee_imagenes = lee_imagenes(3:size(lee_imagenes,1) - 2);
     %We go through every image in the folder
-    for imK = 1:size(lee_imagenes,1)
+    for imK = 1:size(lee_imagenes, 1)
         %If it's a directory and positive image (marker positive). Also we exclude the files of col, ret, CD31 and GAG
         if lee_imagenes(imK).isdir == 0 && isempty(strfind(lower(lee_imagenes(imK).name), markerWeWant)) == 1
-            lee_imagenes(imK).name
+            fullPathImage = lee_imagenes(imK).name;
+            fullPathImage = fullPathImage{:};
+            fullPathImageSplitted = strsplit(fullPathImage, '\');
+            imageName = fullPathImageSplitted(end);
+            imageName = imageName{1};
+            %Path name
+            basePath = strjoin(fullPathImageSplitted(1:6), '\');
             Img=imread(lee_imagenes(imK).name);
 			
 			%Clusterize image
@@ -32,18 +38,27 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
             %--------------------- minimumDistanceBetweenPairsIt ------------------%
             %Get output file names
             distanceBetweenObjects = squareform(distanceBetweenObjects);
-            inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
-            outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat');
-			if exist(outputFileName{:}, 'file') ~= 2
-                %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                try
-                    adjacencyMatrix = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
-                catch exception
-                    disp(exception)
-                    %error('An unexpected error has occured')
-                end
-            end
-            %--------------------------------------------------------%
+            
+            createNetworksWithControls(fullPathImage, Img, distanceBetweenObjects, basePath, 0, inNameFile, imageName);
+            
+%             radiusOfCircle = min(size(Img))/2;
+%             maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfCircle );
+%             
+%             inNameFile = strsplit(strrep(lee_imagenes(imK).name,' ','_'), '.');
+%             outputFileName = strcat('Adjacency\minimumDistanceClassesBetweenPairs', inNameFile(1), 'It1.mat');
+% 			if exist(outputFileName{:}, 'file') ~= 2
+%                 %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+%                 try
+%                     adjacencyMatrix = GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceBetweenObjects , sparse(size(S,1), size(S,1)), zeros(1), inNameFile);
+%                 catch exception
+%                     disp(exception)
+%                     %error('An unexpected error has occured')
+%                 end
+%             end
+%             
+%             
+%             
+%             %--------------------------------------------------------%
 		end
     end
 end
