@@ -11,20 +11,24 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
 %
 %   Developed by Pablo Vicente-Munuera
 
-    lee_imagenes = dir(currentPath);
-    lee_imagenes = lee_imagenes(3:size(lee_imagenes,1) - 2);
-    %We go through every image in the folder
-    for imK = 1:size(lee_imagenes, 1)
+    lee_imagenes = getAllFiles(currentPath);
+    for imK = 1:size(lee_imagenes,1)
+        fullPathImage = lee_imagenes(imK);
+        fullPathImage = fullPathImage{:};
+        fullPathImageSplitted = strsplit(fullPathImage, '\');
+        imageName = fullPathImageSplitted(end);
+        imageName = imageName{1};
+        %Path name
+        basePath = strjoin(fullPathImageSplitted(1:6), '\');
         %If it's a directory and positive image (marker positive). Also we exclude the files of col, ret, CD31 and GAG
-        if lee_imagenes(imK).isdir == 0 && isempty(strfind(lower(lee_imagenes(imK).name), markerWeWant)) == 1
-            fullPathImage = lee_imagenes(imK).name;
-            fullPathImage = fullPathImage{:};
+        if isempty(strfind(lower(lee_imagenes{imK}), lower(markerWeWant))) == 0
+            fullPathImage = lee_imagenes{imK};
             fullPathImageSplitted = strsplit(fullPathImage, '\');
             imageName = fullPathImageSplitted(end);
             imageName = imageName{1};
             %Path name
             basePath = strjoin(fullPathImageSplitted(1:6), '\');
-            Img=imread(lee_imagenes(imK).name);
+            Img=imread(fullPathImage);
 			
 			%Clusterize image
 			Img = im2bw(Img(:,:,1), 0.2);
@@ -38,6 +42,12 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
             %--------------------- minimumDistanceBetweenPairsIt ------------------%
             %Get output file names
             distanceBetweenObjects = squareform(distanceBetweenObjects);
+            inNameFile = strsplit(strrep(imageName,' ','_'), '.');
+            outputFileName = strcat(basePath, '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'DistanceMatrix.mat');
+            if exist(outputFileName{:}, 'file') ~= 2
+                save(outputFileName{:}, 'distanceBetweenObjects');
+            end
+
             
             createNetworksWithControls(fullPathImage, Img, distanceBetweenObjects, basePath, 0, inNameFile, imageName);
             
