@@ -25,7 +25,7 @@ function [ adjacencyMatrix ] = GetConnectedGraphWithMinimumDistancesBetweenPairs
             outputFileIter = strcat(strjoin(outputFileIter(1:end-1), 'It'), 'It', num2str(iteration), '.mat');
             save(outputFileIter, 'adjacencyMatrix', '-v7.3');
             
-            if 1 == graphconncomp(adjacencyMatrix, 'Directed', 'false') || isempty(strfind(outputFileName, 'Control')) == 0
+            if 1 == graphconncomp(adjacencyMatrix, 'Directed', 'false') || isempty(strfind(outputFileName{:}, 'Control')) == 0
 				return
 			end
             i=1;
