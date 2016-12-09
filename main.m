@@ -450,4 +450,6 @@ analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosC
 
 %% Pipeline
 pipelineAnalyzeNetworksWithGraphlets( 'ret', 'RET' );
-pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos\');
+pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos');
+pipelineAnalyzeNetworksWithGraphlets( 'VTN', 'Vitronectine');
+pipelineAnalyzeNetworksWithGraphlets( 'CD163', 'CD163');
