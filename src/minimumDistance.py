@@ -11,6 +11,7 @@ import os.path
 
 mypaths = []
 basePath = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
+
 mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
 mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
 mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
