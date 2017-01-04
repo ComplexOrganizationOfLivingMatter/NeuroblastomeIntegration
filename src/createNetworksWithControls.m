@@ -36,37 +36,37 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
         else
             distanceMatrixControl = dlmread(strrep(outputControlFileDistance{:}, '.mat', '.csv'), ' ');
         end
-        if size(distanceMatrixControl, 1) > 0
-            %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
-            %Get output file names
-            minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
-            if numMask > 0
-                minDistNameFile = [strcat('Control', num2str(numControl), '_', minDistNameFile(1),'_Radius' , num2str(numMask))];
-            else
-                minDistNameFile = [strcat('Control', num2str(numControl), '_', minDistNameFile(1))];
-            end
-            outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
-            if exist(outputFileName{:}, 'file') ~= 2
-                %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), outputFileName);
-            end
-            %--------------------------------------------------------%
-        end
+        % if size(distanceMatrixControl, 1) > 0
+        %     %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
+        %     %Get output file names
+        %     minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
+        %     if numMask > 0
+        %         minDistNameFile = [strcat('Control', num2str(numControl), '_', minDistNameFile(1),'_Radius' , num2str(numMask))];
+        %     else
+        %         minDistNameFile = [strcat('Control', num2str(numControl), '_', minDistNameFile(1))];
+        %     end
+        %     outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
+        %     if exist(outputFileName{:}, 'file') ~= 2
+        %         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+        %         GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrixControl , sparse(size(distanceMatrixControl, 1), size(distanceMatrixControl, 1)), zeros(1), outputFileName);
+        %     end
+        %     %--------------------------------------------------------%
+        % end
 
-        if size(distanceMatrix, 1) > 0 && numControl == 1
-            %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
-            %Get output file names
-            minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
-            if numMask > 0
-                minDistNameFile = [strcat(minDistNameFile(1),'_Radius' , num2str(numMask))];
-            end
-            outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
-            if exist(outputFileName{:}, 'file') ~= 2
-                %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
-                GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), outputFileName);
-            end
-            %--------------------------------------------------------%
-        end
+        % if size(distanceMatrix, 1) > 0 && numControl == 1
+        %     %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
+        %     %Get output file names
+        %     minDistNameFile = strsplit(strrep(imageName,' ','_'), '.');
+        %     if numMask > 0
+        %         minDistNameFile = [strcat(minDistNameFile(1),'_Radius' , num2str(numMask))];
+        %     end
+        %     outputFileName = strcat(basePath, '\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs', minDistNameFile(1), 'It1.mat');
+        %     if exist(outputFileName{:}, 'file') ~= 2
+        %         %minimumDistance algorithm that outputs an adjacencyMatrix which is connected (i.e. only one connected component).
+        %         GetConnectedGraphWithMinimumDistancesBetweenPairsByIteration(distanceMatrix , sparse(size(distanceMatrix,1), size(distanceMatrix,1)), zeros(1), outputFileName);
+        %     end
+        %     %--------------------------------------------------------%
+        % end
     end
 end
 
