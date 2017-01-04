@@ -26,8 +26,10 @@ for mypath in mypaths:
 		outputFileName = fileName.split('.')
 		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
+		#---------------------------- SORTING ---------------------------------------#
 		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
+			print '-- Sorting ---'
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
 			#print mypath + fileName
@@ -38,8 +40,6 @@ for mypath in mypaths:
 				distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 
 			distanceMatrixAux = distanceMatrix;
-			adjacencyMatrix = np.zeros((len(distanceMatrix), len(distanceMatrix)))
-			#print np.triu(distanceMatrix)
 			
 			print len(distanceMatrix)
 			if len(distanceMatrix) > 15:
@@ -74,14 +74,10 @@ for mypath in mypaths:
 
 						numRow = numRow + 1
 					
-					#print distanceMatrix[1532][distanceMatrix[1532] != 0].min()
-					#print maxDistanceIteration
+
 					indices = np.where(distanceMatrix <= maxDistanceIteration)
-					#print len(indices[0])
-					#print len(distanceMatrix)
-					#print maxDistanceIteration
+
 					#Remove edges
-					#print indices
 					for index in range(len(indices[0])):
 						if distanceMatrix[indices[0][index], indices[1][index]] != 0 and distanceMatrix[indices[1][index], indices[0][index]] != 0:
 							distanceMatrix[indices[0][index], indices[1][index]] = 0
@@ -90,36 +86,14 @@ for mypath in mypaths:
 							edge = (indices[0][index], indices[1][index])
 							G.add_edge(*edge)
 
-							adjacencyMatrix[indices[0][index], indices[1][index]] = 1
-							adjacencyMatrix[indices[1][index], indices[0][index]] = 1
-
-
-					#Last edge
-					# distanceMatrixAux[indicesMaxDistanceIteration[0][0], indicesMaxDistanceIteration[1][0]] = 0.0
-					# edge = (indicesMaxDistanceIteration[0][0], indicesMaxDistanceIteration[1][0])
-					# G.add_edge(*edge)
 
 					# ----------- iteration is over! ------------#
 
-					#Output files of the network
-					#outputFileName = fileName.split('/')
-					#outputFileName = outputFileName[11].split('.')
-					#outputFileName = fileName.split('.')
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
 					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
 					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 					
 					iteration = iteration + 1
-					# print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
-					#ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
-					# #print len(ccomp)
-					# print ccomp
-					# print len(ccomp)
-					# print len(distanceMatrix)
-					#print min(sum(adjacencyMatrix))
-					#print np.where(sum(adjacencyMatrix) == min(sum(adjacencyMatrix)))
-					#print sum(adjacencyMatrixOut.todense()).min()
-					#print np.where(sum(adjacencyMatrixOut.todense()) == sum(adjacencyMatrixOut.todense()).min())
 
 					#If the iteration goes over 300, it has to be an error
 					if iteration > 300:
@@ -130,6 +104,74 @@ for mypath in mypaths:
 					if nx.is_connected(G) : #or "Control" in fileName
 						#if len(ccomp) == 1:
 						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+						break
+
+
+			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
+			end = time.time()
+			print (end - start)
+			print ('------------------------------------------------')
+
+		#---------------------------- ITERATION ---------------------------------------#
+		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+			print '-- Iteration ---'
+			start = time.time()
+			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
+			#print start
+			#print mypath + fileName
+			mat = scipy.io.loadmat(mypath + fileName)
+			if "Control" in fileName:
+				distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+			else:
+				distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
+			
+			print len(distanceMatrix)
+			if len(distanceMatrix) > 15:
+				#Creating network
+				G = nx.Graph()
+				#With an initial number of nodes
+				G.add_nodes_from(np.arange(len(distanceMatrix)))
+
+				iteration = 1
+				while True:
+					
+					numRow = 0;
+					for row in distanceMatrix:
+						try:
+							#minimum except zeros
+							minValue = row[row != 0].min()
+							#print minValue
+							#indices of the min value
+							indices = np.where(row == minValue)
+							distanceMatrix[numRow, indices[1][0]] = 0
+							distanceMatrix[indices[1][0], numRow] = 0
+
+							edge = (numRow, indices[1][0])
+							G.add_edge(*edge)
+
+
+						except Exception, e:
+							pass
+
+						numRow = numRow + 1
+
+					# ----------- iteration is over! ------------#
+
+					adjacencyMatrixOut = nx.adjacency_matrix(G)
+					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
+					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					
+					iteration = iteration + 1
+
+					#If the iteration goes over 300, it has to be an error
+					if iteration > 300:
+						print 'Error!'
+						break
+
+					#if the graph is connected, we finish the algorithm
+					if nx.is_connected(G) : #or "Control" in fileName
+						#if len(ccomp) == 1:
+						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 						break
 
 
