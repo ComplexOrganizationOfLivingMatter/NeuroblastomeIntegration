@@ -26,7 +26,7 @@ for mypath in mypaths:
 		outputFileName = fileName.split('.')
 		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
-		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[0] + '/' + directoriesFile[1] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
@@ -106,10 +106,10 @@ for mypath in mypaths:
 					#outputFileName = outputFileName[11].split('.')
 					#outputFileName = fileName.split('.')
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
-					if "Control" not in fileName:
-						print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
-						scipy.io.savemat(basePath + directoriesFile[0] + '/' + directoriesFile[1] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
-						iteration = iteration + 1
+					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
+					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					
+					iteration = iteration + 1
 					# print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 					#ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
 					# #print len(ccomp)
@@ -129,7 +129,7 @@ for mypath in mypaths:
 					#if the graph is connected, we finish the algorithm
 					if nx.is_connected(G) : #or "Control" in fileName
 						#if len(ccomp) == 1:
-						scipy.io.savemat(basePath + directoriesFile[0] + '/' + directoriesFile[1] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 						break
 
 
