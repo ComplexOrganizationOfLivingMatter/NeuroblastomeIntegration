@@ -10,28 +10,13 @@ import os.path
 
 
 mypaths = []
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 1. Y01_01B16459B/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 2. Y02A_02B03119A/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 3. Y02A_02B13320A/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 4. Y03A_03B12888B/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 5. Y03A_03B17300B/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 6. Y03B_03B03346B/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 7. Y03B_03B07423A/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 8. Y03B_03B08572A/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 9. Y2_333688B/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 10. Y2_99B00646B/CoreB/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/Casos/CASO 11. Y2_99B13169A/CoreA/Adjacency/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/RET/Networks/DistanceMatrix/')
-# mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/RET/Networks/ControlNetwork/')
-#mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/DistanceMatrix/')
-#mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/ControlNetwork/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Vitronectine/Networks/DistanceMatrix/')
-mypaths.append('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/Vitronectine/Networks/ControlNetwork/')
+basePath = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
+mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
+mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
+mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
 for mypath in mypaths:
@@ -39,8 +24,9 @@ for mypath in mypaths:
 
 	for fileName in onlyfiles:
 		outputFileName = fileName.split('.')
+		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
-		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/SortingAlgorithm/' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[0] + '/' + directoriesFile[1] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
@@ -120,9 +106,10 @@ for mypath in mypaths:
 					#outputFileName = outputFileName[11].split('.')
 					#outputFileName = fileName.split('.')
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
-					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
-					scipy.io.savemat('/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/VasosSanguineos/Networks/SortingAlgorithm/minimumDistanceClasses_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
-					iteration = iteration + 1
+					if "Control" not in fileName:
+						print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
+						scipy.io.savemat(basePath + directoriesFile[0] + '/' + directoriesFile[1] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+						iteration = iteration + 1
 					# print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 					#ccomp = sorted(nx.connected_components(G), key = len, reverse=True)
 					# #print len(ccomp)
@@ -140,8 +127,9 @@ for mypath in mypaths:
 						break
 
 					#if the graph is connected, we finish the algorithm
-					if nx.is_connected(G) or "Control" in fileName:
+					if nx.is_connected(G) : #or "Control" in fileName
 						#if len(ccomp) == 1:
+						scipy.io.savemat(basePath + directoriesFile[0] + '/' + directoriesFile[1] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 						break
 
 
