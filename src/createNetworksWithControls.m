@@ -24,9 +24,18 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
             distanceMatrixControl = pdist(initCentroids, 'euclidean');
             distanceMatrixControl = squareform(distanceMatrixControl);
             save(outputControlFileDistance{:}, 'distanceMatrixControl');
+            [~, msgid] = lastwarn;
+            if isequal(msgid, 'MATLAB:save:sizeTooBigForMATFile')
+                dlmwrite(strrep(outputControlFileDistance{:}, '.mat', '.csv'), distanceMatrixControl, ' ');
+                lastwarn('')
+            end
         end
 
-        load(outputControlFileDistance{:});
+        if exist(strrep(outputControlFileDistance{:}, '.mat', '.csv'), 'file') ~= 2
+            load(outputControlFileDistance{:});
+        else
+            distanceMatrixControl = dlmread(strrep(outputControlFileDistance{:}, '.mat', '.csv'), ' ');
+        end
         if size(distanceMatrixControl, 1) > 0
             %--------------------- adjacencyMatrix_minimumDistanceBetweenPairsIt ------------------%
             %Get output file names
