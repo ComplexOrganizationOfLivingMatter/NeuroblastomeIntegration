@@ -28,7 +28,7 @@ for mypath in mypaths:
 		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
 		#---------------------------- SORTING ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print '-- Sorting ---'
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
