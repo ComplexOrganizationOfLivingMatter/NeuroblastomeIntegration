@@ -9,10 +9,11 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
     mkdir(basePath, '\Networks\IterationAlgorithm');
     mkdir(basePath, '\Networks\SortingAlgorithm');
     
+    % VASOS SANGUINEOS CON HEXAGONAL GRID!!!!
     if isequal(marker, 'VTN')
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_HEPA_mask'));
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_MACR_mask'));
-    elseif isequal(lower(marker), lower('RET'))
+    elseif isequal(lower(marker), lower('RET')) || isequal(dirName, 'VasosSanguineos')
         createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_mask'));
     else
