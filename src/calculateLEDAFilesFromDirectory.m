@@ -9,7 +9,7 @@ function [ ] = calculateLEDAFilesFromDirectory(PathCurrent, marker)
     for imK = 1:size(lee_matrices,1)
         fullPathImage = strcat(PathCurrent, lee_matrices(imK).name);
         fullPathImageSplitted = strsplit(fullPathImage, '\');
-        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), 'distancematrix'),1) == 0)
+        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), lower('ItFinal')), 1) == 1)
             lee_matrices(imK).name
             inNameFile = strsplit(lee_matrices(imK).name, '.');
             outputLEDAFileName = strcat(strjoin(fullPathImageSplitted(1:end-2), '\'), '\GraphletVectors\', inNameFile(1), '.gw');
