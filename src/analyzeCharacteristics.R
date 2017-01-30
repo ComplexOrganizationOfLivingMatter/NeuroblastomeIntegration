@@ -6,8 +6,8 @@ source('E:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/analyzeCharacteristi
 source('E:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/saveQPlot.R')
 
 startingColumn <- 3
-#characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Characteristics_GDDA_AgainstControl_Inestability_30_01_2017.csv", startingColumn);
-characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Characteristics_GDDA_AgainstControl_UHR_30_01_2017.csv", startingColumn);
+characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_0sInsteadOf-1s_30_01_2017.csv", startingColumn);
+#characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analsys/Characteristics_GDDA_AgainstControl_UHR_30_01_2017.csv", startingColumn);
 #characteristics <- characteristics[characteristics[, startingColumn - 1] == "Media" | characteristics[, startingColumn - 1] == "Alta", ]
 
 tsneCoordinates <- tsne(characteristics[, startingColumn:length(characteristics)], perplexity = 30)
@@ -18,8 +18,8 @@ pcaCoordenates <- prcomp(characteristics[, startingColumn:length(characteristics
 gplot <- qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 2])
 saveQPlot('PCA', gplot)
 
-for (num in startingColumn:(length(characteristics))){
-  for (num2 in (startingColumn + 1) :(length(characteristics))){
+for (num in startingColumn:(length(characteristics) - 1)){
+  for (num2 in (num + 1) :(length(characteristics))){
     if (num != num2){
       gplot <- qplot(characteristics[, num], characteristics[, num2], colour=characteristics[, 2])
       

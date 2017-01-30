@@ -1,4 +1,4 @@
-saveQPlot <- function(infoFile, gplot, height = 1024, width = 1024, directory = '../Results/graphletsCount/Analysis/') {
+saveQPlot <- function(infoFile, gplot, height = 1024, width = 1024, directory = '../Results/graphletsCount/NuevosCasos/Analysis/') {
   
   filename2 <- paste(directory, 'qplot', infoFile, sep = "")
   

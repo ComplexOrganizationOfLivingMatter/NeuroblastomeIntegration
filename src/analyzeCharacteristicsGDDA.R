@@ -8,6 +8,7 @@ analyzeCharacteristicsGDDA <- function(fullPathFile, startingColumnCharacteristi
   characteristicsMatrix <- as.matrix(characteristics[1:length(characteristics[,1]), startingColumnCharacteristics:length(characteristics)])
   
   characteristicsMatrix[is.nan(characteristicsMatrix)] <- 0
+  characteristicsMatrix[characteristicsMatrix == -1] <- 0
   
   colMax <- function(data) apply(data, 2, max)
   maxCharacteristics <- as.matrix(colMax(abs(characteristicsMatrix)))
