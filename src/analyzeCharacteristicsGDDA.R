@@ -16,5 +16,6 @@ analyzeCharacteristicsGDDA <- function(fullPathFile, startingColumnCharacteristi
   characteristicsNormalized <- characteristics
   characteristicsNormalized[,3:length(characteristics)] <- normalizeCharactericsMatrix
   
-  return(characteristicsNormalized)
+  
+  return(characteristicsNormalized[characteristicsNormalized[, startingColumnCharacteristics - 1] != "", ])
 }

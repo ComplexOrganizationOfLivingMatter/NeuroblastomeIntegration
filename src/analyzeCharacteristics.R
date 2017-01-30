@@ -3,34 +3,27 @@
 #--------------------------- GDDA ---------------------------#
 
 source('E:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/analyzeCharacteristicsGDDA.R')
+source('E:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/saveQPlot.R')
 
 startingColumn <- 3
-characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Characteristics_GDDA_AgainstControl_Inestability_30_01_2017.csv", startingColumn);
+#characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Characteristics_GDDA_AgainstControl_Inestability_30_01_2017.csv", startingColumn);
+characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Characteristics_GDDA_AgainstControl_UHR_30_01_2017.csv", startingColumn);
+#characteristics <- characteristics[characteristics[, startingColumn - 1] == "Media" | characteristics[, startingColumn - 1] == "Alta", ]
 
 tsneCoordinates <- tsne(characteristics[, startingColumn:length(characteristics)], perplexity = 30)
-qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics[, 2])
+gplot <- qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics[, 2])
+saveQPlot('tsne_Perplexity30', gplot)
 
 pcaCoordenates <- prcomp(characteristics[, startingColumn:length(characteristics)])
-qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 2])
+gplot <- qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 2])
+saveQPlot('PCA', gplot)
 
-for (num in startingColumn:(length(characteristics)-1)){
-  for (num2 in (startingColumn + 1) :(length(characteristics)-1)){
+for (num in startingColumn:(length(characteristics))){
+  for (num2 in (startingColumn + 1) :(length(characteristics))){
     if (num != num2){
       gplot <- qplot(characteristics[, num], characteristics[, num2], colour=characteristics[, 2])
       
-      filename2 <- paste('qplot', as.character(num), '_', as.character(num2), sep = "")
-      
-      ggsave(paste(filename2, '.pdf', sep=""), gplot, width = 6, height = 8)
-      
-      print(gplot)
-      dev.off()
-      
-      
-      #png(filename = filename2, width = 600, height = 800, res = 300)
-      
-      #print(gplot) 
-      
-      #dev.off()
+      saveQPlot(paste(num, num2, sep = "_"), gplot)
     }
   }
 }
