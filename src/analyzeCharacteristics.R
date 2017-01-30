@@ -1,65 +1,51 @@
 #Developed by Pablo Vicente-Munuera
 
-library("tsne", lib.loc="~/R/win-library/3.1")
-library(ggplot2)
-
-characteristics <- read.csv(file = "../Results/graphletsCount/NuevosCasos/RET/characteristicsRETGCD11NormalizedWithClinicalData.csv")
-
-characteristicsMatrix <- as.matrix(characteristics[1:length(characteristics[,1]),5:length(characteristics)])
-
-characteristicsMatrix[is.nan(characteristicsMatrix)] <- 0
-
-colMax <- function(data) apply(data, 2, max)
-maxCharacteristics <- as.matrix(colMax(abs(characteristicsMatrix)))
-
-normalizeCharactericsMatrix <- sweep(characteristicsMatrix, 2, maxCharacteristics, '/')
-
-
-write.csv(file = "../Results/graphletsCount/NuevosCasos/RET/characteristicsRETGCD11Normalized.csv", normalizeCharactericsMatrix)
-
-tsneCoordinates <- tsne(normalizeCharactericsMatrix, perplexity = 10)
-qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics$Age..months.)
-
-
-dataMatrix = read.delim(file = "../Results/graphletsCount/NuevosCasos/RET/NDUMP2/TotalGraphletsPerAlgorithm/Iteration/gcd11.txt")
-distanceMatrix <- as.matrix(dataMatrix[, 2:length(dataMatrix)])
-names <- sort(dataMatrix$X);
-distanceMatrix <- distanceMatrix[order(dataMatrix$X), order(dataMatrix$X)]
-
-
-
-qplot(normalizeCharactericsMatrix[,"DifferenceIteration1"]*normalizeCharactericsMatrix[,"Iteration1"], normalizeCharactericsMatrix[, "Iter2Sorting"]*normalizeCharactericsMatrix[,"Difference1Sorting"], colour=characteristics$Inestability)
-
 #--------------------------- GDDA ---------------------------#
-characteristics <- read.csv(file = "../Results/graphletsCount/NuevosCasos/RET/characteristicsRETGDDAWithClinicalData.csv")
 
-characteristicsMatrix <- as.matrix(characteristics[1:length(characteristics[,1]),5:length(characteristics)])
+source('E:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/analyzeCharacteristicsGDDA.R')
 
-characteristicsMatrix[is.nan(characteristicsMatrix)] <- 0
+startingColumn <- 3
+characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Characteristics_GDDA_AgainstControl_Inestability_30_01_2017.csv", startingColumn);
 
-colMax <- function(data) apply(data, 2, max)
-maxCharacteristics <- as.matrix(colMax(abs(characteristicsMatrix)))
+tsneCoordinates <- tsne(characteristics[, startingColumn:length(characteristics)], perplexity = 30)
+qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics[, 2])
 
-normalizeCharactericsMatrix <- sweep(characteristicsMatrix, 2, maxCharacteristics, '/')
-write.csv(file = "../Results/graphletsCount/NuevosCasos/RET/characteristicsRETGDDANormalized.csv", normalizeCharactericsMatrix)
+pcaCoordenates <- prcomp(characteristics[, startingColumn:length(characteristics)])
+qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 2])
 
-tsneCoordinates <- tsne(characteristicsMatrix, perplexity = 30)
-qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics$Inestability)
+for (num in startingColumn:(length(characteristics)-1)){
+  for (num2 in (startingColumn + 1) :(length(characteristics)-1)){
+    if (num != num2){
+      gplot <- qplot(characteristics[, num], characteristics[, num2], colour=characteristics[, 2])
+      
+      filename2 <- paste('qplot', as.character(num), '_', as.character(num2), sep = "")
+      
+      ggsave(paste(filename2, '.pdf', sep=""), gplot, width = 6, height = 8)
+      
+      print(gplot)
+      dev.off()
+      
+      
+      #png(filename = filename2, width = 600, height = 800, res = 300)
+      
+      #print(gplot) 
+      
+      #dev.off()
+    }
+  }
+}
 
-pcaCoordenates <- prcomp(normalizeCharactericsMatrix, scale.=TRUE, center = TRUE)
-qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics$Inestability)
 
+# ------- Feature selection ----------#
 
+library("caret")
 
-qplot(normalizeCharactericsMatrix[,"DifferenceIteration1"]*normalizeCharactericsMatrix[,"Iteration1"], normalizeCharactericsMatrix[, "Iter2Sorting"]*normalizeCharactericsMatrix[,"Difference1Sorting"], colour=characteristics$Inestability)
-qplot(normalizeCharactericsMatrix[,"DifferenceIteration1"]*normalizeCharactericsMatrix[,"Iteration1"], normalizeCharactericsMatrix[, "Iter1Sorting"]*normalizeCharactericsMatrix[,"Difference1Sorting"], colour=characteristics$Inestability)
+## Load early to get the warnings out of the way:
+library("randomForest")
+library("ipred")
+library("gbm")
 
+control <- rfeControl(functions = rfFuncs, method = "boot", verbose = FALSE, returnResamp = "final", number = 50)
 
-differencesSorting <- normalizeCharactericsMatrix[, 6:9]
-differencesIteration <- normalizeCharactericsMatrix[, 63:length(normalizeCharactericsMatrix[, 1])]
-
-rowMax <- function(data) apply(data, 1, max)
-maxDifferencesSorting <- rowMax(abs(differencesSorting))
-maxDifferencesIteration <- rowMax(abs(differencesIteration))
-
-which(differencesIteration[1,] == maxDifferencesIteration[1]) #do for all the rows!
+profile.1 <- rfe(normalizeCharactericsMatrix, characteristics$Inestability, rfeControl = control)
+cat( "rf     : Profile 1 predictors:", predictors(profile.1), fill = TRUE )
