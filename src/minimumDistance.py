@@ -77,15 +77,13 @@ for mypath in mypaths:
 					
 
 					indices = np.where(distanceMatrix <= maxDistanceIteration)
-
 					#Remove edges
 					for index in range(len(indices[0])):
-						if distanceMatrix[indices[0][index], indices[1][index]] != 0 and distanceMatrix[indices[1][index], indices[0][index]] != 0:
-							distanceMatrix[indices[0][index], indices[1][index]] = 0
-							distanceMatrix[indices[1][index], indices[0][index]] = 0
-							#Add the edge
-							edge = (indices[0][index], indices[1][index])
-							G.add_edge(*edge)
+						distanceMatrix[indices[0][index], indices[1][index]] = 0
+						distanceMatrix[indices[1][index], indices[0][index]] = 0
+						#Add the edge
+						edge = (indices[0][index], indices[1][index])
+						G.add_edge(*edge)
 
 
 					# ----------- iteration is over! ------------#
