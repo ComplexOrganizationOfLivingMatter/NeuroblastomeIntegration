@@ -10,12 +10,14 @@ import os.path
 
 
 mypaths = []
-basePath = '/home/pablo/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
+basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
 
-mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
-mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
+# mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrix/')
+# mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
+# mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
+# mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
+# mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
+# mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
 mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
 mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
