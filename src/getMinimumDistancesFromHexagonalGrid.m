@@ -13,8 +13,8 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
         %Path name
         basePath = strjoin(fullPathImageSplitted(1:6), '\');
 
-        if size(strfind(lower(imageName), lower(markerName)),1) == 1
-            imageName;
+        if size(strfind(lower(imageName), lower(markerName)), 1) == 1
+            imageName
             Img=imread(fullPathImage);
             Img = Img(:, :, 1);
             Img = im2bw(Img, 0.2);

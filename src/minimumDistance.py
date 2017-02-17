@@ -12,12 +12,12 @@ import os.path
 mypaths = []
 basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
 
-# mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrix/')
-# mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
-# mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
-# mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
-# mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
-# mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
+mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
+mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
+mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
 mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
 mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
@@ -30,7 +30,7 @@ for mypath in mypaths:
 		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
 		#---------------------------- SORTING ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and ("50Diamet" in fileName or "Diamet" not in fileName) and "CELS" not in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print '-- Sorting ---'
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())

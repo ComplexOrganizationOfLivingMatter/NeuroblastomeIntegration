@@ -16,6 +16,7 @@ function [ ] = generateLEDAFromAdjacencyMatrix( adjacencyMatrix, nameFile )
     clear adjacencyMatrixAux idTriu idTril
     %After that process we get the full adjacency matrix
     adjacencyMatrix = full(adjacencyMatrix);
+    adjacencyMatrix(logical(eye(size(adjacencyMatrix)))) = 0;
     
     fileID = fopen(nameFile,'w');
     %Header leda file

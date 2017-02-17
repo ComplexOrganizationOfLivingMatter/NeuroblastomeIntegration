@@ -22,10 +22,10 @@ for file in onlyfiles:
 				directoryName = sys.argv[1] + fileSplitted[1] + '_' + fileSplitted[2]
 		else:
 			directoryName = sys.argv[1] + fileSplitted[1];
-		# 	if fileSplitted[2].startswith('Y0'):
-		# 		directoryName = fileSplitted[0] + '_' + fileSplitted[1] + '_' + fileSplitted[2]
-		# 	else:
-		# 		directoryName = fileSplitted[0][:-1] + '_' + fileSplitted[0][-1:] +  '_' + fileSplitted[1]
+			# if fileSplitted[2].startswith('Y0'):
+			# 	directoryName = fileSplitted[0] + '_' + fileSplitted[1] + '_' + fileSplitted[2]
+			# else:
+			# 	directoryName = fileSplitted[0][:-1] + '_' + fileSplitted[0][-1:] +  '_' + fileSplitted[1]
 
 
 		if len(directoryName) > 2:

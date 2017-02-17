@@ -9,11 +9,11 @@ function [ ] = calculateLEDAFilesFromDirectory(PathCurrent, marker)
     for imK = 1:size(lee_matrices,1)
         fullPathImage = strcat(PathCurrent, lee_matrices(imK).name);
         fullPathImageSplitted = strsplit(fullPathImage, '\');
-        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), lower('ItFinal')), 1) == 1)
+        if (lee_matrices(imK).isdir == 0 && size(strfind(lower(lee_matrices(imK).name), lower('ItFinal')), 1) == 1 && size(strfind(lower(lee_matrices(imK).name), lower('CELS')), 1) == 0)
             lee_matrices(imK).name
             inNameFile = strsplit(lee_matrices(imK).name, '.');
             outputLEDAFileName = strcat(strjoin(fullPathImageSplitted(1:end-2), '\'), '\GraphletVectors\', inNameFile(1), '.gw');
-            outputLEDAFileNameExists = strcat(strjoin(fullPathImageSplitted(1:end-2), '\'), '\GraphletVectors\', upper(marker), '\', inNameFile(1), '.gw');
+            outputLEDAFileNameExists = strcat(strjoin(fullPathImageSplitted(1:end-2), '\'), '\GraphletVectors\Done\', inNameFile(1), '.gw');
             if exist(outputLEDAFileNameExists{:}, 'file') ~= 2 && exist(outputLEDAFileName{:}, 'file') ~= 2
                 load(fullPathImage);
                 if exist('adjacencyMatrix', 'var') == 1

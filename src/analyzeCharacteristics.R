@@ -13,6 +13,8 @@ characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosC
 characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/testOverfitting_07_02_2017.csv", startingColumn);
 #characteristics <- characteristics[characteristics[, startingColumn - 1] == "Baja" | characteristics[, startingColumn - 1] == "Media", ]
 
+https://cran.r-project.org/web/packages/kohonen/kohonen.pdf
+
 classesCharacteristics <- classvec2classmat(t(characteristics[, startingColumn - 1]))
 #som2 <- bdk(as.matrix(characteristics[, c(3, 5, 7)]), grid = somgrid(xdim = 2, ydim = 2, topo = c("rectangular", "hexagonal")), classesCharacteristics);
 som2 <- bdk(as.matrix(characteristics[, startingColumn:length(characteristics)]), grid = somgrid(xdim = 1, ydim = 2, topo = c("rectangular", "hexagonal")), classesCharacteristics);
