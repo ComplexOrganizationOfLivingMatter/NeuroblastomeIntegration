@@ -1,6 +1,6 @@
 analyzeCharacteristicsGDDA <- function(fullPathFile, startingColumnCharacteristics) {
   
-  library("tsne", lib.loc="~/R/win-library/3.1")
+  library("tsne")
   library(ggplot2)
   
   characteristics <- read.csv(file = fullPathFile)
