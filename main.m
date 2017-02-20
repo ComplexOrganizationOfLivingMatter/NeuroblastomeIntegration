@@ -455,7 +455,6 @@ parfor i = 1:size(params{1}, 2)
     pipelineAnalyzeNetworksWithGraphlets(params{1}{i}, params{2}{i});
 end
 
-
 pipelineAnalyzeNetworksWithGraphlets( 'ret', 'RET' ); %done
 pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos'); %done
 pipelineAnalyzeNetworksWithGraphlets( 'VTN', 'Vitronectine');
@@ -464,8 +463,8 @@ pipelineAnalyzeNetworksWithGraphlets( 'COL', 'COLAGENO');
 pipelineAnalyzeNetworksWithGraphlets( 'GAGs', 'GAGs');
 
 
-analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\DivideByPacient\AgainstControl\', 'ret', 'gdda');
-analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\VasosSanguineos\NDUMP2\DivideByPacient\AgainstControl\', 'CD31', 'gdda');
-analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'MACR', 'gdda');
-analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'HEPA', 'gdda');
-analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\COL\NDUMP2\DivideByPacient\AgainstControl\', 'COL', 'gdda');
+analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\RET\NDUMP2\DivideByPacient\AgainstControl\', 'ret', 'gdda');
+analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VasosSanguineos\NDUMP2\DivideByPacient\AgainstControl\', 'CD31', 'gdda');
+analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'MACR', 'gdda');
+analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'HEPA', 'gdda');
+analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\COL\NDUMP2\DivideByPacient\AgainstControl\', 'COL', 'gdda');

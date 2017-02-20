@@ -9,7 +9,8 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
     mkdir(basePath, '\Networks\IterationAlgorithm');
     mkdir(basePath, '\Networks\SortingAlgorithm');
     mkdir(basePath, '\Networks\GraphletVectors');
-    
+    mkdir(basePath, '\Networks\MinimumSpanningTree');
+%     
 %     %VASOS SANGUINEOS CON HEXAGONAL GRID!!!!
 %     if isequal(marker, 'VTN')
 %         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_HEPA_mask'));
@@ -21,20 +22,24 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
 %         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_POSITIVAS_');
 %         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_NEGATIVAS_');
 %     end
-% 
-%     
-%     %Execute minimumDistances.py to get the networks with the Sorting
-%     %algorithm
-%     answer = 'n';
-%     while answer ~= 'y'
-%         answer = input('Have you executed minimumDistance.py? [y/n] ');
-%     end
+
+    createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrix'), marker);
+    createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
+    
+    %Execute minimumDistances.py to get the networks with the Sorting
+    %algorithm
+    answer = 'n';
+    while answer ~= 'y'
+        answer = input('Have you executed minimumDistance.py? [y/n] ');
+    end
     
     disp('Leda files...');
     disp('Iteration');
-    %calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\IterationAlgorithm\'), marker);
+    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\IterationAlgorithm\'), marker);
     disp('Sorting');
     calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\SortingAlgorithm\'), marker);
+    disp('MST');
+    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\MSTAlgorithm\'), marker);
     
     %divide by paciente the ndump2 files
     graphletResultsDir = strcat('..\Results\graphletsCount\NuevosCasos\Markers\', upper(marker), '\NDUMP2\DivideByPacient\');

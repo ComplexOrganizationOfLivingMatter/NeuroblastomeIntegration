@@ -20,6 +20,9 @@ mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
 mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
 mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
 mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
+mypaths.append(basePath + 'GAGs/Networks/DistanceMatrix/')
+mypaths.append(basePath + 'GAGs/Networks/ControlNetwork/')
+
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
 for mypath in mypaths:
