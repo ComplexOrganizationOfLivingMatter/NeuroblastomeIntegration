@@ -25,6 +25,7 @@ function [ ] = createMinimumSpanningTreeFromNetworks( currentPath, markerWeWant 
             nameFileNoExtension = strsplit(strrep(fileName(1:end-18),' ','_'), '.');
             outputFileName = strcat(basePath, '\Networks\MinimumSpanningTree\mst_', nameFileNoExtension{1}, '.mat');
             if exist(outputFileName, 'file') ~= 2 && isempty(strfind(fileName, 'DistanceMatrix')) == 0
+                fileName
                 if exist(strrep(fullPathFileName, '.mat', '.csv'), 'file') ~= 2
                     load(fullPathFileName);
                 else
@@ -32,11 +33,20 @@ function [ ] = createMinimumSpanningTreeFromNetworks( currentPath, markerWeWant 
                 end
                 
                 if exist('distanceBetweenObjects', 'var') == 1
-                    adjacencyMatrix = graphminspantree(sparse(distanceBetweenObjects));
-                else
-                    adjacencyMatrix = graphminspantree(sparse(distanceBetweenClusters));
+                    distanceMatrix = distanceBetweenObjects;
+                elseif exist('distanceBetweenClusters', 'var') == 1
+                    distanceMatrix = distanceBetweenClusters;
                 end
-                save(outputFileName, 'adjacencyMatrix', '-v7.3');
+                
+                if exist('distanceMatrix', 'var') == 1
+                    if length(distanceMatrix) > 15
+                        adjacencyMatrix = graphminspantree(sparse(distanceMatrix));
+                        save(outputFileName, 'adjacencyMatrix', '-v7.3');
+                    end
+%                 else
+%                     distanceMatrix = distanceMatrixControl;
+%                     
+                end
             end
         end
     end

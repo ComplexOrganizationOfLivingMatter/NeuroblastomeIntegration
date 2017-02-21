@@ -24,7 +24,7 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
 %     end
 
     createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrix'), marker);
-    createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
+    %createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
     
     %Execute minimumDistances.py to get the networks with the Sorting
     %algorithm
@@ -39,7 +39,7 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
     disp('Sorting');
     calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\SortingAlgorithm\'), marker);
     disp('MST');
-    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\MSTAlgorithm\'), marker);
+    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\MinimumSpanningTree\'), marker);
     
     %divide by paciente the ndump2 files
     graphletResultsDir = strcat('..\Results\graphletsCount\NuevosCasos\Markers\', upper(marker), '\NDUMP2\DivideByPacient\');
