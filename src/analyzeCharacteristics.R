@@ -10,10 +10,10 @@ library("som")
 
 startingColumn <- 3
 #characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_0sInsteadOf-1s_30_01_2017.csv", startingColumn);
-characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_VTN_20_02_2017.csv", startingColumn);
+characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_22_02_2017.csv", startingColumn);
 
 #characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/testOverfitting_07_02_2017.csv", startingColumn);
-characteristics <- characteristics[characteristics[, startingColumn - 2] == "Baja" | characteristics[, startingColumn - 2] == "Media", ]
+characteristics <- characteristics[characteristics[, startingColumn - 1] == "Baja" | characteristics[, startingColumn - 1] == "Media", ]
 
 #https://cran.r-project.org/web/packages/kohonen/kohonen.pdf
 
@@ -33,22 +33,22 @@ classesCharacteristics <- classvec2classmat(t(characteristics[, startingColumn -
 somInfo <- som(scale(characteristics[, startingColumn:length(characteristics)]), grid = somgrid(3, 4, "rectangular"))
 #plot(somInfo)
 
-som.draw(somInfo, characteristics[, startingColumn - 2])
+som.draw(somInfo, characteristics[, startingColumn - 1])
 
 characteristics$classification <- p
 
 tsneCoordinates <- tsne(characteristics[, startingColumn:length(characteristics)], perplexity = 30)
-gplot <- qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics[, 1])
+gplot <- qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics[, 2])
 saveQPlot('tsne_Perplexity30', gplot)
 
 pcaCoordenates <- prcomp(characteristics[, startingColumn:length(characteristics)])
-gplot <- qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 1])
+gplot <- qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 2])
 saveQPlot('PCA', gplot)
 
 for (num in startingColumn:(length(characteristics) - 1)){
   for (num2 in (num + 1) :(length(characteristics))){
     if (num != num2){
-      gplot <- qplot(characteristics[, num], characteristics[, num2], colour=characteristics[, 1])
+      gplot <- qplot(characteristics[, num], characteristics[, num2], colour=characteristics[, 2])
       
       saveQPlot(paste(num, num2, sep = "_"), gplot)
     }
