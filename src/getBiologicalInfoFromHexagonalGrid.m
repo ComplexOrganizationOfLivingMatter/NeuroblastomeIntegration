@@ -5,17 +5,18 @@ function [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percenta
     
     quantityOfFibrePerFilledCell = zeros(length(centroidsFiltered), 1);
     percentageOfFibrePerFilledCell = zeros(length(centroidsFiltered), 1);
-    for i = 1:length(centroidsFiltered)
+    parfor i = 1:length(centroidsFiltered)
         quantityOfFibrePerFilledCell(i) = sum(sum(ImgMasked == classes(i)));
         percentageOfFibrePerFilledCell(i) = sum(sum(mask == classes(i)));
     end
-    percentageOfFibrePerFilledCell = quantityOfFibrePerFilledCell / percentageOfFibrePerFilledCell;
+    percentageOfFibrePerFilledCell = quantityOfFibrePerFilledCell ./ percentageOfFibrePerFilledCell;
     
-    quantityOfFibrePerCell = zeros(max(max(mask)), 1);
-    percentageOfFibrePerCell = zeros(max(max(mask)), 1);
-    for i = 1:max(mask)
-        quantityOfFibrePerCell(i) = sum(sum(ImgMasked == i));
-        percentageOfFibrePerCell(i) = sum(sum(mask == i));
+    lengthAllCells = max(max(mask));
+    quantityOfFibrePerCell = zeros(lengthAllCells, 1);
+    percentageOfFibrePerCell = zeros(lengthAllCells, 1);
+    parfor i = 1:lengthAllCells
+        quantityOfFibrePerCell(i,1) = sum(sum(ImgMasked == i));
+        percentageOfFibrePerCell(i,1) = sum(sum(mask == i));
     end
-    percentageOfFibrePerCell = quantityOfFibrePerCell / percentageOfFibrePerCell;
+    percentageOfFibrePerCell = quantityOfFibrePerCell ./ percentageOfFibrePerCell;
 end
