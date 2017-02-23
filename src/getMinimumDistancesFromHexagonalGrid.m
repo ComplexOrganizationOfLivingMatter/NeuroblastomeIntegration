@@ -32,14 +32,17 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     stdPercentageOfFibrePerFilledCell = std(percentageOfFibrePerFilledCell);
                     stdPercentageOfFibrePerCell = std(percentageOfFibrePerCell);
                     
+                    meanPercentageOfFibrePerFilledCell = mean(percentageOfFibrePerFilledCell);
+                    meanPercentageOfFibrePerCell = mean(percentageOfFibrePerCell);
+                    
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell');
                 else
                     [distanceMatrix, ~, ~, ~, ~] = importdata(outputFileName{:});
                 end
                 if size(distanceMatrix, 1) > 15
-                    createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
+                    %createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
                 end
             end
         end

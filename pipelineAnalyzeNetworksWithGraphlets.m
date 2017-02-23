@@ -24,28 +24,28 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_NEGATIVAS_');
     end
 
-    createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrix'), marker);
-    %createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
-    
-    %Execute minimumDistances.py to get the networks with the Sorting
-    %algorithm
-    answer = 'n';
-    while answer ~= 'y'
-        answer = input('Have you executed minimumDistance.py? [y/n] ');
-    end
-    
-    disp('Leda files...');
-    disp('Iteration');
-    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\IterationAlgorithm\'), marker);
-    disp('Sorting');
-    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\SortingAlgorithm\'), marker);
-    disp('MST');
-    calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\MinimumSpanningTree\'), marker);
-    
-    %divide by paciente the ndump2 files
-    graphletResultsDir = strcat('..\Results\graphletsCount\NuevosCasos\Markers\', upper(marker), '\NDUMP2\DivideByPacient\');
-    if exist(graphletResultsDir, 'dir') ~= 7
-        mkdir(graphletResultsDir);
-    end
+%     createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrix'), marker);
+%     %createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
+%     
+%     %Execute minimumDistances.py to get the networks with the Sorting
+%     %algorithm
+%     answer = 'n';
+%     while answer ~= 'y'
+%         answer = input('Have you executed minimumDistance.py? [y/n] ');
+%     end
+%     
+%     disp('Leda files...');
+%     disp('Iteration');
+%     calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\IterationAlgorithm\'), marker);
+%     disp('Sorting');
+%     calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\SortingAlgorithm\'), marker);
+%     disp('MST');
+%     calculateLEDAFilesFromDirectory(strcat(basePath, '\Networks\MinimumSpanningTree\'), marker);
+%     
+%     %divide by paciente the ndump2 files
+%     graphletResultsDir = strcat('..\Results\graphletsCount\NuevosCasos\Markers\', upper(marker), '\NDUMP2\DivideByPacient\');
+%     if exist(graphletResultsDir, 'dir') ~= 7
+%         mkdir(graphletResultsDir);
+%     end
 end
 
