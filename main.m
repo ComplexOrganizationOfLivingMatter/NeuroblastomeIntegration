@@ -455,9 +455,9 @@ parfor i = 1:size(params{1}, 2)
     pipelineAnalyzeNetworksWithGraphlets(params{1}{i}, params{2}{i});
 end
 
-pipelineAnalyzeNetworksWithGraphlets( 'ret', 'RET' ); %done
-pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos'); %done
 pipelineAnalyzeNetworksWithGraphlets( 'VTN', 'Vitronectine');
+pipelineAnalyzeNetworksWithGraphlets( 'ret', 'RET' );
+pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos');
 %pipelineAnalyzeNetworksWithGraphlets( 'CD163', 'CD163');
 pipelineAnalyzeNetworksWithGraphlets( 'COL', 'COLAGENO');
 pipelineAnalyzeNetworksWithGraphlets( 'GAGs', 'GAGs');
@@ -468,3 +468,17 @@ analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosC
 analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'MACR', 'gdda');
 analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'HEPA', 'gdda');
 analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\COL\NDUMP2\DivideByPacient\AgainstControl\', 'COL', 'gdda');
+
+%% painting networks
+load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\MinimumSpanningTree\mst_04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50Diamet.mat')
+load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\DistanceMatrixWeights\04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50DiametDistanceMatrix.mat')
+imageName = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Images\Y04B\04B7005A\04B07005A_Y04B_VTN_HEPA_Mask.tif';
+paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids);
+
+load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\SortingAlgorithm\sorting_04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50DiametItFinal.mat')
+paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids);
+
+load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50DiametItFinal.mat')
+paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids);
+
+

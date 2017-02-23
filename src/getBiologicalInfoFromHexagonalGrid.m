@@ -1,4 +1,4 @@
-function [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell,distanceMatrix] = getBiologicalInfoFromHexagonalGrid(image, mask)
+function [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroidsFiltered, ImgMasked] = getBiologicalInfoFromHexagonalGrid(image, mask)
 %GETBIOLOGICALINFOFROMHEXAGONALGRID Summary of this function goes here
 %   Detailed explanation goes here
     [ distanceMatrix, centroidsFiltered, ImgMasked, classes] = getDistanceMatrixFromHexagonalGrid(image, mask);

@@ -27,7 +27,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
-                    [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
                     
                     stdPercentageOfFibrePerFilledCell = std(percentageOfFibrePerFilledCell);
                     stdPercentageOfFibrePerCell = std(percentageOfFibrePerCell);
@@ -37,7 +37,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell');
                 else
                     matrixData = importdata(outputFileName{:});
                     distanceMatrix = matrixData.distanceBetweenObjects;
