@@ -6,6 +6,7 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
     basePath = strcat('..\Datos\Data\NuevosCasos160\Casos\', dirName);
     mkdir(basePath, '\Networks\ControlNetwork');
     mkdir(basePath, '\Networks\DistanceMatrix');
+    mkdir(basePath, '\Networks\DistanceMatrixWeights');
     mkdir(basePath, '\Networks\IterationAlgorithm');
     mkdir(basePath, '\Networks\SortingAlgorithm');
     mkdir(basePath, '\Networks\GraphletVectors');
