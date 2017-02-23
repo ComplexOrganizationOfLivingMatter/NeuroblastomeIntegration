@@ -22,6 +22,6 @@ function [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percenta
     quantityOfFibrePerFilledCell = quantityOfFibrePerCell(classes);
     percentageOfFibrePerFilledCell = percentageOfFibrePerCell(classes);
     
-    percentageOfFibrePerFilledCell = quantityOfFibrePerFilledCell ./ percentageOfFibrePerFilledCell;
-    percentageOfFibrePerCell = quantityOfFibrePerCell ./ percentageOfFibrePerCell;
+    percentageOfFibrePerFilledCell = quantityOfFibrePerFilledCell ./ percentageOfFibrePerFilledCell*100;
+    percentageOfFibrePerCell = quantityOfFibrePerCell ./ percentageOfFibrePerCell*100;
 end
