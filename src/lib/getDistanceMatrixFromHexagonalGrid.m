@@ -1,4 +1,4 @@
-function [ distanceMatrix ] = getDistanceMatrixFromHexagonalGrid(Img, mask)
+function [ distanceMatrix, centroidsFiltered, ImgMasked ] = getDistanceMatrixFromHexagonalGrid(Img, mask)
 %GETDISTANCEMATRIXFROMHEXAGONALGRID Summary of this function goes here
 %   Detailed explanation goes here
     ImgMasked = Img .* mask;

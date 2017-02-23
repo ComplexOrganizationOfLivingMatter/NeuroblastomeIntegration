@@ -27,10 +27,11 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
-                    distanceMatrix = getDistanceMatrixFromHexagonalGrid(Img, mask);
+                    [weightsOfVertices, weightsOfEdges, distanceMatrix] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'weightsOfVertices');
                 else
                     distanceMatrix = importdata(outputFileName{:});
                 end
