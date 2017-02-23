@@ -27,13 +27,16 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
-                    [weightsOfVertices, weightsOfEdges, distanceMatrix] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    
+                    stdPercentageOfFibrePerFilledCell = std(percentageOfFibrePerFilledCell);
+                    stdPercentageOfFibrePerCell = std(percentageOfFibrePerCell);
                     
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'weightsOfVertices');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell');
                 else
-                    distanceMatrix = importdata(outputFileName{:});
+                    [distanceMatrix, ~, ~, ~, ~] = importdata(outputFileName{:});
                 end
                 if size(distanceMatrix, 1) > 15
                     createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
