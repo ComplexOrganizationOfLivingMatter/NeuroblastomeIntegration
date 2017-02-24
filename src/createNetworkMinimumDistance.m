@@ -43,7 +43,7 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
             %Get output file names
             distanceBetweenObjects = squareform(distanceBetweenObjects);
             inNameFile = strsplit(strrep(imageName,' ','_'), '.');
-            outputFileName = strcat(basePath, '\Networks\DistanceMatrix\minimumDistanceClasses', inNameFile(1), 'DistanceMatrix.mat');
+            outputFileName = strcat(basePath, '\Networks\DistanceMatrix\', inNameFile(1), 'DistanceMatrix.mat');
             if exist(outputFileName{:}, 'file') ~= 2 && exist(strrep(outputFileName{:}, '.mat', '.csv'), 'file') ~= 2
                 save(outputFileName{:}, 'distanceBetweenObjects');
                 [~, msgid] = lastwarn;

@@ -12,19 +12,20 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
     mkdir(basePath, '\Networks\GraphletVectors');
     mkdir(basePath, '\Networks\MinimumSpanningTree');
 %     
-%     %VASOS SANGUINEOS CON HEXAGONAL GRID!!!!
-%     if isequal(marker, 'VTN')
-%         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_HEPA_mask'));
-%         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_MACR_mask'));
-%     elseif isequal(lower(marker), lower('RET')) || isequal(dirName, 'VasosSanguineos') ||  isequal(lower(marker), lower('COL')) ||  isequal(lower(marker), lower('GAGs'))
-%         %createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
-%         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_mask'));
-%     else
-%         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_POSITIVAS_');
-%         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_NEGATIVAS_');
-%     end
+    %VASOS SANGUINEOS CON HEXAGONAL GRID!!!!
+    if isequal(marker, 'VTN')
+        getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_HEPA_mask'));
+        getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_MACR_mask'));
+        createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
+    elseif isequal(lower(marker), lower('RET')) || isequal(dirName, 'VasosSanguineos') ||  isequal(lower(marker), lower('COL')) ||  isequal(lower(marker), lower('GAGs'))
+        createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
+        getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_mask'));
+    else
+        createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_POSITIVAS_');
+        createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_NEGATIVAS_');
+    end
     
-    exportCharacteristicsAsCSV(strcat(basePath, '\Networks\DistanceMatrixWeights'));
+    %exportCharacteristicsAsCSV(strcat(basePath, '\Networks\DistanceMatrixWeights'));
 
 %     createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrix'), marker);
 %     %createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
