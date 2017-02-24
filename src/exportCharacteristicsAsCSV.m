@@ -13,6 +13,6 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo )
         characteristics(numImg, :) = {fileName(1:end-61), meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell};
     end
     characteristicsTable = cell2table(characteristics);
-    writetable(strcat(strjoin(fileNameSplitted(1:end - 1), '\'), '\characteristics', fileNameSplitted{end - 3} ,'.csv'), characteristicsTable, ';');
+    writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} ,'.xls'));
 end
 

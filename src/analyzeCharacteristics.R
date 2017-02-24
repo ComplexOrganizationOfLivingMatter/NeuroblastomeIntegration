@@ -5,12 +5,13 @@
 source('D:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/analyzeCharacteristicsGDDA.R')
 source('D:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/saveQPlot.R')
 source('D:/Pablo/Neuroblastoma/NeuroblastomeIntegration/src/lib/plotingUnsupervisedSom.R')
-#library("kohonen", lib.loc="~/R/win-library/3.3")
-library("som")
+library("kohonen", lib.loc="~/R/win-library/3.3")
+library("plot3D");
+#library("som")
 
 startingColumn <- 3
 #characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_0sInsteadOf-1s_30_01_2017.csv", startingColumn);
-characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_22_02_2017.csv", startingColumn);
+characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_RiskWithWeights_24_02_2017.csv", startingColumn);
 
 #characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/testOverfitting_07_02_2017.csv", startingColumn);
 characteristics <- characteristics[characteristics[, startingColumn - 1] == "Baja" | characteristics[, startingColumn - 1] == "Media", ]
@@ -37,9 +38,9 @@ som.draw(somInfo, characteristics[, startingColumn - 1])
 
 characteristics$classification <- p
 
-tsneCoordinates <- tsne(characteristics[, startingColumn:length(characteristics)], perplexity = 30)
+tsneCoordinates <- tsne(characteristics[, startingColumn:length(characteristics)], perplexity = 20)
 gplot <- qplot(tsneCoordinates[,1], tsneCoordinates[,2], colour=characteristics[, 2])
-saveQPlot('tsne_Perplexity30', gplot)
+saveQPlot('tsne_Perplexity20', gplot)
 
 pcaCoordenates <- prcomp(characteristics[, startingColumn:length(characteristics)])
 gplot <- qplot(pcaCoordenates$x[, "PC1"], pcaCoordenates$x[, "PC2"], colour=characteristics[, 2])
