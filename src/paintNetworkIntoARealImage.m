@@ -6,6 +6,7 @@ function [ ] = paintNetworkIntoARealImage( imageName, adjacencyMatrix, centroids
     centroids = padcat(centroids{:});
     img = imread(imageName);
     image(img);
+    colormap hot;
     hold on;
     for i = 1:size(adjacencyMatrix, 1)
         for j = 1:size(adjacencyMatrix, 2)
