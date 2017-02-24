@@ -23,6 +23,8 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_POSITIVAS_');
         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_NEGATIVAS_');
     end
+    
+    exportCharacteristicsAsCSV(strcat(basePath, '\Networks\DistanceMatrixWeights'));
 
 %     createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrix'), marker);
 %     %createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\ControlNetwork'), marker);
