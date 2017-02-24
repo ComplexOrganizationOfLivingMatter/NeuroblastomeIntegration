@@ -3,17 +3,16 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo )
 %   Detailed explanation goes here
     
     allImages = getAllFiles(pathOfInfo);
-    characteristics = zeros(length(allImages), 4);
-    pacientName = {};
+    characteristics = cell(length(allImages), 5);
     for numImg = 1:size(allImages,1)
         fullPathFile = allImages{numImg};
         fileNameSplitted = strsplit(fullPathFile, '\');
         fileName = fileNameSplitted(end);
         fileName = fileName{1};
-        pacientName(end + 1, 1) = {fileName}
         load(fullPathFile);
-        characteristics(numImg, :) = [meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell];
+        characteristics(numImg, :) = {fileName(1:end-61), meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell};
     end
-    dlmwrite(strcat(strjoin(fileNameSplitted, '\'), '\characteristics', fileNameSplitted{end - 3} ,'.csv'), characteristics, ';');
+    characteristicsTable = cell2table(characteristics);
+    writetable(strcat(strjoin(fileNameSplitted(1:end - 1), '\'), '\characteristics', fileNameSplitted{end - 3} ,'.csv'), characteristicsTable, ';');
 end
 
