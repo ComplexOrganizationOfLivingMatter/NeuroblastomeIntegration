@@ -61,6 +61,6 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
             end
         end
     end
-    xlswrite(strcat(basePath, 'negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector'));
+    xlswrite(strcat(basePath, '\negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector'));
 end
 
