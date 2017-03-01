@@ -16,12 +16,14 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
         %Path name
         basePath = strjoin(fullPathFileNameSplitted(1:6), '\');
         %If it's a directory and positive image (marker positive). Also we exclude the files of col, ret, CD31 and GAG
-        if isempty(strfind(lower(fullPathFileName), lower(markerWeWant))) == 0 && isempty(strfind(lower(fullPathFileName), lower('CELS'))) == 1 && isempty(strfind(lower(fullPathFileName), '.txt')) == 1
+        if isempty(strfind(lower(fullPathFileName), lower(markerWeWant))) == 0 && isempty(strfind(lower(fullPathFileName), lower('mask'))) == 0 && isempty(strfind(lower(fullPathFileName), lower('CELS'))) == 1 && isempty(strfind(lower(fullPathFileName), '.txt')) == 1
             fileNameSplitted = strsplit(fileName, '_');
             
             if isempty(fileNameSplitted{1})
+                fileNamePositive = fileNameSplitted{2};
                 fileNameNegative = cellfun(@(x) isempty(strfind(x, fileNameSplitted{2})) == 0 & isempty(strfind(lower(x), 'cels')) == 0, allFiles);
             else
+                fileNamePositive = fileNameSplitted{1};
                 fileNameNegative = cellfun(@(x) isempty(strfind(x, fileNameSplitted{1})) == 0 & isempty(strfind(lower(x), 'cels')) == 0, allFiles);
             end
             
@@ -49,13 +51,16 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
                 centroidsFilteredPositive = vertcat(centroidsFilteredPositive.Centroid);
                 distanceBetweenPositiveAndNegative = pdist2(centroidsFilteredPositive, imgNegativeCentroids);
                 minDistanceBetweenPositiveAndNegative = min(distanceBetweenPositiveAndNegative);
-                meanMinDistanceBetweenPositiveAndNegative = mean(minDistanceBetweenPositiveAndNegative)
+                meanMinDistanceBetweenPositiveAndNegative = mean(minDistanceBetweenPositiveAndNegative);
                 meanMinDistanceBetweenPositiveAndNegativeVector{end+1} = meanMinDistanceBetweenPositiveAndNegative;
-                fileNamePositiveVector{end+1} = fileName;
-                fileNameNegativeVector{end+1} = fileNameNegative;
+                fileNamePositiveVector{end+1} = fileNamePositive;
+                fileNameNegativeVector{end+1} = fileNameNegativeFinal;
+            else
+                disp('No negative cells!');
+                fileNamePositive
             end
         end
     end
-    fileNamePositiveVector;
+    xlswrite(strcat(basePath, 'negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector'));
 end
 
