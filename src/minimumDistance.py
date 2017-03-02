@@ -7,21 +7,23 @@ from time import gmtime, strftime
 from os import listdir
 from os.path import isfile, join
 import os.path
+import csv
+from numpy import genfromtxt
 
 
 mypaths = []
 basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
 
 mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
+#mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
 mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
+#mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
 mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
+#mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
 mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
+#mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
 mypaths.append(basePath + 'GAGs/Networks/DistanceMatrix/')
-mypaths.append(basePath + 'GAGs/Networks/ControlNetwork/')
+#mypaths.append(basePath + 'GAGs/Networks/ControlNetwork/')
 
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
@@ -39,12 +41,15 @@ for mypath in mypaths:
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
 			#print mypath + fileName
-			mat = scipy.io.loadmat(mypath + fileName)
-			if "Control" in fileName:
-				distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+			if os.path.isfile(mypath + outputFileName[0] + '.csv')  == False:
+				mat = scipy.io.loadmat(mypath + fileName)
+				if "Control" in fileName:
+					distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+				else:
+					distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 			else:
-				distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
-
+				distanceMatrix = genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' ')
+			
 			distanceMatrixAux = distanceMatrix;
 			
 			print len(distanceMatrix)
@@ -117,7 +122,7 @@ for mypath in mypaths:
 			print ('------------------------------------------------')
 
 		#---------------------------- ITERATION ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName  and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			print '-- Iteration ---'
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
