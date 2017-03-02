@@ -48,7 +48,7 @@ for mypath in mypaths:
 				else:
 					distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 			else:
-				distanceMatrix = genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' ')
+				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
 			
 			distanceMatrixAux = distanceMatrix;
 			
@@ -128,11 +128,16 @@ for mypath in mypaths:
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
 			#print mypath + fileName
-			mat = scipy.io.loadmat(mypath + fileName)
-			if "Control" in fileName:
-				distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+			if os.path.isfile(mypath + outputFileName[0] + '.csv')  == False:
+				mat = scipy.io.loadmat(mypath + fileName)
+				if "Control" in fileName:
+					distanceMatrix = np.matrix(mat['distanceMatrixControl'])
+				else:
+					distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 			else:
-				distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
+				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
+			
+			distanceMatrixAux = distanceMatrix;
 			
 			print len(distanceMatrix)
 			if len(distanceMatrix) > 15:
