@@ -12,7 +12,7 @@ library("plot3Drgl");
 
 startingColumn <- 3
 #characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Inestability_0sInsteadOf-1s_30_01_2017.csv", startingColumn);
-characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_InestabilityWithWeights_24_02_2017.csv", startingColumn);
+characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/Characteristics_GDDA_AgainstControl_Risk_Weights_02_03_2017.csv", startingColumn);
 
 #characteristics <- analyzeCharacteristicsGDDA("../Results/graphletsCount/NuevosCasos/Analysis/testOverfitting_07_02_2017.csv", startingColumn);
 characteristics <- characteristics[characteristics[, startingColumn - 1] == "Baja" | characteristics[, startingColumn - 1] == "Media", ]
