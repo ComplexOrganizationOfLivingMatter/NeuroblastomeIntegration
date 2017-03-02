@@ -35,7 +35,7 @@ for mypath in mypaths:
 		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
 		#---------------------------- SORTING ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingUsingWeightsAlgorithm/sortingUsingWeights_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print '-- Sorting ---'
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
@@ -50,9 +50,11 @@ for mypath in mypaths:
 			else:
 				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
 			
+			distanceMatrix = distanceMatrix .* 
 			distanceMatrixAux = distanceMatrix;
-			
+			print distanceMatrix
 			print len(distanceMatrix)
+			break
 			if len(distanceMatrix) > 15:
 				#Creating network
 				G = nx.Graph()
@@ -100,7 +102,7 @@ for mypath in mypaths:
 
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
 					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
-					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingUsingWeightsAlgorithm/sortingUsingWeights_' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 					
 					iteration = iteration + 1
 
@@ -112,7 +114,7 @@ for mypath in mypaths:
 					#if the graph is connected, we finish the algorithm
 					if nx.is_connected(G) : #or "Control" in fileName
 						#if len(ccomp) == 1:
-						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingAlgorithm/sorting_' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingUsingWeightsAlgorithm/sortingUsingWeights_' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 						break
 
 
@@ -122,7 +124,7 @@ for mypath in mypaths:
 			print ('------------------------------------------------')
 
 		#---------------------------- ITERATION ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName  and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName  and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationUsingWeightsAlgorithm/minimumDistanceClassesBetweenPairsUsingWeights' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			print '-- Iteration ---'
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
@@ -140,6 +142,7 @@ for mypath in mypaths:
 			distanceMatrixAux = distanceMatrix;
 			
 			print len(distanceMatrix)
+			break
 			if len(distanceMatrix) > 15:
 				#Creating network
 				G = nx.Graph()
@@ -173,7 +176,7 @@ for mypath in mypaths:
 
 					adjacencyMatrixOut = nx.adjacency_matrix(G)
 					print outputFileName[0][:-14] + 'It' + str(iteration) + '.mat'
-					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+					scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationUsingWeightsAlgorithm/minimumDistanceClassesBetweenPairsUsingWeights' + outputFileName[0][:-14] + 'It' + str(iteration) + '.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 					
 					iteration = iteration + 1
 
@@ -185,7 +188,7 @@ for mypath in mypaths:
 					#if the graph is connected, we finish the algorithm
 					if nx.is_connected(G) : #or "Control" in fileName
 						#if len(ccomp) == 1:
-						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationAlgorithm/minimumDistanceClassesBetweenPairs' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
+						scipy.io.savemat(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationUsingWeightsAlgorithm/minimumDistanceClassesBetweenPairsUsingWeights' + outputFileName[0][:-14] + 'ItFinal.mat', mdict={'adjacencyMatrix': adjacencyMatrixOut})
 						break
 
 
