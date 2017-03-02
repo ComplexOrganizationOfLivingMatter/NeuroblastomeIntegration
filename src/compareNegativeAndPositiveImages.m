@@ -7,6 +7,7 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
     meanMinDistanceBetweenPositiveAndNegativeVector = {};
     fileNamePositiveVector = {};
     fileNameNegativeVector = {};
+    eulerNumberVector = {};
     for numFile = 1:size(allFiles,1)
         fullPathFileName = allFiles(numFile);
         fullPathFileName = fullPathFileName{:};
@@ -44,6 +45,9 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
                 imgPositive = imread(allFiles{numFile});
                 imgPositive = im2bw(imgPositive(:,:,1), 0.2);
                 imgPositiveLog = logical(imgPositive);
+
+                eulerNumber = bweuler(imgPositiveLog, 4);
+                
                 maskName = strcat('..\Mascaras\HexagonalMask', num2str(NUM_MASK), 'Diamet.mat');
                 mask = importdata(maskName);
                 mask = mask(1:size(imgPositiveLog, 1), 1:size(imgPositiveLog,2));
@@ -55,12 +59,13 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
                 meanMinDistanceBetweenPositiveAndNegativeVector{end+1} = meanMinDistanceBetweenPositiveAndNegative;
                 fileNamePositiveVector{end+1} = fileNamePositive;
                 fileNameNegativeVector{end+1} = fileNameNegativeFinal;
+                eulerNumberVector{end+1} = eulerNumber;
             else
                 disp('No negative cells!');
                 fileNamePositive
             end
         end
     end
-    xlswrite(strcat(basePath, '\negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector'));
+    xlswrite(strcat(basePath, '\negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector', eulerNumberVector'));
 end
 
