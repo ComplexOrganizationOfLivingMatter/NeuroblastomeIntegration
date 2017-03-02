@@ -27,7 +27,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
-                    [percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    [quantityOfBranchesFilledPerCell, quantityOfBranchesPerCell, percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
                     
                     stdPercentageOfFibrePerFilledCell = std(percentageOfFibrePerFilledCell);
                     stdPercentageOfFibrePerCell = std(percentageOfFibrePerCell);
@@ -35,9 +35,13 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     meanPercentageOfFibrePerFilledCell = mean(percentageOfFibrePerFilledCell);
                     meanPercentageOfFibrePerCell = mean(percentageOfFibrePerCell);
                     
+                    meanQuantityOfBranchesFilledPerCell = mean(quantityOfBranchesFilledPerCell);
+                    meanQuantityOfBranchesPerCell = mean(quantityOfBranchesPerCell);
+                    
+                    
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell');
                 else
                     matrixData = importdata(outputFileName{:});
                     distanceMatrix = matrixData.distanceBetweenObjects;
