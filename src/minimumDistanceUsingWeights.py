@@ -14,8 +14,8 @@ from sklearn.preprocessing import normalize
 
 mypaths = []
 basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
-weightOfWeightMatrix = 4
-weightOfDistanceMatrix = 0.1
+weightOfWeightMatrix = 4 #The good ones
+weightOfDistanceMatrix = 0.1 #the good ones
 
 # mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrixWeights/')
 # mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrixWeights/')
