@@ -9,6 +9,7 @@ from os.path import isfile, join
 import os.path
 import csv
 from numpy import genfromtxt
+from sklearn.preprocessing import normalize
 
 
 mypaths = []
@@ -50,12 +51,22 @@ for mypath in mypaths:
 			else:
 				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
 			
-			distanceMatrix = distanceMatrix .* 
-			distanceMatrixAux = distanceMatrix;
-			print distanceMatrix
+			weightMatrixNormalized = normalize(np.matrix(mat['percentageOfFibrePerFilledCell']))
+			distanceMatrixNormalized = normalize(distanceMatrix)
+
+			print weightMatrixNormalized
+
+			weightMatrix = 1 / ()
+			#print distanceMatrix
 			print len(distanceMatrix)
-			break
+			
 			if len(distanceMatrix) > 15:
+				print distanceMatrix
+				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
+				distanceMatrix = distanceMatrix + weightMatrix + weightMatrix.transpose()
+				print distanceMatrix
+				break
+				distanceMatrixAux = distanceMatrix
 				#Creating network
 				G = nx.Graph()
 				#With an initial number of nodes
