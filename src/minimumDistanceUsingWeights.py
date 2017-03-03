@@ -15,16 +15,11 @@ from sklearn.preprocessing import normalize
 mypaths = []
 basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
 
-mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrixWeights/')
-#mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
-mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrixWeights/')
-#mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
-mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrixWeights/')
-#mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
+# mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrixWeights/')
+# mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrixWeights/')
+# mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrixWeights/')
+# mypaths.append(basePath + 'GAGs/Networks/DistanceMatrixWeights/')
 mypaths.append(basePath + 'RET/Networks/DistanceMatrixWeights/')
-#mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
-mypaths.append(basePath + 'GAGs/Networks/DistanceMatrixWeights/')
-#mypaths.append(basePath + 'GAGs/Networks/ControlNetwork/')
 
 #mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
 
@@ -36,7 +31,7 @@ for mypath in mypaths:
 		directoriesFile = mypath.split('/');
 		#print outputFileName[0][:-14]
 		#---------------------------- SORTING ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingUsingWeightsAlgorithm/sortingUsingWeights_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/SortingUsingWeightsAlgorithm/sortingUsingWeights_' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			start = time.time()
 			print '-- Sorting ---'
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
@@ -51,21 +46,16 @@ for mypath in mypaths:
 			else:
 				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
 			
-			weightMatrixNormalized = normalize(np.matrix(mat['percentageOfFibrePerFilledCell']))
-			distanceMatrixNormalized = normalize(distanceMatrix)
-
-			print weightMatrixNormalized
-
-			weightMatrix = 1 / ()
-			#print distanceMatrix
 			print len(distanceMatrix)
 			
 			if len(distanceMatrix) > 15:
-				print distanceMatrix
+				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
+				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max')
+				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0)
+
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
 				distanceMatrix = distanceMatrix + weightMatrix + weightMatrix.transpose()
-				print distanceMatrix
-				break
+
 				distanceMatrixAux = distanceMatrix
 				#Creating network
 				G = nx.Graph()
@@ -74,7 +64,6 @@ for mypath in mypaths:
 
 				iteration = 1
 				while True:
-					
 					maxDistanceIteration = 0;
 					indicesMaxDistanceIteration = 0
 					numRow = 0;
@@ -135,7 +124,7 @@ for mypath in mypaths:
 			print ('------------------------------------------------')
 
 		#---------------------------- ITERATION ---------------------------------------#
-		if "DistanceMatrix.mat" in fileName  and ("50Diamet" in fileName or "Diamet" not in fileName) and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationUsingWeightsAlgorithm/minimumDistanceClassesBetweenPairsUsingWeights' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
+		if "DistanceMatrix.mat" in fileName  and "50Diamet" in fileName and os.path.isfile(basePath + directoriesFile[9] + '/' + directoriesFile[10] + '/IterationUsingWeightsAlgorithm/minimumDistanceClassesBetweenPairsUsingWeights' + outputFileName[0][:-14] + 'It' + '1' + '.mat') == 0:
 			print '-- Iteration ---'
 			start = time.time()
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
@@ -150,11 +139,16 @@ for mypath in mypaths:
 			else:
 				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
 			
-			distanceMatrixAux = distanceMatrix;
-			
 			print len(distanceMatrix)
 			break
 			if len(distanceMatrix) > 15:
+				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max')
+				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0)
+
+				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
+				distanceMatrix = distanceMatrix + weightMatrix + weightMatrix.transpose()
+
+				distanceMatrixAux = distanceMatrix;
 				#Creating network
 				G = nx.Graph()
 				#With an initial number of nodes
