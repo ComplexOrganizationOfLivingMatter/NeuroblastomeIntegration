@@ -9,7 +9,6 @@ from os.path import isfile, join
 import os.path
 import csv
 from numpy import genfromtxt
-from sklearn.preprocessing import normalize
 
 
 mypaths = []
@@ -46,12 +45,12 @@ for mypath in mypaths:
 			
 			if len(distanceMatrix) > 15:
 				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = normalize(np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']), axis=0, norm='max')
+				weightMatrix = np.matrix(mat['meanPercentageOfFibreWithinNeighborhood'])
 				distanceMatrix = distanceMatrix * weightOfDistanceMatrix
-				weightMatrix = (1 / weightMatrix)  * weightOfWeightMatrix
+				weightMatrix = weightMatrix * weightOfWeightMatrix
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
-				distanceMatrix = distanceMatrix * (weightMatrix/2 + weightMatrix.transpose()/2)
+				distanceMatrix = distanceMatrix / (weightMatrix/2 + 1 + weightMatrix.transpose()/2)
 
 				distanceMatrixAux = distanceMatrix
 				#Creating network
@@ -133,8 +132,8 @@ for mypath in mypaths:
 			
 			print len(distanceMatrix)
 			if len(distanceMatrix) > 15:
-				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = normalize(np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']), axis=0, norm='max')
+
+				weightMatrix = np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']) / 100
 				distanceMatrix = distanceMatrix * weightOfDistanceMatrix
 				weightMatrix = weightMatrix * weightOfWeightMatrix
 
