@@ -38,10 +38,13 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     meanQuantityOfBranchesFilledPerCell = mean(quantityOfBranchesFilledPerCell);
                     meanQuantityOfBranchesPerCell = mean(quantityOfBranchesPerCell);
                     
+                    centroidsAll = regionprops(mask, 'Centroid');
+                    distanceMatrixAll = squareform(pdist(vertcat(centroidsAll.Centroid)));
+                    meanPercentageOfFibreWithinNeighborhood = getMeanOfVariableFromNeighborhood(percentageOfFibrePerCell, distanceMatrixAll, unique(ImgMasked), numMask*2);
                     
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell');
                 else
                     matrixData = importdata(outputFileName{:});
                     distanceMatrix = matrixData.distanceBetweenObjects;
