@@ -14,6 +14,8 @@ from sklearn.preprocessing import normalize
 
 mypaths = []
 basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
+weightOfMatrixWeights = 0.2
+weightOfDistanceMatrix = 0.8
 
 # mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrixWeights/')
 # mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrixWeights/')
@@ -50,11 +52,11 @@ for mypath in mypaths:
 			
 			if len(distanceMatrix) > 15:
 				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max')
-				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0)
+				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max') * weightOfMatrixWeights
+				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0) * weightOfDistanceMatrix
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
-				distanceMatrix = distanceMatrix + weightMatrix + weightMatrix.transpose()
+				distanceMatrix = distanceMatrix + weightMatrix/2 + weightMatrix.transpose()/2
 
 				distanceMatrixAux = distanceMatrix
 				#Creating network
@@ -64,6 +66,7 @@ for mypath in mypaths:
 
 				iteration = 1
 				while True:
+					break
 					maxDistanceIteration = 0;
 					indicesMaxDistanceIteration = 0
 					numRow = 0;
@@ -140,13 +143,13 @@ for mypath in mypaths:
 				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
 			
 			print len(distanceMatrix)
-			break
 			if len(distanceMatrix) > 15:
-				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max')
-				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0)
+				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
+				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max') * weightOfMatrixWeights
+				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0) * weightOfDistanceMatrix
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
-				distanceMatrix = distanceMatrix + weightMatrix + weightMatrix.transpose()
+				distanceMatrix = distanceMatrix + weightMatrix/2 + weightMatrix.transpose()/2
 
 				distanceMatrixAux = distanceMatrix;
 				#Creating network
