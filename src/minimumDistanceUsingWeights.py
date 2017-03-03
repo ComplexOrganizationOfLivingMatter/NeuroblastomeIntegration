@@ -14,8 +14,8 @@ from sklearn.preprocessing import normalize
 
 mypaths = []
 basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
-weightOfMatrixWeights = 0.5
-weightOfDistanceMatrix = 0.5
+weightOfMatrixWeights = 0.3
+weightOfDistanceMatrix = 0.7
 
 # mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrixWeights/')
 # mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrixWeights/')
@@ -46,8 +46,9 @@ for mypath in mypaths:
 			
 			if len(distanceMatrix) > 15:
 				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = normalize(1 / np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']), axis=0, norm='max') * weightOfMatrixWeights
+				weightMatrix = normalize(np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']), axis=0, norm='max')
 				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0) * weightOfDistanceMatrix
+				weightMatrix = (1 / weightMatrix)  * weightOfMatrixWeights
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
 				distanceMatrix = distanceMatrix + weightMatrix/2 + weightMatrix.transpose()/2
