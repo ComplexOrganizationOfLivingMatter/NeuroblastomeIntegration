@@ -39,20 +39,14 @@ for mypath in mypaths:
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
 			#print mypath + fileName
-			if os.path.isfile(mypath + outputFileName[0] + '.csv')  == False:
-				mat = scipy.io.loadmat(mypath + fileName)
-				if "Control" in fileName:
-					distanceMatrix = np.matrix(mat['distanceMatrixControl'])
-				else:
-					distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
-			else:
-				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
+			mat = scipy.io.loadmat(mypath + fileName)
+			distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 			
 			print len(distanceMatrix)
 			
 			if len(distanceMatrix) > 15:
 				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = normalize(1 / np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max') * weightOfMatrixWeights
+				weightMatrix = normalize(1 / np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']), axis=0, norm='max') * weightOfMatrixWeights
 				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0) * weightOfDistanceMatrix
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
@@ -133,19 +127,13 @@ for mypath in mypaths:
 			print strftime("%a, %d %b %Y %H:%M:%S", gmtime())
 			#print start
 			#print mypath + fileName
-			if os.path.isfile(mypath + outputFileName[0] + '.csv')  == False:
-				mat = scipy.io.loadmat(mypath + fileName)
-				if "Control" in fileName:
-					distanceMatrix = np.matrix(mat['distanceMatrixControl'])
-				else:
-					distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
-			else:
-				distanceMatrix = np.matrix(genfromtxt(mypath + outputFileName[0] + '.csv', delimiter=' '))
+			mat = scipy.io.loadmat(mypath + fileName)
+			distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 			
 			print len(distanceMatrix)
 			if len(distanceMatrix) > 15:
 				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = normalize(np.matrix(mat['percentageOfFibrePerFilledCell']), axis=0, norm='max')
+				weightMatrix = normalize(np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']), axis=0, norm='max')
 				distanceMatrix = normalize(distanceMatrix, norm='max', axis = 0) * weightOfDistanceMatrix
 				weightMatrix = (1 / weightMatrix)  * weightOfMatrixWeights
 
