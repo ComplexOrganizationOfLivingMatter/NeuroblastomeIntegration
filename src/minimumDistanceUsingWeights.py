@@ -44,13 +44,12 @@ for mypath in mypaths:
 			print len(distanceMatrix)
 			
 			if len(distanceMatrix) > 15:
-				#http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.normalize.html#sklearn.preprocessing.normalize
-				weightMatrix = np.matrix(mat['meanPercentageOfFibreWithinNeighborhood'])
+				weightMatrix = np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']) / 100
 				distanceMatrix = distanceMatrix * weightOfDistanceMatrix
 				weightMatrix = weightMatrix * weightOfWeightMatrix
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
-				distanceMatrix = distanceMatrix / (weightMatrix/2 + 1 + weightMatrix.transpose()/2)
+				distanceMatrix = distanceMatrix / (weightMatrix/2 + 1 + weightMatrix.transpose()/2) #The one in the middle changes a lot
 
 				distanceMatrixAux = distanceMatrix
 				#Creating network
@@ -60,7 +59,6 @@ for mypath in mypaths:
 
 				iteration = 1
 				while True:
-					break
 					maxDistanceIteration = 0;
 					indicesMaxDistanceIteration = 0
 					numRow = 0;
@@ -138,7 +136,7 @@ for mypath in mypaths:
 				weightMatrix = weightMatrix * weightOfWeightMatrix
 
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
-				distanceMatrix = distanceMatrix / (weightMatrix/2 + 1 + weightMatrix.transpose()/2)
+				distanceMatrix = distanceMatrix / (weightMatrix/2 + 1 + weightMatrix.transpose()/2) #The one in the middle changes a lot
 
 				distanceMatrixAux = distanceMatrix;
 				#Creating network
