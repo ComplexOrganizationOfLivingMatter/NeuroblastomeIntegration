@@ -52,8 +52,9 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
                     lastwarn('')
                 end
             end
-
-            createNetworksWithControls(fullPathImage, Img, distanceBetweenObjects, basePath, 0, inNameFile, imageName);
+            if isempty(strfind(lower(lee_imagenes{imK}), lower('Cels')))
+                createNetworksWithControls(fullPathImage, Img, distanceBetweenObjects, basePath, 0, inNameFile, imageName);
+            end
             
 %             radiusOfCircle = min(size(Img))/2;
 %             maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfCircle );
