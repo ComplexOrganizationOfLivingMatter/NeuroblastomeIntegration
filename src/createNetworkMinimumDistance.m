@@ -52,7 +52,7 @@ function [ ] = createNetworkMinimumDistance( currentPath, markerWeWant )
                     lastwarn('')
                 end
             end
-            if isempty(strfind(lower(lee_imagenes{imK}), lower('Cels')))
+            if isempty(strfind(lower(lee_imagenes{imK}), lower('Cels'))) && isempty(strfind(lower(lee_imagenes{imK}), lower('NEG')))
                 createNetworksWithControls(fullPathImage, Img, distanceBetweenObjects, basePath, 0, inNameFile, imageName);
             end
             
