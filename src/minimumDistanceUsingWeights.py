@@ -42,8 +42,8 @@ for mypath in mypaths:
 			distanceMatrix = np.matrix(mat['distanceBetweenObjects'])
 			
 			print len(distanceMatrix)
-			
 			if len(distanceMatrix) > 15:
+
 				weightMatrix = np.matrix(mat['meanPercentageOfFibreWithinNeighborhood']) / 100
 				distanceMatrix = distanceMatrix * weightOfDistanceMatrix
 				weightMatrix = weightMatrix * weightOfWeightMatrix
@@ -51,7 +51,7 @@ for mypath in mypaths:
 				weightMatrix = np.matrix(np.tile(np.array(weightMatrix), [1, len(distanceMatrix)]))
 				distanceMatrix = distanceMatrix / (weightMatrix/2 + 1 + weightMatrix.transpose()/2) #The one in the middle changes a lot
 
-				distanceMatrixAux = distanceMatrix
+				distanceMatrixAux = distanceMatrix;
 				#Creating network
 				G = nx.Graph()
 				#With an initial number of nodes
