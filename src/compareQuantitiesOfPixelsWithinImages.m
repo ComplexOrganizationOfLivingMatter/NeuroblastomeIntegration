@@ -12,6 +12,9 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
     
     allImages = getAllFiles(strcat(basePath, '\Images\'));
     
+    vtnDifferences = cell(length(files1), 1);
+    meanVTNDifference = zeros(length(files1), 1);
+    pacients = cell(length(files1), 1);
     for indexFile1 = 1:length(files1)
         fullPathImage = files1{indexFile1};
         fullPathImageSplitted = strsplit(fullPathImage, '\');
@@ -50,10 +53,16 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
             
             meanPercentageOfFibreWithinNeighborhoodFile2 = getMeanOfVariableFromNeighborhood(infoFile2.percentageOfFibrePerCell, distanceMatrixAll, allClasses, numMask);
             diffPercentageOfFibreWithinNeighborhood = meanPercentageOfFibreWithinNeighborhoodFile2 - meanPercentageOfFibreWithinNeighborhoodFile1;
-            mean(diffPercentageOfFibreWithinNeighborhood)
+            vtnDifferences(indexFile1) = {diffPercentageOfFibreWithinNeighborhood};
+            meanVTNDifference(indexFile1) = mean(diffPercentageOfFibreWithinNeighborhood);
         else
-            mean(infoFile1.percentageOfFibrePerFilledCell)
+            meanVTNDifference(indexFile1) = mean(infoFile1.percentageOfFibrePerFilledCell);
+            vtnDifferences(indexFile1) = {infoFile1.percentageOfFibrePerFilledCell};
         end
+        pacients(indexFile1) = {caseName};
     end
+    pacients
+    stdVTNDifference = cellfun(@(x) std(x), vtnDifferences);
+    save(strcat(basePath, '\Networks\vtnDifferences'), 'pacients', 'meanVTNDifference', 'stdVTNDifference','vtnDifferences');
 end
 
