@@ -51,7 +51,11 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'eulerNumberArray');
                 else
                     matrixData = importdata(outputFileName{:});
-                    distanceMatrix = matrixData.distanceBetweenObjects;
+                    if isfield(matrixData, 'distanceBetweenObjects')
+                        distanceMatrix = matrixData.distanceBetweenObjects;
+                    else
+                        distanceMatrix = [];
+                    end
                 end
                 if size(distanceMatrix, 1) > 15
                     createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
