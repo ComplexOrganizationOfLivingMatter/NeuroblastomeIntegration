@@ -4,6 +4,8 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
 %
 %   Developed by Pablo Vicente-Munuera
     lee_imagenes = getAllFiles(PathCurrent);
+    eulerNumberArray = {};
+    imageNameArray = {};
     for imK = 1:size(lee_imagenes,1)
         fullPathImage = lee_imagenes(imK);
         fullPathImage = fullPathImage{:};
@@ -22,6 +24,8 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                 inNameFile = strsplit(strrep(imageName,' ','_'), '.');
                 outputFileName = strcat(basePath, '\Networks\DistanceMatrixWeights\', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat');
                 distanceMatrix = '';
+                eulerNumberArray(end+1) = {bweuler(Img, 4)};
+                imageNameArray(end+1) = {imageName};
                 if exist(outputFileName{:}, 'file') ~= 2
                     maskName = strcat('..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');
                     mask = importdata(maskName);
@@ -44,13 +48,13 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell');
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'eulerNumberArray');
                 else
                     matrixData = importdata(outputFileName{:});
                     distanceMatrix = matrixData.distanceBetweenObjects;
                 end
                 if size(distanceMatrix, 1) > 15
-                    %createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
+                    createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
                 end
             end
         end
