@@ -37,7 +37,5 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage)
     for numRow = 1:size(pixelsToRemoveFromMask, 1)
         newMask(pixelsToRemoveFromMask(numRow, 1), pixelsToRemoveFromMask(numRow, 2)) = 0;
     end
-    figure;
-    imshow(newMask);
 end
 
