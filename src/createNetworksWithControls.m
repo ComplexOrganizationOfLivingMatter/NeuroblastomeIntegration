@@ -10,7 +10,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
     if sum(originalImage) > 0
         nameOriginalImage = {filesOriginal{originalImage}};
         if sum(originalImage) > 1
-            nameOriginalVTN = cellfun(@(x) isempty(strfind(lower(x), 'def')) == 0, nameOriginalImage);
+            nameOriginalVTN = cellfun(@(x) isempty(strfind(lower(x), 'def')) == 0 | isempty(strfind(lower(x), 'snap')) == 0, nameOriginalImage);
             if sum(nameOriginalVTN) > 1
                 error('Error: more than 1 original image found');
             else
