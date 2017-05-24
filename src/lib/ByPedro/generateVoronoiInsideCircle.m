@@ -29,6 +29,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         L_original = bwlabel(1 - Voronoi, 8);  %% De esta manera da una etiqueta a todas las celulas y da valor 1 a todas las celulas del borde
         L_original = L_original & (1 - perim);
         L_original = L_original & (mask);
+        L_original = bwareaopen(L_original, 500, 4);
         %%Obtenemos nuevos centroides
         centro = regionprops(L_original);
         centros_nuevos = cat(1, centro.Centroid);
@@ -43,7 +44,12 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
            end
         end
         
-        if size(initCentroids, 1) ~= numPoints
+        if size(initCentroids, 1) > numPoints
+            
+            areas = regionprops(L_original);
+            [B, indices] = sort(vertcat(areas.Area), 'descend');
+            initCentroids = centros_nuevos(indices(1:numPoints), :);
+        elseif size(initCentroids, 1) < numPoints
             j = 0;
             initCentroids = Chose_seeds_positions(mask, numPoints, 5);
             'init centroid again'
