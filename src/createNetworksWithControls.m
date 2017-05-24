@@ -4,7 +4,22 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
     radiusOfEllipse = size(Img)/2;
     maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfEllipse);
 
-    removingArtificatsFromImage(maskImage, originalImage);
+    fullPathSplitted = strsplit(fullPathImage, '\');
+    filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
+    filesOriginal = filesOriginal(vertcat(filesOriginal{:, 4}) == 0, :);
+    originalImage = cellfun(@(x) isempty(strfind(lower(x), 'mask')), filesOriginal(:, 1));
+    if sum(originalImage) > 0
+        nameOriginalImage = {filesOriginal{originalImage}};
+        if sum(originalImage) > 1
+            nameOriginalVTN = cellfun(@(x) isempty(strfind(lower(x), 'def')) == 0, nameOriginalImage);
+            if sum(nameOriginalVTN) > 1
+                error('Error: more than 1 original image found');
+            else
+                nameOriginalImage = nameOriginalImage(nameOriginalVTN)
+            end
+        end
+        maskImage = removingArtificatsFromImage(maskImage, imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})));
+    end
     for numControl = 1:10
         if numMask > 0
             maskName = strcat(inNameFile(1), num2str(numMask), 'Diamet');
