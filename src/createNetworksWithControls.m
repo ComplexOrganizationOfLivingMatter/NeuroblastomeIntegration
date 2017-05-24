@@ -2,7 +2,6 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
 %CREATENETWORKSWITHCONTROLS Summary of this function goes here
 %   Detailed explanation goes here
     radiusOfEllipse = size(Img)/2;
-    radiusOfEllipse = [radiusOfEllipse(2), radiusOfEllipse(1)];
     maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfEllipse);
 
     removingArtificatsFromImage(maskImage, originalImage);
