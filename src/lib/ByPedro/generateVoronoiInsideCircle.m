@@ -28,7 +28,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         centro = regionprops(L_original);
         centros_nuevos = cat(1, centro.Centroid);
         centros_nuevos=round(centros_nuevos);
-        %centros_nuevos=fliplr(centros_nuevos); %[filas,columnas]
+        centros_nuevos=fliplr(centros_nuevos); %[filas,columnas]
         initCentroids=centros_nuevos;
         size(initCentroids, 1)
         if size(initCentroids, 1) > numPoints
