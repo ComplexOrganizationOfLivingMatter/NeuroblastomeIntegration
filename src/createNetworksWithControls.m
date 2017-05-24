@@ -1,9 +1,10 @@
 function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName)
 %CREATENETWORKSWITHCONTROLS Summary of this function goes here
 %   Detailed explanation goes here
-    radiusOfCircle = min(size(Img))/2;
-    maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfCircle );
+    radiusOfEllipse = size(Img)/2;
+    maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfEllipse);
 
+    removingArtificatsFromImage(maskImage, originalImage);
     for numControl = 1:10
         if numMask > 0
             maskName = strcat(inNameFile(1), num2str(numMask), 'Diamet');
@@ -14,7 +15,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
         outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', maskName , 'Control', num2str(numControl), '.mat');
         if exist(outputControlFile{:}, 'file') ~= 2
             outputControl = strcat(basePath, '\Networks\ControlNetwork\', maskName, 'Control', num2str(numControl));
-            generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfCircle, maskImage(1:radiusOfCircle*2, 1:radiusOfCircle*2), outputControl);
+            generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfEllipse, maskImage(1:radiusOfEllipse(1)*2, 1:radiusOfEllipse(2)*2), outputControl);
         end
         clear Img
 

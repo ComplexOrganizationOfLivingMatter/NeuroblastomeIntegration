@@ -4,11 +4,11 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
 %
 %   Developed by Pablo Vicente-Munuera and Pedro Gomez-Galvez
 
-    initCentroids = Chose_seeds_positions(1, radiusOfCircle*2, radiusOfCircle*2, numPoints, 5);
+    initCentroids = Chose_seeds_positions(1, radiusOfCircle(1)*2, radiusOfCircle(2)*2, numPoints, 5);
     size(initCentroids, 1)
     j = 1;
     while j <= numIterations
-        image = zeros(radiusOfCircle*2, radiusOfCircle*2); % Se define imagen que contiene puntos
+        image = zeros(radiusOfCircle(1)*2, radiusOfCircle(2)*2); % Se define imagen que contiene puntos
         j
         for k = 1:size(initCentroids,1)
             image(initCentroids(k,1), initCentroids(k,2)) = 1;
@@ -40,7 +40,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         
         if size(initCentroids, 1) ~= numPoints
             j = 0;
-            initCentroids = Chose_seeds_positions(1, radiusOfCircle*2, radiusOfCircle*2, numPoints, 5);
+            initCentroids = Chose_seeds_positions(1, radiusOfCircle(1)*2, radiusOfCircle(2)*2, numPoints, 5);
             'init centroid again'
         end
         j = j + 1;

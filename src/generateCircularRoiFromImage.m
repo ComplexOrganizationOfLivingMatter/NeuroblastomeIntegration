@@ -1,11 +1,11 @@
-function [ maskImage ] = generateCircularRoiFromImage(fullPathImage, radiusOfCircle )
+function [ maskImage ] = generateCircularRoiFromImage(fullPathImage, radiusOfEllipse)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     
     figure
     roiImage = imread(fullPathImage);
     imshow(roiImage);
-    h = imellipse(gca, [0 0 radiusOfCircle*2 radiusOfCircle*2]);
+    h = imellipse(gca, [0 0 radiusOfEllipse(1)*2 horzRadiusOfEllipse(1)*2]);
     api = iptgetapi(h);
 
     fcn = getPositionConstraintFcn(h);
