@@ -1,22 +1,24 @@
-function [centroidSeeds] = Chose_seeds_positions(xMin, xMax, yMax, numPoints, minDistanceBetweenPoints)
+function [centroidSeeds] = Chose_seeds_positions(mask, numPoints, minDistanceBetweenPoints)
 
     % Resolve K random values between imin and imax
-    if ((xMax-(xMin-1))*(yMax-(xMin-1)) < numPoints)
-        fprintf(' Error: Excede el rango\n');
-        centroidSeeds = NaN;
-        return
-    end
+%     if ((xMax-(xMin-1))*(yMax-(xMin-1)) < numPoints)
+%         fprintf(' Error: Excede el rango\n');
+%         centroidSeeds = NaN;
+%         return
+%     end
     
-    centroidSeeds = [];
-    t=0:.001:2*pi;
-    xInsideCircle = cos(t)*xMax/2 + xMax/2;
-    yInsideCircle = sin(t)*yMax/2 + yMax/2;
+     centroidSeeds = [];
+     [xPossibleCentroids, yPossibleCentroids] = find(mask);
+%     t=0:.001:2*pi;
+%     xInsideCircle = cos(t)*xMax/2 + xMax/2;
+%     yInsideCircle = sin(t)*yMax/2 + yMax/2;
 
     %we want to add 'numPoints' number of points
     while size(centroidSeeds, 1) < numPoints
 
-        centroidX = randi([xMin,xMax],1);
-        centroidY = randi([xMin,yMax],1);
+        numCentroid = randi(size(xPossibleCentroids, 1));
+        centroidX = xPossibleCentroids(numCentroid);
+        centroidY = yPossibleCentroids(numCentroid);
         newCentroid = [centroidX,centroidY];
 
         tooCloseToOthers = 0;
@@ -30,7 +32,7 @@ function [centroidSeeds] = Chose_seeds_positions(xMin, xMax, yMax, numPoints, mi
         
         %If the centroid is inside the polygon we want it in the good
         %centroids. Also we don't want too close to the others
-        if inpolygon(centroidX, centroidY, xInsideCircle, yInsideCircle) && tooCloseToOthers == 0
+        if tooCloseToOthers == 0
             centroidSeeds = [centroidSeeds; newCentroid];
         end
     end
