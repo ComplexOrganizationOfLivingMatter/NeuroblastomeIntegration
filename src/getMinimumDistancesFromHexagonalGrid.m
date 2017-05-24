@@ -48,7 +48,9 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     
                     distanceBetweenObjects = distanceMatrix;
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'eulerNumberArray');
+                    eulerNumber = bweuler(Img, 4);
+                    
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'eulerNumber');
                 else
                     matrixData = importdata(outputFileName{:});
                     if isfield(matrixData, 'distanceBetweenObjects')
