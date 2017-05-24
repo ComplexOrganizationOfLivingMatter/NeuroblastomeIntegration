@@ -1,9 +1,8 @@
 function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName)
 %CREATENETWORKSWITHCONTROLS Summary of this function goes here
 %   Detailed explanation goes here
-    radiusOfEllipse = size(Img)/2;
-    maskImage = generateCircularRoiFromImage(fullPathImage, radiusOfEllipse);
-
+    
+    %Create the control mask
     fullPathSplitted = strsplit(fullPathImage, '\');
     filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
     filesOriginal = filesOriginal(vertcat(filesOriginal{:, 4}) == 0, :);
@@ -15,10 +14,13 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
             if sum(nameOriginalVTN) > 1
                 error('Error: more than 1 original image found');
             else
-                nameOriginalImage = nameOriginalImage(nameOriginalVTN)
+                nameOriginalImage = nameOriginalImage(nameOriginalVTN);
             end
         end
-        maskImage = removingArtificatsFromImage(maskImage, imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})));
+        [maskImage, radiusOfEllipse] = removingArtificatsFromImage(imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})));
+    else
+        radiusOfEllipse = [0 0 size(Img)/2];
+        maskImage = generateCircularRoiFromImage(fullPathImage, size(Img)/2);
     end
     for numControl = 1:10
         if numMask > 0
@@ -30,7 +32,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
         outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', maskName , 'Control', num2str(numControl), '.mat');
         if exist(outputControlFile{:}, 'file') ~= 2
             outputControl = strcat(basePath, '\Networks\ControlNetwork\', maskName, 'Control', num2str(numControl));
-            generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfEllipse, maskImage(1:radiusOfEllipse(1)*2, 1:radiusOfEllipse(2)*2), outputControl);
+            generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfEllipse, maskImage, outputControl);
         end
         clear Img
 
