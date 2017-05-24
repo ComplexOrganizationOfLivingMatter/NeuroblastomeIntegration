@@ -1,4 +1,4 @@
-function [ newMask ] = removingArtificatsFromImage(originalImage)
+function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage)
 %REMOVINGARTIFICATSFROMIMAGE Summary of this function goes here
 %   Detailed explanation goes here
     originalImgGray = rgb2gray(originalImage);
@@ -6,10 +6,10 @@ function [ newMask ] = removingArtificatsFromImage(originalImage)
     maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBin), 1000000);
     boundingBox = regionprops(maskOfBiopsy, 'BoundingBox');
     
+    boundingBox = boundingBox.BoundingBox;
     figure;
-    %roiImage = imread(fullPathImage);
     imshow(imgBin);
-    h = imellipse(gca, boundingBox.BoundingBox);
+    h = imellipse(gca, boundingBox);
     api = iptgetapi(h);
 
     fcn = getPositionConstraintFcn(h);
