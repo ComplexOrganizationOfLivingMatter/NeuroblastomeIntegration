@@ -29,7 +29,9 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         L_original = bwlabel(1 - Voronoi, 8);  %% De esta manera da una etiqueta a todas las celulas y da valor 1 a todas las celulas del borde
         L_original = L_original & (1 - perim);
         L_original = L_original & (mask);
-        L_original = bwareaopen(L_original, 500, 4);
+        % Removing areas with not so many pixels
+        centro = regionprops(L_original);
+        L_original = bwareaopen(L_original, round(mean(vertcat(centro.Area))/8), 4);
         %%Obtenemos nuevos centroides
         centro = regionprops(L_original);
         centros_nuevos = cat(1, centro.Centroid);
