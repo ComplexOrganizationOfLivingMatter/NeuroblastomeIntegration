@@ -49,6 +49,7 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
             areas = regionprops(L_original);
             [B, indices] = sort(vertcat(areas.Area), 'descend');
             initCentroids = centros_nuevos(indices(1:numPoints), :);
+            size(initCentroids, 1)
         elseif size(initCentroids, 1) < numPoints
             L_original = L_original_ant;
             centro = regionprops(L_original);
