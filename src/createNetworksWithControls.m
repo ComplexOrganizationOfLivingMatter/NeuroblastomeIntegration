@@ -8,7 +8,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
     else
         maskName = inNameFile(1);
     end
-    outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', numMask , 'Control', num2str(10), '.mat');
+    outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', maskName , 'Control', num2str(10), '.mat');
     if exist(outputControlFile{:}, 'file') ~= 2
         fullPathSplitted = strsplit(fullPathImage, '\');
         filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
