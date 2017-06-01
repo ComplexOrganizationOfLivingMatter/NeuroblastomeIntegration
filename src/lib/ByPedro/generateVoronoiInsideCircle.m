@@ -31,8 +31,11 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
         L_original = L_original & (mask);
         % Removing areas with not so many pixels
         centro = regionprops(L_original);
-        if size(vertcat(centro.Area), 1) > numPoints + 30
-            L_original = bwareaopen(L_original, round(mean(vertcat(centro.Area))/10), 4);
+        L_original_ant = L_original;
+        if size(vertcat(centro.Area), 1) > numPoints + 150
+            L_original = bwareaopen(L_original, round(mean(vertcat(centro.Area))/8), 4);
+        elseif size(vertcat(centro.Area), 1) > numPoints + 40
+            L_original = bwareaopen(L_original, round(mean(vertcat(centro.Area))/14), 4);
         end
         %%Obtenemos nuevos centroides
         centro = regionprops(L_original);
@@ -47,9 +50,17 @@ function [ ] = generateVoronoiInsideCircle( numIterations, numPoints, radiusOfCi
             [B, indices] = sort(vertcat(areas.Area), 'descend');
             initCentroids = centros_nuevos(indices(1:numPoints), :);
         elseif size(initCentroids, 1) < numPoints
-            j = 0;
-            initCentroids = Chose_seeds_positions(mask, numPoints, 5);
-            'init centroid again'
+            L_original = L_original_ant;
+            centro = regionprops(L_original);
+            centros_nuevos = cat(1, centro.Centroid);
+            centros_nuevos=round(centros_nuevos);
+            centros_nuevos=fliplr(centros_nuevos); %[filas,columnas]
+            initCentroids=centros_nuevos;
+            if size(initCentroids, 1) < numPoints
+                j = 0;
+                initCentroids = Chose_seeds_positions(mask, numPoints, 5);
+                'init centroid again'
+            end
         end
         j = j + 1;
     end
