@@ -28,7 +28,7 @@ function [numberOfHolesPerFilledCell, numberOfHolesPerCell, eulerNumberPerFilled
         num = classes(classes == i);
         if num > 0
             eulerNumberPerCell(i) = bweuler(ImgMasked == num, 8);
-            imageObjects = regionprops(ImgMasked == num, {'Area', 'EulerNumber'});
+            imageObjects = regionprops(ImgMasked == num, 'EulerNumber');
             numberOfObjects = size(imageObjects, 1);
             numberOfHolesPerCell(i) = numberOfObjects - sum([imageObjects.EulerNumber]);
             quantityOfBranchesPerCell(i) = sum(sum(imgBranchingPoints == num));

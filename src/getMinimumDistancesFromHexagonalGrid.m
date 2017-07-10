@@ -31,7 +31,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
-                    [eulerNumberPerFilledCell, eulerNumberPerCell, quantityOfBranchesFilledPerCell, quantityOfBranchesPerCell, percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    [numberOfHolesPerFilledCell, numberOfHolesPerCell, eulerNumberPerFilledCell, eulerNumberPerCell, quantityOfBranchesFilledPerCell, quantityOfBranchesPerCell, percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
                     
                     stdPercentageOfFibrePerFilledCell = std(percentageOfFibrePerFilledCell);
                     stdPercentageOfFibrePerCell = std(percentageOfFibrePerCell);
@@ -42,15 +42,32 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     meanQuantityOfBranchesFilledPerCell = mean(quantityOfBranchesFilledPerCell);
                     meanQuantityOfBranchesPerCell = mean(quantityOfBranchesPerCell);
                     
+                    meanNumberOfHolesPerFilledCell = mean(numberOfHolesPerFilledCell);
+                    meanNumberOfHolesPerCell = mean(numberOfHolesPerCell);
+                    
+                    eulerNumberPerFilledCell = mean(eulerNumberPerFilledCell);
+                    eulerNumberPerCell = mean(eulerNumberPerCell);
+                    
                     centroidsAll = regionprops(mask, 'Centroid');
                     distanceMatrixAll = squareform(pdist(vertcat(centroidsAll.Centroid)));
                     meanPercentageOfFibreWithinNeighborhood = getMeanOfVariableFromNeighborhood(percentageOfFibrePerCell, distanceMatrixAll, unique(ImgMasked), numMask*2);
                     
                     distanceBetweenObjects = distanceMatrix;
                     
-                    eulerNumber = bweuler(Img, 4);
+                    eulerNumber = bweuler(Img, 8);
                     
-                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'eulerNumber');
+                    imageObjects = regionprops(Img, 'EulerNumber');
+                    numberOfObjects = size(imageObjects, 1);
+                    numberOfHoles = numberOfObjects - sum([imageObjects.EulerNumber]);
+                    
+                    eulerNumberPerObject = eulerNumber / numberOfObjects;
+                    numberOfHolesPerObject = numberOfHoles / numberOfObjects;
+                    holesObjects = bwconncomp(logical(1-Img), 4);
+                    areaOfHoles = cellfun(@(x) size(x, 1), holesObjects.PixelIdxList(2:end));
+                    meanAreaOfHoles = mean(areaOfHoles);
+                    stdAreaOfHoles = std(areaOfHoles);
+                    
+                    save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'meanNumberOfHolesPerFilledCell', 'meanNumberOfHolesPerCell', 'eulerNumberPerFilledCell', 'eulerNumberPerCell', 'eulerNumberPerObject', 'numberOfHolesPerObject', 'meanAreaOfHoles', 'stdAreaOfHoles', 'eulerNumber', 'numberOfObjects', 'numberOfHoles');
                 else
                     matrixData = importdata(outputFileName{:});
                     if isfield(matrixData, 'distanceBetweenObjects')
