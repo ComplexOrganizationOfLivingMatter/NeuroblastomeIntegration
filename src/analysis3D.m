@@ -16,7 +16,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         newCase = patientOfImages{numImage};
         if size(newCase, 2) > 1
             if newCase{2}(1) == 'A' || newCase{2}(1) == 'B' || isempty(newCase{1})
-                patientOfImagesOnlyCase(numImage) = {strjoin(newCase(1:2), '')};
+                patientOfImagesOnlyCase(numImage) = {strjoin(newCase(1:2), '_')};
             else
                 patientOfImagesOnlyCase(numImage) = newCase(1);
             end
@@ -24,6 +24,11 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             patientOfImagesOnlyCase(numImage) = {newCase};
         end
     end
+    
+    
+    patientsOnlyNumbers = regexp([patientOfImagesOnlyCase{:}], '[0-9]{4,}', 'match');
+    
+    [C,ia,ic] = unique(lower([patientsOnlyNumbers{:}]));
     
     %Filtering by markers
     filterOfMarkers = zeros(size(onlyImagesFilesNoMasks, 1), size(possibleMarkers, 2));
