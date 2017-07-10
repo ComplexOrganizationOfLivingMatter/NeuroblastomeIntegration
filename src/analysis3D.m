@@ -27,13 +27,15 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     
     
     patientsOnlyNumbers = regexp([patientOfImagesOnlyCase{:}], '[0-9]{4,}', 'match');
+    patientsOnlyNumbers = cellfun(@(x) str2double(x), [patientsOnlyNumbers{:}]);
     
-    [C,ia,ic] = unique(lower([patientsOnlyNumbers{:}]));
-    
+    [uniqueCases, ia, uniqueCasesIndices] = unique(patientsOnlyNumbers);
     %Filtering by markers
-    filterOfMarkers = zeros(size(onlyImagesFilesNoMasks, 1), size(possibleMarkers, 2));
+    filterOfMarkers = zeros(size(uniqueCases, 2), size(possibleMarkers, 2));
     for numMarker = 1:size(possibleMarkers, 2)
-        filterOfMarkers(:, numMarker) = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0, onlyImagesFilesNoMasks);
+        foundMarkers = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0, onlyImagesFilesNoMasks);
+        casesInMarker = uniqueCasesIndices(foundMarkers);
+        filterOfMarkers(uniqueCases(casesInMarker'), numMarker) = find(foundMarkers)';
     end
     
     filterOfMarkers
