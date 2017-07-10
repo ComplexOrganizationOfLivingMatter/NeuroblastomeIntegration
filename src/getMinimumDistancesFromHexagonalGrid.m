@@ -31,7 +31,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     mask = importdata(maskName);
                     mask = mask(1:size(Img, 1), 1:size(Img,2));
 
-                    [quantityOfBranchesFilledPerCell, quantityOfBranchesPerCell, percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
+                    [eulerNumberPerFilledCell, eulerNumberPerCell, quantityOfBranchesFilledPerCell, quantityOfBranchesPerCell, percentageOfFibrePerFilledCell, quantityOfFibrePerFilledCell, percentageOfFibrePerCell, quantityOfFibrePerCell, distanceMatrix, centroids, ImgMasked] = getBiologicalInfoFromHexagonalGrid(Img, mask);
                     
                     stdPercentageOfFibrePerFilledCell = std(percentageOfFibrePerFilledCell);
                     stdPercentageOfFibrePerCell = std(percentageOfFibrePerCell);
