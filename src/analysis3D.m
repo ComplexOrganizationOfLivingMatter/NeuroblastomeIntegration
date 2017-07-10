@@ -35,9 +35,18 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     for numMarker = 1:size(possibleMarkers, 2)
         foundMarkers = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0, onlyImagesFilesNoMasks);
         casesInMarker = uniqueCasesIndices(foundMarkers);
-        filterOfMarkers(uniqueCases(casesInMarker'), numMarker) = find(foundMarkers)';
+        filterOfMarkers(casesInMarker, numMarker) = find(foundMarkers)';
     end
     
     filterOfMarkers
+    
+    for numCase = 1:size(filterOfMarkers, 1)
+        img1 = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, 1)});
+        %[hog_4x4, vis4x4] = extractHOGFeatures(img1,'CellSize',[50 50]);
+        regionsCh1 = detectMSERFeatures(img1(:, :, 1));
+        figure; imshow(img1); hold on;
+        plot(regionsCh1,'showPixelList',true,'showEllipses',false);
+        img2 = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, 2)});
+    end
 end
 
