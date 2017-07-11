@@ -42,7 +42,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     subWindowX = size(filterOfMarkers, 2);
     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
-        imagesByCase = [onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}];
+        imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
         matchingImagesWithinMarkers(imagesByCase);
 %         figure;
 %         

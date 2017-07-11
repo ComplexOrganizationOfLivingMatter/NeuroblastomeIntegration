@@ -1,10 +1,10 @@
-function [ output_args ] = matchingImagesWithinMarkers(onlyImagesFilesNoMasks, filterOfMarkers )
+function [ output_args ] = matchingImagesWithinMarkers(imagesByCase)
 %MATCHINGIMAGESWITHINMARKERS Summary of this function goes here
 %   Detailed explanation goes here
 
-    thresholdOfFeatures = 1;
+    thresholdOfFeatures = 2;
     %% VTN
-    imgVTN = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, 1)});
+    imgVTN = imread(imagesByCase{1});
     [ imgSegmented, imgOnlyWhite, imgNoMarkersNoWhite ] = processVTNRawImage(imgVTN);
     img1Gray = rgb2gray(imgVTN);
     
@@ -15,7 +15,7 @@ function [ output_args ] = matchingImagesWithinMarkers(onlyImagesFilesNoMasks, f
     plot(points1);
     
     %% COL
-    imgCOL = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, 2)});
+    imgCOL = imread(imagesByCase{2});
     img2Gray = rgb2gray(imgCOL);
     img2Gray = 255 - img2Gray;
     numChannel = 1;
@@ -33,6 +33,6 @@ function [ output_args ] = matchingImagesWithinMarkers(onlyImagesFilesNoMasks, f
     matchedPoints1 = valid_points1(indexPairs(:,1),:);
     matchedPoints2 = valid_points2(indexPairs(:,2),:);
     
-    figure; showMatchedFeatures(img1Gray, img2Gray, matchedPoints1,matchedPoints2);
+    figure; showMatchedFeatures(img1Gray, img2Gray, matchedPoints1, matchedPoints2);
 end
 
