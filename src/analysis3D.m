@@ -1,6 +1,7 @@
 function [ ] = analysis3D( imagesPath, possibleMarkers )
 %ANALYSIS3D Summary of this function goes here
 %   Detailed explanation goes here
+
     allFiles = getAllFiles(imagesPath);
     onlyImagesFiles = cellfun(@(x) isempty(strfind(lower(x), lower('\Images\'))) == 0 & isempty(strfind(lower(x), lower('.txt'))), allFiles);
     onlyImagesFiles = allFiles(onlyImagesFiles);
@@ -42,6 +43,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     
     for numCase = 1:size(filterOfMarkers, 1)
         img1 = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, 1)});
+        [ imgSegmented, imgOnlyWhite, imgNoMarkersNoWhite ] = processVTNRawImage(img1);
         img1Gray = rgb2gray(img1);
         numChannel = 1;
         points1 = detectMSERFeatures(img1Gray, 'RegionAreaRange', [(size(img1, 1) * size(img1, 2)*0.001) uint16(size(img1, 1) * size(img1, 2))], 'ThresholdDelta', thresholdOfFeatures);
