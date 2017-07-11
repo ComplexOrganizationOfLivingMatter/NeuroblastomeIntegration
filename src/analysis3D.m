@@ -39,9 +39,31 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         filterOfMarkers(casesInMarker, numMarker) = find(foundMarkers)';
     end
     
-    
+    subWindowX = size(filterOfMarkers, 2);
+    subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
-        %matchingImagesWithinMarkers(onlyImagesFilesNoMasks, filterOfMarkers);
+        imagesByCase = [onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}];
+        matchingImagesWithinMarkers(imagesByCase);
+%         figure;
+%         
+%         for numMarker = 1:size(filterOfMarkers, 2)
+%             if filterOfMarkers(numCase, numMarker) ~= 0
+%                 subplot(subWindowX, subWindowY, numMarker)
+%                 imgToSubPlot = imread(onlyImagesFilesNoMasks{filterOfMarkers(numCase, numMarker)});
+%                 imshow(imgToSubPlot);
+%             end
+%         end
+%         
+%         for numMarker = 1:size(filterOfMarkers, 2)
+%             if filterOfMarkers(numCase, numMarker) ~= 0
+%                 figure
+%                 imgVTN = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, numMarker)});
+%                 imshow(imgVTN)
+%                 %[x, y, BW, xi, yi] = roipoly(imgVTN);
+%             end
+%         end
+        
+        
         
     end
 end
