@@ -25,14 +25,15 @@ function [ output_args ] = matchingImagesWithinMarkers(imagesByCase)
     plot(points2);
     
     %% Matching
-    [features1,valid_points1] = extractFeatures(img1Gray, points1);
-    [features2,valid_points2] = extractFeatures(img2Gray, points2);
+    [features1, valid_points1] = extractFeatures(img1Gray, points1, 'BlockSize', 159, 'Method', 'Auto');
+    [features2, valid_points2] = extractFeatures(img2Gray, points2, 'BlockSize', 159, 'Method', 'Auto');
     
-    indexPairs = matchFeatures(features1,features2, 'Method', 'Approximate');
+    indexPairs = matchFeatures(features1, features2, 'Method', 'Exhaustive', 'MaxRatio', 0.8);
     
     matchedPoints1 = valid_points1(indexPairs(:,1),:);
     matchedPoints2 = valid_points2(indexPairs(:,2),:);
     
     figure; showMatchedFeatures(img1Gray, img2Gray, matchedPoints1, matchedPoints2);
+    figure;
 end
 
