@@ -6,7 +6,7 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo, filter )
     if isempty(filter) == 0
         allImages = allImages(cellfun(@(x) isempty(strfind(lower(x), lower(filter))) == 0, allImages));
     end
-    characteristics = cell(length(allImages), 8);
+    characteristics = cell(length(allImages), 13);
     for numImg = 1:size(allImages,1)
         fullPathFile = allImages{numImg};
         fileNameSplitted = strsplit(fullPathFile, '\');
@@ -19,7 +19,7 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo, filter )
             fileNameFinal = fileNameSplittedSplitted{1};
         end
         load(fullPathFile);
-        characteristics(numImg, :) = {fileNameFinal, meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell, meanQuantityOfBranchesPerCell, meanQuantityOfBranchesFilledPerCell, eulerNumber};
+        characteristics(numImg, :) = {fileNameFinal, meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell, meanQuantityOfBranchesPerCell, meanQuantityOfBranchesFilledPerCell, eulerNumberPerObject, eulerNumberPerCell, eulerNumberPerFilledCell, numberOfHolesPerObject, meanAreaOfHoles, stdAreaOfHoles};
     end
     characteristicsTable = cell2table(characteristics);
     if isempty(filter)
