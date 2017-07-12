@@ -43,6 +43,12 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
         imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
+        maskOfImagesByCase = cell(size(filterOfMarkers, 2));
+        for numMarker = 1:size(filterOfMarkers, 2)
+            originalImg = imread(imagesByCase{numMarker});
+            [ maskOfImagesByCase{numMarker}, ~] = removingArtificatsFromImage(originalImg);
+        end
+        
         matchingImagesWithinMarkers(imagesByCase);
 %         figure;
 %         
