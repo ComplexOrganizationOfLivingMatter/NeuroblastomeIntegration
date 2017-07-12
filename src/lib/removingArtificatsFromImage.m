@@ -2,7 +2,7 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage)
 %REMOVINGARTIFICATSFROMIMAGE Summary of this function goes here
 %   Detailed explanation goes here
     originalImgGray = rgb2gray(originalImage);
-    imgBin = originalImgGray < 255;
+    imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
     maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBin), 1000000);
     boundingBox = regionprops(maskOfBiopsy, 'BoundingBox');
     
