@@ -57,11 +57,12 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             holesInImage(holesInImage.Area < 75, :) = [];
             
             
-            maskOfImagesByCase(numMarker, :) = [{imgWithHoles}; {holesInImage}]; 
+            maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}]; 
         end
         
         %% Matching of marker images regarding their holes
-        similarHolesProperties.maxDistanceOfCentroids = 150;
+        similarHolesProperties.maxDistanceOfCentroids = 500;
+        similarHolesProperties.maxArea = 200;
         radiusOfTheAreaTaken = 350;
         couplingHoles = cell(size(filterOfMarkers, 2));
         for actualMarker = 1:size(filterOfMarkers, 2)
