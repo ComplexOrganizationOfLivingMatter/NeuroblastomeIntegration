@@ -43,11 +43,23 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
         imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
-        maskOfImagesByCase = cell(size(filterOfMarkers, 2));
+        maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
         for numMarker = 1:size(filterOfMarkers, 2)
             originalImg = imread(imagesByCase{numMarker});
-            [ maskOfImagesByCase{numMarker}, ~] = removingArtificatsFromImage(originalImg);
+            [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
+            
+            [ maskImage2 ] = createEllipsoidalMaskFromImage(originalImg, imgWithHoles);
+            
+            perimImage = bwperim(maskImage2, 8);
+            
+            holesInImage = regionprops(logical(1-(imgWithHoles | perimImage)), 'all');
+            holesInImage = struct2table(holesInImage(2:end));
+            holesInImage(holesInImage.Area < 75, :) = [];
+            
+            
+            maskOfImagesByCase(numMarker, :) = [{imgWithHoles}; {holesInImage}]; 
         end
+        
         
         matchingImagesWithinMarkers(imagesByCase);
 %         figure;
