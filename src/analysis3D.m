@@ -60,8 +60,25 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             maskOfImagesByCase(numMarker, :) = [{imgWithHoles}; {holesInImage}]; 
         end
         
+        %% Matching of marker images regarding their holes
+        similarHolesProperties.maxDistanceOfCentroids = 150;
+        radiusOfTheAreaTaken = 350;
+        couplingHoles = cell(size(filterOfMarkers, 2));
+        for actualMarker = 1:size(filterOfMarkers, 2)
+            for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
+                %Match the holes
+                couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties);
+                
+                % Once we have the coupling of holes. We have to get the matching
+                % areas, which will a circular region of radius
+                % 'radiusOfTheAreaTaken'
+                
+            end
+        end
         
-        matchingImagesWithinMarkers(imagesByCase);
+        
+        %matchingImagesWithinMarkers(imagesByCase);
+        
 %         figure;
 %         
 %         for numMarker = 1:size(filterOfMarkers, 2)
