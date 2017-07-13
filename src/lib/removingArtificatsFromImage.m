@@ -5,10 +5,8 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, ma
     switch marker
         case 'Vitronectine'
             imgBin = originalImgGray >= 255;
-        case 'COLAGENO'
-            imgBin = im2bw(originalImgGray, 0.1*graythresh(originalImgGray) + 0.9*graythresh(originalImgGray(1:100,1:100)));
         otherwise
-            imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
+            imgBin = im2bw(originalImgGray, 0.5*graythresh(originalImgGray) + 0.5*graythresh(originalImgGray(1:100,1:100)));
     end
 
     imgBin = logical(1-imgBin);
