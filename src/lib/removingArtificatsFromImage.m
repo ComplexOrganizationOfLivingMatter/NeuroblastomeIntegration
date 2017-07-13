@@ -1,23 +1,20 @@
-function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage)
+function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, marker)
 %REMOVINGARTIFICATSFROMIMAGE Summary of this function goes here
 %   Detailed explanation goes here
     originalImgGray = rgb2gray(originalImage);
-    imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
-    maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBin), 1000000);
-    boundingBox = regionprops(maskOfBiopsy, 'BoundingBox');
+    switch marker
+        case 'Vitronectine'
+            imgBin = originalImgGray >= 255;
+        case 'COLAGENO'
+            imgBin = im2bw(originalImgGray, 0.1*graythresh(originalImgGray) + 0.9*graythresh(originalImgGray(1:100,1:100)));
+        otherwise
+            imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
+    end
+
+    imgBin = logical(1-imgBin);
     
-    boundingBox = boundingBox.BoundingBox;
-    figure;
-    imshow(imgBin);
-    h = imellipse(gca, boundingBox);
-    api = iptgetapi(h);
-
-    fcn = getPositionConstraintFcn(h);
-
-    api.setPositionConstraintFcn(fcn);
-
-    maskImage2 = createMask(h);
-    close all
+    maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBin), 1000000);
+    [ maskImage2, boundingBox ] = createEllipsoidalMaskFromImage(imgBin, maskOfBiopsy);
     
     imgBin(maskImage2 == 0) = 1;
     
