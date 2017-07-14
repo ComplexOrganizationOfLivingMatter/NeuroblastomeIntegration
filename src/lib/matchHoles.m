@@ -5,8 +5,8 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
 %	 - Shape : We do a correlation between them, if any of them can be a
 %	 subset of the other.
 
-    distanceBetweenHoles = pdist2(holesOfMarker1.Centroid, holesOfMarker2.Centroid);
-    closerHoles = distanceBetweenHoles < similarHolesProperties.maxDistanceOfCentroids;
+%     distanceBetweenHoles = pdist2(holesOfMarker1.Centroid, holesOfMarker2.Centroid);
+%     closerHoles = distanceBetweenHoles < similarHolesProperties.maxDistanceOfCentroids;
     
     correspondanceBetweenHoles = zeros(size(holesOfMarker1, 1), size(holesOfMarker2, 1));
     
@@ -20,10 +20,10 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
             %if there's any pixels at the same location we do the matching
             if isempty(pixelsAtTheSameLocation)
                 %If not we check if the holes are closerEnough
-                if closerHoles(numHoleOfMarker1, numHoleOfMarker2)
+%                 if closerHoles(numHoleOfMarker1, numHoleOfMarker2)
                     distancesOfPixels = pdist2(holesOfMarker1.PixelList{numHoleOfMarker1}, holesOfMarker2.PixelList{numHoleOfMarker2});
                     holesAreCloseEnough = min(min(distancesOfPixels)) < similarHolesProperties.maxDistanceBetweenPixels;
-                end
+%                 end
             else
                 holesAreCloseEnough = 1;
             end
