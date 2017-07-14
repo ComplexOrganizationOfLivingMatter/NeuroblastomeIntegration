@@ -1,4 +1,4 @@
-function [ closerHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHolesProperties)
+function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHolesProperties)
 %MATCHHOLES Get which holes are the same in two images
 %   We want to check if two holes are the same in terms of:
 %	 - Distance: They have to be relatively close
@@ -7,6 +7,8 @@ function [ closerHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHo
 
     distanceBetweenHoles = pdist2(holesOfMarker1.Centroid, holesOfMarker2.Centroid);
     closerHoles = distanceBetweenHoles < similarHolesProperties.maxDistanceOfCentroids;
+    
+    correspondanceBetweenHoles = zeros(size(holesOfMarker1, 1), size(holesOfMarker2, 1));
     
     for numHoleOfMarker1 = 1:size(holesOfMarker1, 1)
         for numHoleOfMarker2 = 1:size(holesOfMarker2, 1)
@@ -49,12 +51,22 @@ function [ closerHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHo
                     xoffSet = xpeak-size(imgOfMarker1,2);
 
                     correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(imgOfMarker1,2), size(imgOfMarker1,1)];
-                    imgOfMarker2Cropped = imcrop(imgOfMarker2, correspondenceOfTheOldImage);
-
-        %             hFig = figure;
-        %             hAx  = axes;
-        %             imshow( imgOfMarker2,'Parent', hAx);
-        %             imrect(hAx, [xoffSet+1, yoffSet+1, size(imgOfMarker1,2), size(imgOfMarker1,1)]);
+                    %imgOfMarker2Cropped = imcrop(imgOfMarker2, correspondenceOfTheOldImage);
+                    
+                    figure;
+                    subplot(2,1,1);
+                    imshow(insertShape(imgOfMarker2,'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
+                    title('Subplot 1: correspondance of the template')
+                    
+                    subplot(2,1,2);
+                    imshow(imgOfMarker1);
+                    title('Subplot 2: Template')
+                    
+                    if error
+                        correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = 1;
+                    else
+                        correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = 1;
+                    end
                 end
             end
         end
