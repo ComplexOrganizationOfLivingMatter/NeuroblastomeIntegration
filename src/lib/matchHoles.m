@@ -32,8 +32,15 @@ function [ closerHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHo
         imgOfMarker1 = holesOfMarker1.Image{numHoleOfMarker1};
         imgOfMarker2 = holesOfMarker2.Image{numHoleOfMarker2};
 
-        correlationBetweenHoles = normxcorr2(imgOfMarker1, imgOfMarker2);
-        %figure, surf(c), shading flat
+        try
+            correlationBetweenHoles = normxcorr2(imgOfMarker1, imgOfMarker2);
+        catch mexception
+            imgOfMarker2 = holesOfMarker1.Image{numHoleOfMarker1};
+            imgOfMarker1 = holesOfMarker2.Image{numHoleOfMarker2};
+            correlationBetweenHoles = normxcorr2(imgOfMarker1, imgOfMarker2);
+        end
+            
+        %figure, surf(correlationBetweenHoles), shading flat
 
         maxCorrelation = max(correlationBetweenHoles(:));
         if maxCorrelation > similarHolesProperties.minCorrelation
