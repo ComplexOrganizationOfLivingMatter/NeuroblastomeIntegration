@@ -1,4 +1,4 @@
-function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHolesProperties)
+function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMarker2, similarHolesProperties, outputDirectory)
 %MATCHHOLES Get which holes are the same in two images
 %   We want to check if two holes are the same in terms of:
 %	 - Distance: They have to be relatively close
@@ -63,7 +63,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                     correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(imgOfMarker1,2), size(imgOfMarker1,1)];
                     %imgOfMarker2Cropped = imcrop(imgOfMarker2, correspondenceOfTheOldImage);
                     
-                    figure;
+                    h = figure;
                     subplot(1,2,1);
                     imshow(insertShape(double(imgOfMarker2),'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
                     title('Subplot 1: correspondance of the template')
@@ -71,6 +71,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                     subplot(1,2,2);
                     imshow(imgOfMarker1);
                     title('Subplot 2: Template')
+                    print(h, strcat('TempResults\', outputDirectory, '\matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'));
                     
                     if error
                         correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = 1;

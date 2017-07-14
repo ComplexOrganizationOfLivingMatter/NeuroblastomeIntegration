@@ -39,9 +39,10 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         filterOfMarkers(casesInMarker, numMarker) = find(foundMarkers)';
     end
     
-    subWindowX = size(filterOfMarkers, 2);
-    subWindowY = 1;
+%     subWindowX = size(filterOfMarkers, 2);
+%     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
+        mkdir(strcat('TempResults\', num2str(uniqueCases(numCase))))
         imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
         maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
         for numMarker = 1:size(filterOfMarkers, 2)
@@ -60,6 +61,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}]; 
         end
         
+        save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
+        
         %% Matching of marker images regarding their holes
         %similarHolesProperties.maxDistanceOfCentroids = 2000;
         similarHolesProperties.maxDistanceBetweenPixels = 100;
@@ -69,7 +72,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         for actualMarker = 1:size(filterOfMarkers, 2)
             for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
                 %Match the holes
-                couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties);
+                couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(num2str(uniqueCases(numCase)), '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
                 
                 % Once we have the coupling of holes. We have to get the matching
                 % areas, which will a circular region of radius
@@ -78,7 +81,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             end
         end
         
-        
+        save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
+
         %matchingImagesWithinMarkers(imagesByCase);
         
 %         figure;
