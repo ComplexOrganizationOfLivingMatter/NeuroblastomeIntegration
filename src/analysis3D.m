@@ -48,21 +48,22 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             originalImg = imread(imagesByCase{numMarker});
             [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
             
-            [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgBinOriginal), 1000000));
+            [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgWithHoles), 1000000));
             
             perimImage = bwperim(maskImage2, 8);
             
             holesInImage = regionprops(logical(1-(imgWithHoles | perimImage)), 'all');
             holesInImage = struct2table(holesInImage(2:end));
-            holesInImage(holesInImage.Area < 75, :) = [];
+            holesInImage(holesInImage.Area < 2000, :) = [];
             
             
             maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}]; 
         end
         
         %% Matching of marker images regarding their holes
-        similarHolesProperties.maxDistanceOfCentroids = 500;
-        similarHolesProperties.maxArea = 200;
+        %similarHolesProperties.maxDistanceOfCentroids = 2000;
+        similarHolesProperties.maxDistanceBetweenPixels = 100;
+        similarHolesProperties.minCorrelation = 0.5;
         radiusOfTheAreaTaken = 350;
         couplingHoles = cell(size(filterOfMarkers, 2));
         for actualMarker = 1:size(filterOfMarkers, 2)
