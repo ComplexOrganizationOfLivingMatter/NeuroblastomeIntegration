@@ -48,7 +48,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             originalImg = imread(imagesByCase{numMarker});
             [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
             
-            [ maskImage2 ] = createEllipsoidalMaskFromImage(originalImg, imgWithHoles);
+            [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgBinOriginal), 1000000));
             
             perimImage = bwperim(maskImage2, 8);
             
@@ -98,9 +98,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %                 %[x, y, BW, xi, yi] = roipoly(imgVTN);
 %             end
 %         end
-        
-        
-        
     end
 end
 
