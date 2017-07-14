@@ -1,4 +1,4 @@
-function [ newMask, boundingBox, imgBinOriginal] = removingArtificatsFromImage(originalImage, marker)
+function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, marker)
 %REMOVINGARTIFICATSFROMIMAGE Summary of this function goes here
 %   Detailed explanation goes here
     originalImgGray = rgb2gray(originalImage);
@@ -9,12 +9,11 @@ function [ newMask, boundingBox, imgBinOriginal] = removingArtificatsFromImage(o
             imgBin = im2bw(originalImgGray, 0.5*graythresh(originalImgGray) + 0.5*graythresh(originalImgGray(1:100,1:100)));
     end
 
-    imgBinOriginal = logical(1-imgBin);
+    imgBin = logical(1-imgBin);
     
-    maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBinOriginal), 1000000);
-    [ maskImage2, boundingBox ] = createEllipsoidalMaskFromImage(imgBinOriginal, maskOfBiopsy);
+    maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBin), 1000000);
+    [ maskImage2, boundingBox ] = createEllipsoidalMaskFromImage(imgBin, maskOfBiopsy);
     
-    imgBin = imgBinOriginal;
     imgBin(maskImage2 == 0) = 1;
     
     imgBinDilated = imdilate(imgBin, strel('disk', 20));
