@@ -32,13 +32,23 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
             if holesAreCloseEnough
                 imgOfMarker1 = holesOfMarker1.Image{numHoleOfMarker1};
                 imgOfMarker2 = holesOfMarker2.Image{numHoleOfMarker2};
+                
+                if size(imgOfMarker1, 2) > size(imgOfMarker2, 2) && size(imgOfMarker1, 1) < size(imgOfMarker2, 1)
+                    imgOfMarker2(:, size(imgOfMarker2, 2) + 1: size(imgOfMarker1, 2)) = 0;
+                end
+                
+                if size(imgOfMarker1, 2) < size(imgOfMarker2, 2) && size(imgOfMarker1, 1) > size(imgOfMarker2, 1)
+                    imgOfMarker2(size(imgOfMarker2, 1) + 1: size(imgOfMarker1, 1), :) = 0;
+                end
+                
                 error = 0;
                 try
                     correlationBetweenHoles = normxcorr2(imgOfMarker1, imgOfMarker2);
                 catch mexception
                     error = 1;
-                    imgOfMarker2 = holesOfMarker1.Image{numHoleOfMarker1};
-                    imgOfMarker1 = holesOfMarker2.Image{numHoleOfMarker2};
+                    imgOfMarkerAux = imgOfMarker1;
+                    imgOfMarker1 = imgOfMarker2;
+                    imgOfMarker2 = imgOfMarkerAux;
                     correlationBetweenHoles = normxcorr2(imgOfMarker1, imgOfMarker2);
                 end
 
