@@ -6,6 +6,8 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, ma
         case 'Vitronectine'
             imgBin = originalImgGray >= 255;
         case 'COLAGENO'
+            %If you use only the graythresh of all the image, it will add
+            %too many holes.
             imgBin = im2bw(originalImgGray, 0.7*graythresh(originalImgGray) + 0.3*graythresh(originalImgGray(1:100,1:100)));
         otherwise
             imgBin = im2bw(originalImgGray, 0.5*graythresh(originalImgGray) + 0.5*graythresh(originalImgGray(1:100,1:100)));
