@@ -54,11 +54,11 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                     %imgOfMarker2Cropped = imcrop(imgOfMarker2, correspondenceOfTheOldImage);
                     
                     figure;
-                    subplot(2,1,1);
-                    imshow(insertShape(imgOfMarker2,'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
+                    subplot(1,2,1);
+                    imshow(insertShape(double(imgOfMarker2),'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
                     title('Subplot 1: correspondance of the template')
                     
-                    subplot(2,1,2);
+                    subplot(1,2,2);
                     imshow(imgOfMarker1);
                     title('Subplot 2: Template')
                     
