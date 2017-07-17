@@ -42,10 +42,11 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, ma
     %finalRemovableAreas = cellfun(@(x) sum(ismember([pixelsYOfGoodAreas, pixelsXOfGoodAreas], x, 'rows')) > 0, allHolePixels);
     % It improves the efficiency a lot.
     for numGoodHoles = 1:size(goodHoles, 1)
-        matchEncounter = false;
         pixelsGoodHoles = goodHoles(numGoodHoles).PixelList;
         for numAllHoles = 1:size(allHolePixels, 2)
-            if ismember(pixelsGoodHoles, allHolePixels{numAllHoles}, 'rows')
+            %We only need one pixel to check if the holes is the same,
+            %because it will only have the same area but shrinken
+            if ismember(pixelsGoodHoles(1, :), allHolePixels{numAllHoles}, 'rows')
                 finalRemovableAreas(end+1) = numAllHoles;
                 break
             end
