@@ -102,12 +102,14 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                     end
                     
                     if foundCorrelationNotTooFar
-                        h = figure;
-                        subplot(1,2,1);
+                        h = figure('Visible', 'off');
+                        ax1 = subplot(1,2,1);
+                        set(ax1,'Visible','off');
                         imshow(insertShape(double(imgOfMarker2),'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
                         title('Subplot 1: correspondance of the template')
 
-                        subplot(1,2,2);
+                        ax2 = subplot(1,2,2);
+                        set(ax2,'Visible','off');
                         imshow(imgOfMarker1);
                         title('Subplot 2: Template')
                         print(h, strcat('TempResults\', outputDirectory, '_matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'), '-djpeg');
