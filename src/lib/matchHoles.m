@@ -21,8 +21,15 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
             if isempty(pixelsAtTheSameLocation)
                 %If not we check if the holes are closerEnough
 %                 if closerHoles(numHoleOfMarker1, numHoleOfMarker2)
-                    distancesOfPixels = pdist2(holesOfMarker1.PixelList{numHoleOfMarker1}, holesOfMarker2.PixelList{numHoleOfMarker2});
-                    holesAreCloseEnough = min(min(distancesOfPixels)) < similarHolesProperties.maxDistanceBetweenPixels;
+                    pixelsHolesOfMarker = holesOfMarker1.PixelList{numHoleOfMarker1};
+                    pieceSize = round(size(pixelsHolesOfMarker, 1)/100);
+                    for numRow = 1:pieceSize:size(pixelsHolesOfMarker, 1)
+                        distancesOfPixels = pdist2(pixelsHolesOfMarker(numRow:pieceSize-1, :), holesOfMarker2.PixelList{numHoleOfMarker2});
+                        if min(distancesOfPixels) < similarHolesProperties.maxDistanceBetweenPixels;
+                            holesAreCloseEnough = 1;
+                            break
+                        end
+                    end
 %                 end
             else
                 holesAreCloseEnough = 1;
