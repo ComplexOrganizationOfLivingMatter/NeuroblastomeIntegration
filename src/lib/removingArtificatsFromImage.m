@@ -14,7 +14,7 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, ma
         case 'RET'
             imgBin = im2bw(originalImgGray, 0.1*graythresh(originalImgGray) + 0.9*graythresh(originalImgGray(1:100,1:100)));
         case 'GAGs'
-            imgBin = im2bw(originalImgGray, 0.6*graythresh(originalImgGray) + 0.4*graythresh(originalImgGray(1:100,1:100)));
+            imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
     end
     
     imgBin = logical(1-imgBin);
