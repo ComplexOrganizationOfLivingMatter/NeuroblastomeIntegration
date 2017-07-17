@@ -47,27 +47,33 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
         maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
         for numMarker = 1:size(filterOfMarkers, 2)
-            originalImg = imread(imagesByCase{numMarker});
-            [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
-            
-            [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgWithHoles), 1000000));
-            
-            perimImage = bwperim(maskImage2, 8);
-            
-            holesInImage = regionprops(logical(1-(imgWithHoles | perimImage)), 'all');
-            holesInImage = struct2table(holesInImage(2:end));
-            holesInImage(holesInImage.Area < 2000, :) = [];
-            
-            outputDirectoryMarker = strcat(outputDirectory, '\', possibleMarkers{numMarker});
-            mkdir(outputDirectoryMarker)
-            for numHole = 1:size(holesInImage, 1)
-                h = figure('Visible', 'off');
-                imshow(insertShape(double(imgWithHoles | perimImage), 'FilledRectangle', holesInImage.BoundingBox(numHole, :), 'Color', 'green'));
-                print(h, strcat(outputDirectoryMarker, '\hole_Number_', num2str(numHole), '.jpg'), '-djpeg', '-r300');
-                close(h);
+            if (imagesByCase{numMarker}) ~= 0
+                originalImg = imread(imagesByCase{numMarker});
+                [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
+
+                [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgWithHoles), 1000000));
+
+                perimImage = bwperim(maskImage2, 8);
+
+                holesInImage = regionprops(logical(1-(imgWithHoles | perimImage)), 'all');
+                holesInImage = struct2table(holesInImage);
+
+                if size(holesInImage, 1) > 1
+                    holesInImage = holesInImage(2:end, :);
+                    holesInImage(holesInImage.Area < 2000, :) = [];
+
+                    outputDirectoryMarker = strcat(outputDirectory, '\', possibleMarkers{numMarker});
+                    mkdir(outputDirectoryMarker)
+                    for numHole = 1:size(holesInImage, 1)
+                        h = figure('Visible', 'off');
+                        imshow(insertShape(double(imgWithHoles | perimImage), 'FilledRectangle', holesInImage.BoundingBox(numHole, :), 'Color', 'green'));
+                        print(h, strcat(outputDirectoryMarker, '\hole_Number_', num2str(numHole), '.jpg'), '-djpeg', '-r300');
+                        close(h);
+                    end
+                end
+
+                maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}];
             end
-            
-            maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}]; 
         end
         
         save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
