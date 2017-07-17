@@ -70,21 +70,55 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                     correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(imgOfMarker1,2), size(imgOfMarker1,1)];
                     %imgOfMarker2Cropped = imcrop(imgOfMarker2, correspondenceOfTheOldImage);
                     
-                    h = figure;
-                    subplot(1,2,1);
-                    imshow(insertShape(double(imgOfMarker2),'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
-                    title('Subplot 1: correspondance of the template')
-                    
-                    subplot(1,2,2);
-                    imshow(imgOfMarker1);
-                    title('Subplot 2: Template')
-                    print(h, strcat('TempResults\', outputDirectory, '\matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'));
-                    close h
-                    
-                    if error
-                        correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = 1;
+                    % check if the correlation we've found is closer enough
+                    % It may occur that the matching holes are really too
+                    % far, because one of the image is ellongated enough.
+                    foundCorrelationNotTooFar = 0;
+                    if error == 0
+                        %Get the center of the bounding box image
+                        centerOfBoundingBox = [xoffSet+size(imgOfMarker1,1)/2, yoffSet+size(imgOfMarker1,2)/2];
+                        offSetOriginalImage = min(holesOfMarker2.PixelList{numHoleOfMarker2});
+                        %Then, we transform this pixel into the bigger
+                        %image, to check if the real region found is closer
+                        %enough from the original region (also called
+                        %template)
+                        realCenterOfBoundingBoxOnImage(1, 1) = centerOfBoundingBox(1,1) + offSetOriginalImage(1);
+                        realCenterOfBoundingBoxOnImage(1, 2) = centerOfBoundingBox(1,2) + offSetOriginalImage(2);
+                        if any(pdist2(realCenterOfBoundingBoxOnImage, holesOfMarker1.PixelList{numHoleOfMarker1}) < similarHolesProperties.maxDistanceOfCorrelations)
+                            foundCorrelationNotTooFar = 1;
+                        end
                     else
-                        correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = 1;
+                        centerOfBoundingBox = [xoffSet+size(imgOfMarker2,1)/2, yoffSet+size(imgOfMarker2,2)/2];
+                        offSetOriginalImage = min(holesOfMarker1.PixelList{numHoleOfMarker1});
+                        %Then, we transform this pixel into the bigger
+                        %image, to check if the real region found is closer
+                        %enough from the original region (also called
+                        %template)
+                        realCenterOfBoundingBoxOnImage(1, 1) = centerOfBoundingBox(1,1) + offSetOriginalImage(1);
+                        realCenterOfBoundingBoxOnImage(1, 2) = centerOfBoundingBox(1,2) + offSetOriginalImage(2);
+                        if any(pdist2(realCenterOfBoundingBoxOnImage, holesOfMarker2.PixelList{numHoleOfMarker2}) < similarHolesProperties.maxDistanceOfCorrelations)
+                            foundCorrelationNotTooFar = 1;
+                        end
+                    end
+                    
+                    if foundCorrelationNotTooFar
+                        h = figure;
+                        subplot(1,2,1);
+                        imshow(insertShape(double(imgOfMarker2),'FilledRectangle', correspondenceOfTheOldImage,'Color','green'));
+                        title('Subplot 1: correspondance of the template')
+
+                        subplot(1,2,2);
+                        imshow(imgOfMarker1);
+                        title('Subplot 2: Template')
+                        print(h, strcat('TempResults\', outputDirectory, '_matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'), '-djpeg');
+
+
+                        if error
+                            correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = 1;
+                        else
+                            correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = 1;
+                        end
+                        close(h)
                     end
                 end
             end
