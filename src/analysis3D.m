@@ -42,7 +42,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %     subWindowX = size(filterOfMarkers, 2);
 %     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
-        mkdir(strcat('TempResults\', num2str(uniqueCases(numCase))))
+        outputDirectory = strcat('TempResults\', num2str(uniqueCases(numCase)));
+        mkdir(outputDirectory)
         imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
         maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
         for numMarker = 1:size(filterOfMarkers, 2)
@@ -57,6 +58,14 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             holesInImage = struct2table(holesInImage(2:end));
             holesInImage(holesInImage.Area < 2000, :) = [];
             
+            outputDirectoryMarker = strcat(outputDirectory, '\', possibleMarkers{numMarker});
+            mkdir(outputDirectoryMarker)
+            for numHole = 1:size(holesInImage, 1)
+                h = figure('Visible', 'off');
+                imshow(insertShape(double(imgWithHoles | perimImage), 'FilledRectangle', holesInImage.BoundingBox(numHole, :), 'Color', 'green'));
+                print(h, strcat(outputDirectoryMarker, '\hole_Number_', num2str(numHole), '.jpg'), '-djpeg', '-r300');
+                close(h);
+            end
             
             maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}]; 
         end
@@ -64,7 +73,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
         
         %% Matching of marker images regarding their holes
-        %similarHolesProperties.maxDistanceOfCentroids = 2000;
+        similarHolesProperties.maxDistanceOfCorrelations = 700;
         similarHolesProperties.maxDistanceBetweenPixels = 100;
         similarHolesProperties.minCorrelation = 0.5;
         radiusOfTheAreaTaken = 350;
