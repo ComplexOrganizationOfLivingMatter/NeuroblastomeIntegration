@@ -87,7 +87,11 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         for actualMarker = 1:size(filterOfMarkers, 2)
             for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
                 %Match the holes
-                couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(num2str(uniqueCases(numCase)), '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
+                if isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0
+                    couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(num2str(uniqueCases(numCase)), '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
+                else
+                    couplingHoles{actualMarker, numMarkerToCheck} = [];
+                end
                 
                 % Once we have the coupling of holes. We have to get the matching
                 % areas, which will a circular region of radius
