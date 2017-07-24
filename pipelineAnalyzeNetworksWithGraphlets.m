@@ -1,7 +1,6 @@
 function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
 %PIPELINEANALYZENETWORKSWITHGRAPHLETS Summary of this function goes here
 %   Detailed explanation goes here
-    cd 'D:\Pablo\Neuroblastoma\NeuroblastomeIntegration\'
     
     basePath = strcat('..\Datos\Data\NuevosCasos160\Casos\', dirName);
     mkdir(basePath, '\Networks\ControlNetwork');
@@ -9,6 +8,10 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName )
     mkdir(basePath, '\Networks\DistanceMatrixWeights');
     mkdir(basePath, '\Networks\IterationAlgorithm');
     mkdir(basePath, '\Networks\SortingAlgorithm');
+    
+    mkdir(basePath, '\Networks\IterationUsingWeightsAlgorithm');
+    mkdir(basePath, '\Networks\SortingUsingWeightsAlgorithm');
+    
     mkdir(basePath, '\Networks\GraphletVectors');
     mkdir(basePath, '\Networks\MinimumSpanningTree');
 %     
