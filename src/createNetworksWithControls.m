@@ -24,7 +24,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
                     nameOriginalImage = nameOriginalImage(nameOriginalVTN);
                 end
             end
-            [maskImage, radiusOfEllipse] = removingArtificatsFromImage(imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})));
+            [maskImage, radiusOfEllipse] = removingArtificatsFromImage(imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})), fullPathSplitted{end-4});
         else
             radiusOfEllipse = [0 0 size(Img)/2];
             maskImage = generateCircularRoiFromImage(fullPathImage, size(Img)/2);
