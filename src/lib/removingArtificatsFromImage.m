@@ -2,21 +2,30 @@ function [ newMask, boundingBox] = removingArtificatsFromImage(originalImage, ma
 %REMOVINGARTIFICATSFROMIMAGE Summary of this function goes here
 %   Detailed explanation goes here
     originalImgGray = rgb2gray(originalImage);
-    switch marker
-        case 'Vitronectine'
-            imgBin = originalImgGray >= 255;
-        case 'COLAGENO'
-            %If you use only the graythresh of all the image, it will add
-            %too many holes.
-            imgBin = im2bw(originalImgGray, 0.7*graythresh(originalImgGray) + 0.3*graythresh(originalImgGray(1:100,1:100)));
-        case 'VasosSanguineos'
-            imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
-        case 'RET'
-            imgBin = im2bw(originalImgGray, 0.1*graythresh(originalImgGray) + 0.9*graythresh(originalImgGray(1:100,1:100)));
-        case 'GAGs'
-            imgBin = im2bw(originalImgGray, 0.3*graythresh(originalImgGray) + 0.7*graythresh(originalImgGray(1:100,1:100)));
-    end
-    
+    load('supplementaryData\meanOfGraythreshPerMarker_VTN_COL_VasosSanguineos_RET_GAGs_LymphaticVessels.mat')
+%     switch marker
+%         case 'Vitronectine'
+%             imgBin = originalImgGray >= 255;
+%         case 'COLAGENO'
+%             %If you use only the graythresh of all the image, it will add
+%             %too many holes.
+%             %imgBin = im2bw(originalImgGray, 0.7*meanOfGraythreshPerMarker(2, 1) + 0.3*meanOfGraythreshPerMarker(2, 2));
+%             imgBin = im2bw(originalImgGray, 0.7*meanOfGraythreshPerMarker(2, 1) + 0.3*meanOfGraythreshPerMarker(2, 2));
+%         case 'VasosSanguineos'
+%             %imgBin = im2bw(originalImgGray, 0.3*meanOfGraythreshPerMarker(3, 1) + 0.7*meanOfGraythreshPerMarker(3, 2));
+%         case 'RET'
+%             %imgBin = im2bw(originalImgGray, 0.1*meanOfGraythreshPerMarker(4, 1) + 0.9*meanOfGraythreshPerMarker(4, 2));
+%         case 'GAGs'
+%             %imgBin = im2bw(originalImgGray, 0.3*meanOfGraythreshPerMarker(5, 1) + 0.7*meanOfGraythreshPerMarker(5, 2));
+%         case 'LymphaticVessels'
+%             %imgBin = im2bw(originalImgGray, min(min(originalImgGray(1:100, 1:100))));
+%             imgBin = originalImgGray >= mean(meanOfGraythreshPerMarker(6, 2:3));
+%         otherwise
+%             ME = MException('MyComponent:noMarkerFound', ...
+%                 'Marker %s not found', marker);
+%             throw(ME)
+%     end
+    imgBin = originalImgGray >= mean(meanOfGraythreshPerMarker(6, 2:3));
     imgBin = logical(1-imgBin);
    
     maskOfBiopsy = 1 - bwareaopen(logical(1 - imgBin), 1000000);
