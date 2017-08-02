@@ -13,7 +13,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
         fullPathSplitted = strsplit(fullPathImage, '\');
         filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
         filesOriginal = filesOriginal(vertcat(filesOriginal{:, 4}) == 0, :);
-        originalImage = cellfun(@(x) isempty(strfind(lower(x), 'mask')), filesOriginal(:, 1));
+        originalImage = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'txt')), filesOriginal(:, 1));
         if sum(originalImage) > 0
             nameOriginalImage = {filesOriginal{originalImage}};
             if sum(originalImage) > 1
