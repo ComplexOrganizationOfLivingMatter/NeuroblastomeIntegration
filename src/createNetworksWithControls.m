@@ -13,7 +13,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
         fullPathSplitted = strsplit(fullPathImage, '\');
         filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
         filesOriginal = filesOriginal(vertcat(filesOriginal{:, 4}) == 0, :);
-        originalImage = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'txt')), filesOriginal(:, 1));
+        originalImage = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'txt')) & isempty(strfind(lower(x), 'cels')), filesOriginal(:, 1));
         if sum(originalImage) > 0
             nameOriginalImage = {filesOriginal{originalImage}};
             if sum(originalImage) > 1
@@ -23,8 +23,8 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
                 else
                     nameOriginalImage = nameOriginalImage(nameOriginalVTN);
                 end
-            end
-            [maskImage, radiusOfEllipse] = removingArtificatsFromImage(imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})), fullPathSplitted{end-4});
+            end 
+            [maskImage, radiusOfEllipse] = removingArtificatsFromImage(imread(strcat(strjoin(fullPathSplitted(1:end-1), '\'), '\', nameOriginalImage{1})), fullPathSplitted{6});
         else
             radiusOfEllipse = [0 0 size(Img)/2];
             maskImage = generateCircularRoiFromImage(fullPathImage, size(Img)/2);
