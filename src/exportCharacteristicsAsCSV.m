@@ -6,7 +6,7 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo, filter )
     if isempty(filter) == 0
         allImages = allImages(cellfun(@(x) isempty(strfind(lower(x), lower(filter))) == 0, allImages));
     end
-    characteristics = cell(length(allImages), 13);
+   	characteristicsTable = [];
     for numImg = 1:size(allImages,1)
         fullPathFile = allImages{numImg};
         fileNameSplitted = strsplit(fullPathFile, '\');
@@ -14,18 +14,22 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo, filter )
         fileName = fileName{1};
         fileNameSplittedSplitted = strsplit(fileName, '_');
         if isempty(fileNameSplittedSplitted{1})
-            fileNameFinal = fileNameSplittedSplitted{2};
+            fileNameFinal = fileNameSplittedSplitted(2);
         else
-            fileNameFinal = fileNameSplittedSplitted{1};
+            fileNameFinal = fileNameSplittedSplitted(1);
         end
         load(fullPathFile);
-        characteristics(numImg, :) = {fileNameFinal, meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell, meanQuantityOfBranchesPerCell, meanQuantityOfBranchesFilledPerCell, eulerNumberPerObject, eulerNumberPerCell, eulerNumberPerFilledCell, numberOfHolesPerObject, meanAreaOfHoles, stdAreaOfHoles};
+        if isempty(characteristicsTable)
+            characteristicsTable = table(fileNameFinal, meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell, meanQuantityOfBranchesPerCell, meanQuantityOfBranchesFilledPerCell, eulerNumberPerObject, eulerNumberPerCell, eulerNumberPerFilledCell, numberOfHolesPerObject, meanAreaOfHoles, stdAreaOfHoles);
+        else
+            characteristicsTable = [characteristicsTable; table(fileNameFinal, meanPercentageOfFibrePerCell, stdPercentageOfFibrePerCell, meanPercentageOfFibrePerFilledCell, stdPercentageOfFibrePerFilledCell, meanQuantityOfBranchesPerCell, meanQuantityOfBranchesFilledPerCell, eulerNumberPerObject, eulerNumberPerCell, eulerNumberPerFilledCell, numberOfHolesPerObject, meanAreaOfHoles, stdAreaOfHoles)];
+        end
     end
-    characteristicsTable = cell2table(characteristics);
+    
     if isempty(filter)
-        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} ,'.xls'));
+        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} , '_', date, '.xls'));
     else
-        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} , '_', filter, '.xls'));
+        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} , '_', filter, '_', date,'.xls'));
     end
 end
 
