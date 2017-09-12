@@ -22,7 +22,7 @@ function [ ] = analyzeGraphletsDistances(currentPath, marker, typeOfDistance)
             namesFinal = namesFinal(namesFinalMarkerIndices);
             distanceMatrix = distanceMatrix(namesFinalMarkerIndices, namesFinalMarkerIndices);
             
-            originalImagesFilter = cellfun(@(x) isempty(strfind(lower(x), 'maskcontigous')) == 0, namesFinal);
+            originalImagesFilter = cellfun(@(x) isempty(strfind(lower(x), 'contigous')) == 0, namesFinal);
             originalImagesIndices = find(originalImagesFilter);
             
             sortingValue = 0;
@@ -40,7 +40,7 @@ function [ ] = analyzeGraphletsDistances(currentPath, marker, typeOfDistance)
                         iterationValue = mean(distanceMatrix(actualIndex, controlIndices));
                     end
                 else %sorting
-                    controlIndices = cellfun(@(x) isempty(strfind(lower(x), 'maskcontigous')) & x(1) == 's', namesFinal);
+                    controlIndices = cellfun(@(x) isempty(strfind(lower(x), 'contigous')) & x(1) == 's', namesFinal);
                     sortingValue = mean(distanceMatrix(actualIndex, controlIndices));
                 end
             end
