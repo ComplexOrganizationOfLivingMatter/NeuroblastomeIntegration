@@ -63,9 +63,14 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     eulerNumberPerObject = eulerNumber / numberOfObjects;
                     numberOfHolesPerObject = numberOfHoles / numberOfObjects;
                     holesObjects = bwconncomp(logical(1-Img), 4);
-                    areaOfHoles = cellfun(@(x) size(x, 1), holesObjects.PixelIdxList(2:end));
-                    meanAreaOfHoles = mean(areaOfHoles);
-                    stdAreaOfHoles = std(areaOfHoles);
+                    if numberOfHoles > 0
+                        areaOfHoles = cellfun(@(x) size(x, 1), holesObjects.PixelIdxList(2:end));
+                        meanAreaOfHoles = mean(areaOfHoles);
+                        stdAreaOfHoles = std(areaOfHoles);
+                    else
+                        meanAreaOfHoles = 0;
+                        stdAreaOfHoles = 0;
+                    end
                     
                     save(outputFileName{:}, 'distanceBetweenObjects', 'centroids', 'ImgMasked', 'meanPercentageOfFibreWithinNeighborhood','percentageOfFibrePerFilledCell', 'quantityOfFibrePerFilledCell', 'percentageOfFibrePerCell', 'quantityOfFibrePerCell', 'stdPercentageOfFibrePerFilledCell', 'stdPercentageOfFibrePerCell', 'meanPercentageOfFibrePerFilledCell', 'meanPercentageOfFibrePerCell', 'meanQuantityOfBranchesFilledPerCell', 'meanQuantityOfBranchesPerCell', 'meanNumberOfHolesPerFilledCell', 'meanNumberOfHolesPerCell', 'eulerNumberPerFilledCell', 'eulerNumberPerCell', 'eulerNumberPerObject', 'numberOfHolesPerObject', 'meanAreaOfHoles', 'stdAreaOfHoles', 'eulerNumber', 'numberOfObjects', 'numberOfHoles');
                 else
