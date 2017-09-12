@@ -17,23 +17,30 @@ function [ ] = analyzeGraphletsDistances(currentPath, marker, typeOfDistance)
             names = importfileNames(fullPathGraphlet);
             namesSplitted = cellfun(@(x) strsplit(x, '/'), names, 'UniformOutput', false);
             namesFinal = cellfun(@(x) x(end), namesSplitted);
+            namesFinalMarkerIndices = find(cellfun(@(x) isempty(strfind(lower(x), lower(marker))) == 0, namesFinal));
+            
+            namesFinal = namesFinal(namesFinalMarkerIndices);
+            distanceMatrix = distanceMatrix(namesFinalMarkerIndices, namesFinalMarkerIndices);
             
             originalImagesFilter = cellfun(@(x) isempty(strfind(lower(x), 'maskcontigous')) == 0, namesFinal);
             originalImagesIndices = find(originalImagesFilter);
             
+            sortingValue = 0;
+            iterationValue = 0;
+            mstValue = 0;
             for numOriginalImg = 1:size(originalImagesIndices, 1)
                 actualIndex = originalImagesIndices(numOriginalImg);
                 actualOriginalImg = namesFinal{actualIndex};
                 
                 if lower(actualOriginalImg(1)) == 'm' % mst or iteration
-                    controlIndices = find(cellfun(@(x) isempty(strfind(lower(x), 'maskcontigous')) & x(1) == 'm', namesFinal));
+                    controlIndices = cellfun(@(x) isempty(strfind(lower(x), 'contigous')) & x(1) == 'm', namesFinal);
                     if strcmpi(actualOriginalImg(1:3), 'mst') % Minimum Spanning Tree
                         mstValue = mean(distanceMatrix(actualIndex, controlIndices));
                     else % Iteration
                         iterationValue = mean(distanceMatrix(actualIndex, controlIndices));
                     end
                 else %sorting
-                    controlIndices = find(cellfun(@(x) isempty(strfind(lower(x), 'maskcontigous')) & x(1) == 's', namesFinal));
+                    controlIndices = cellfun(@(x) isempty(strfind(lower(x), 'maskcontigous')) & x(1) == 's', namesFinal);
                     sortingValue = mean(distanceMatrix(actualIndex, controlIndices));
                 end
             end
@@ -46,7 +53,7 @@ function [ ] = analyzeGraphletsDistances(currentPath, marker, typeOfDistance)
         end
     end
 
-    outputFile = strjoin(graphletNameSplitted(1:end-2), '\');
+    outputFile = strjoin(graphletNameSplitted(1:end-3), '\');
     writetable(allCharacteristics, strcat(outputFile, '\characteristics_', marker, '_', upper(typeOfDistance),'_', date ,'.xls'));
 end
 
