@@ -86,6 +86,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         
         save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
         
+        %load(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date));
         %% Matching of marker images regarding their holes
         similarHolesProperties.maxDistanceOfCorrelations = 700;
         similarHolesProperties.maxDistanceBetweenPixels = 100;
