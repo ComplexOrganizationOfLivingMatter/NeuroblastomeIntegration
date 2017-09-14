@@ -6,7 +6,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     onlyImagesFiles = cellfun(@(x) isempty(strfind(lower(x), lower('\Images\'))) == 0 & isempty(strfind(lower(x), lower('.txt'))), allFiles);
     onlyImagesFiles = allFiles(onlyImagesFiles);
     
-    onlyImagesFilesNoMasks = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'neg')) & isempty(strfind(lower(x), 'cel')), onlyImagesFiles);
+    onlyImagesFilesNoMasks = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'neg')) & isempty(strfind(lower(x), 'original')) & isempty(strfind(lower(x), 'cel')), onlyImagesFiles);
     onlyImagesFilesNoMasks = onlyImagesFiles(onlyImagesFilesNoMasks);
     
     patientOfImagesSplitted = cellfun(@(x) strsplit(x, '\'), onlyImagesFilesNoMasks, 'UniformOutput', false);
@@ -46,10 +46,16 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     for numCase = 1:size(filterOfMarkers, 1)
         outputDirectory = strcat('TempResults\', num2str(uniqueCases(numCase)));
         mkdir(outputDirectory)
-        imagesByCase = {onlyImagesFilesNoMasks{filterOfMarkers(numCase, :)}};
+        for numImage = 1:size(filterOfMarkers, 2)
+            if filterOfMarkers(numCase, numImage) ~= 0
+                imagesByCase(numImage) = onlyImagesFilesNoMasks(filterOfMarkers(numCase, numImage));
+            else
+                imagesByCase(numImage) = {''};
+            end
+        end
         maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
         for numMarker = 1:size(filterOfMarkers, 2)
-            if (imagesByCase{numMarker}) ~= 0
+            if filterOfMarkers(numCase, numMarker) ~= 0
                 originalImg = imread(imagesByCase{numMarker});
                 [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
 
@@ -84,7 +90,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         similarHolesProperties.maxDistanceOfCorrelations = 700;
         similarHolesProperties.maxDistanceBetweenPixels = 100;
         similarHolesProperties.minCorrelation = 0.5;
-        radiusOfTheAreaTaken = 350;
+        %radiusOfTheAreaTaken = 350;
         couplingHoles = cell(size(filterOfMarkers, 2));
         for actualMarker = 1:size(filterOfMarkers, 2)
             for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
@@ -105,25 +111,25 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
 
         %matchingImagesWithinMarkers(imagesByCase);
-        
-%         figure;
 %         
-%         for numMarker = 1:size(filterOfMarkers, 2)
-%             if filterOfMarkers(numCase, numMarker) ~= 0
-%                 subplot(subWindowX, subWindowY, numMarker)
-%                 imgToSubPlot = imread(onlyImagesFilesNoMasks{filterOfMarkers(numCase, numMarker)});
-%                 imshow(imgToSubPlot);
-%             end
-%         end
-%         
-%         for numMarker = 1:size(filterOfMarkers, 2)
-%             if filterOfMarkers(numCase, numMarker) ~= 0
-%                 figure
-%                 imgVTN = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, numMarker)});
-%                 imshow(imgVTN)
-%                 %[x, y, BW, xi, yi] = roipoly(imgVTN);
-%             end
-%         end
+% %         figure;
+% %         
+% %         for numMarker = 1:size(filterOfMarkers, 2)
+% %             if filterOfMarkers(numCase, numMarker) ~= 0
+% %                 subplot(subWindowX, subWindowY, numMarker)
+% %                 imgToSubPlot = imread(onlyImagesFilesNoMasks{filterOfMarkers(numCase, numMarker)});
+% %                 imshow(imgToSubPlot);
+% %             end
+% %         end
+% %         
+% %         for numMarker = 1:size(filterOfMarkers, 2)
+% %             if filterOfMarkers(numCase, numMarker) ~= 0
+% %                 figure
+% %                 imgVTN = imread(onlyImagesFilesNoMasks{filterOfMarkers(1, numMarker)});
+% %                 imshow(imgVTN)
+% %                 %[x, y, BW, xi, yi] = roipoly(imgVTN);
+% %             end
+% %         end
     end
 end
 
