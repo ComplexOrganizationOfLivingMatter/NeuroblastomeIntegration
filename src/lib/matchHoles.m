@@ -66,6 +66,10 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                 maxCorrelation = max(correlationBetweenHoles(:));
                 if maxCorrelation > similarHolesProperties.minCorrelation
                     [ypeak, xpeak] = find(correlationBetweenHoles==maxCorrelation);
+                    if size(ypeak, 1) > 1
+                        xpeak = xpeak(1);
+                        ypeak = ypeak(1);
+                    end
                     yoffSet = ypeak-size(imgOfMarker1,1);
                     xoffSet = xpeak-size(imgOfMarker1,2);
 
