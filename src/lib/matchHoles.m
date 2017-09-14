@@ -19,6 +19,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
 
             %if there's any pixels at the same location we do the matching
             if isempty(pixelsAtTheSameLocation)
+                if holesOfMarker1.Area(numHoleOfMarker1) < 1000000 && holesOfMarker2.Area(numHoleOfMarker2) < 1000000
                 %If not we check if the holes are closerEnough
 %                 if closerHoles(numHoleOfMarker1, numHoleOfMarker2)
                     pixelsHolesOfMarker = holesOfMarker1.PixelList{numHoleOfMarker1};
@@ -31,6 +32,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                         end
                     end
 %                 end
+                end
             else
                 holesAreCloseEnough = 1;
             end
