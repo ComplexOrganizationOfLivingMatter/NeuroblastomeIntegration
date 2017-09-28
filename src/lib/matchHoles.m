@@ -122,9 +122,9 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
 
 
                         if error
-                            correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = 1;
+                            correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = maxCorrelation;
                         else
-                            correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = 1;
+                            correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = maxCorrelation;
                         end
                         close(h)
                     end
