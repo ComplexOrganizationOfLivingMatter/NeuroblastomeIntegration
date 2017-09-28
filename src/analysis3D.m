@@ -53,63 +53,81 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 imagesByCase(numImage) = {''};
             end
         end
-        maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
-        for numMarker = 1:size(filterOfMarkers, 2)
-            if filterOfMarkers(numCase, numMarker) ~= 0
-                originalImg = imread(imagesByCase{numMarker});
-                [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
+        
+        filePath = strcat('TempResults\', num2str(uniqueCases(numCase)));
+        filesInDir = dir(filePath);
+        filesInDir = {filesInDir.name};
+        maskOfImagesByCaseFiles = cellfun(@(x) isempty(strfind(x, 'maskOfImagesByCase_')) == 0, filesInDir);
+        if any(maskOfImagesByCaseFiles) == 0
+            maskOfImagesByCase = cell(size(filterOfMarkers, 2), 2);
+            for numMarker = 1:size(filterOfMarkers, 2)
+                if filterOfMarkers(numCase, numMarker) ~= 0
+                    originalImg = imread(imagesByCase{numMarker});
+                    [ imgWithHoles, ~] = removingArtificatsFromImage(originalImg, possibleMarkers{numMarker});
 
-                [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgWithHoles), 1000000));
+                    [ maskImage2 ] = createEllipsoidalMaskFromImage(imgWithHoles, 1 - bwareaopen(logical(1 - imgWithHoles), 1000000));
 
-                perimImage = bwperim(maskImage2, 8);
+                    perimImage = bwperim(maskImage2, 8);
 
-                holesInImage = regionprops(logical(1-(imgWithHoles | perimImage)), 'all');
-                holesInImage = struct2table(holesInImage);
+                    holesInImage = regionprops(logical(1-(imgWithHoles | perimImage)), 'all');
 
-                if size(holesInImage, 1) > 1
-                    holesInImage = holesInImage(2:end, :);
-                    holesInImage(holesInImage.Area < 2000, :) = [];
+                    if size(holesInImage, 1) > 1
+                        holesInImage = struct2table(holesInImage);
+                        holesInImage = holesInImage(2:end, :);
+                        holesInImage(holesInImage.Area < 2000, :) = [];
 
-                    outputDirectoryMarker = strcat(outputDirectory, '\', possibleMarkers{numMarker});
-                    mkdir(outputDirectoryMarker)
-                    for numHole = 1:size(holesInImage, 1)
-                        h = figure('Visible', 'off');
-                        imshow(insertShape(double(imgWithHoles | perimImage), 'FilledRectangle', holesInImage.BoundingBox(numHole, :), 'Color', 'green'));
-                        print(h, strcat(outputDirectoryMarker, '\hole_Number_', num2str(numHole), '.jpg'), '-djpeg', '-r300');
-                        close(h);
+                        outputDirectoryMarker = strcat(outputDirectory, '\', possibleMarkers{numMarker});
+                        mkdir(outputDirectoryMarker)
+                        for numHole = 1:size(holesInImage, 1)
+                            h = figure('Visible', 'off');
+                            imshow(insertShape(double(imgWithHoles | perimImage), 'FilledRectangle', holesInImage.BoundingBox(numHole, :), 'Color', 'green'));
+                            print(h, strcat(outputDirectoryMarker, '\hole_Number_', num2str(numHole), '.jpg'), '-djpeg', '-r300');
+                            close(h);
+                        end
+                        maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}];
+                    else
+                        maskOfImagesByCase(numMarker, 1) = {imgWithHoles | perimImage};
                     end
-                end
 
-                maskOfImagesByCase(numMarker, :) = [{imgWithHoles | perimImage}; {holesInImage}];
-            end
-        end
-        
-        save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
-        
-        %load(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date));
-        %% Matching of marker images regarding their holes
-        similarHolesProperties.maxDistanceOfCorrelations = 700;
-        similarHolesProperties.maxDistanceBetweenPixels = 100;
-        similarHolesProperties.minCorrelation = 0.5;
-        %radiusOfTheAreaTaken = 350;
-        couplingHoles = cell(size(filterOfMarkers, 2));
-        for actualMarker = 1:size(filterOfMarkers, 2)
-            for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
-                %Match the holes
-                if isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0
-                    couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(num2str(uniqueCases(numCase)), '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
-                else
-                    couplingHoles{actualMarker, numMarkerToCheck} = [];
+                    
                 end
-                
-                % Once we have the coupling of holes. We have to get the matching
-                % areas, which will a circular region of radius
-                % 'radiusOfTheAreaTaken'
-                
             end
+
+            save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
+        else
+            load(strcat(filePath, '\', filesInDir{maskOfImagesByCaseFiles}));
         end
         
-        save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
+        couplingHolesFiles = cellfun(@(x) isempty(strfind(x, 'couplingHoles_')) == 0, filesInDir);
+        if any(couplingHolesFiles)
+            %% Matching of marker images regarding their holes
+            similarHolesProperties.maxDistanceOfCorrelations = 700;
+            similarHolesProperties.maxDistanceBetweenPixels = 100;
+            similarHolesProperties.minCorrelation = 0.5;
+            %radiusOfTheAreaTaken = 350;
+            couplingHoles = cell(size(filterOfMarkers, 2));
+            for actualMarker = 1:size(filterOfMarkers, 2)
+                for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
+                    %Match the holes
+                    if isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0
+                        couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(num2str(uniqueCases(numCase)), '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
+                    else
+                        couplingHoles{actualMarker, numMarkerToCheck} = [];
+                    end
+
+                    % Once we have the coupling of holes. We have to get the matching
+                    % areas, which will be a circular region of radius
+                    % 'radiusOfTheAreaTaken'
+
+                end
+            end
+
+            save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
+        else
+            load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));
+        end
+        
+        
 
         %matchingImagesWithinMarkers(imagesByCase);
 %         
