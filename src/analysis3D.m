@@ -1,7 +1,11 @@
 function [ ] = analysis3D( imagesPath, possibleMarkers )
 %ANALYSIS3D Summary of this function goes here
 %   Detailed explanation goes here
+%   How to run it:
+%   analysis3D('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos', {'COLAGENO', 'VasosSanguineos', 'RET', 'GAGs', 'LymphaticVessels', 'Vitronectine'});
 
+
+    outputFatherDir = '..\Results\3Danalysis\';
     allFiles = getAllFiles(imagesPath);
     onlyImagesFiles = cellfun(@(x) isempty(strfind(lower(x), lower('\Images\'))) == 0 & isempty(strfind(lower(x), lower('.txt'))), allFiles);
     onlyImagesFiles = allFiles(onlyImagesFiles);
@@ -30,7 +34,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     patientsOnlyNumbers = regexp([patientOfImagesOnlyCase{:}], '[0-9]{4,}', 'match');
     patientsOnlyNumbers = cellfun(@(x) str2double(x), [patientsOnlyNumbers{:}]);
     
-    [uniqueCases, ia, uniqueCasesIndices] = unique(patientsOnlyNumbers);
+    [uniqueCases, ~, uniqueCasesIndices] = unique(patientsOnlyNumbers);
     %Filtering by markers
     filterOfMarkers = zeros(size(uniqueCases, 2), size(possibleMarkers, 2));
     meanOfGraythreshPerMarker = zeros(size(possibleMarkers, 2), 3);
@@ -44,7 +48,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %     subWindowX = size(filterOfMarkers, 2);
 %     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
-        outputDirectory = strcat('TempResults\', num2str(uniqueCases(numCase)));
+        outputDirectory = strcat(outputFatherDir, num2str(uniqueCases(numCase)));
         mkdir(outputDirectory)
         for numImage = 1:size(filterOfMarkers, 2)
             if filterOfMarkers(numCase, numImage) ~= 0
@@ -54,7 +58,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             end
         end
         
-        filePath = strcat('TempResults\', num2str(uniqueCases(numCase)));
+        filePath = strcat(outputFatherDir, num2str(uniqueCases(numCase)));
         filesInDir = dir(filePath);
         filesInDir = {filesInDir.name};
         maskOfImagesByCaseFiles = cellfun(@(x) isempty(strfind(x, 'maskOfImagesByCase_')) == 0, filesInDir);
@@ -93,13 +97,13 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 end
             end
 
-            save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
+            save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\maskOfImagesByCase_', date), 'maskOfImagesByCase');
         else
             load(strcat(filePath, '\', filesInDir{maskOfImagesByCaseFiles}));
         end
         
         couplingHolesFiles = cellfun(@(x) isempty(strfind(x, 'couplingHoles_')) == 0, filesInDir);
-        if any(couplingHolesFiles)
+        if any(couplingHolesFiles) == 0
             %% Matching of marker images regarding their holes
             similarHolesProperties.maxDistanceOfCorrelations = 700;
             similarHolesProperties.maxDistanceBetweenPixels = 100;
@@ -110,7 +114,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
                     %Match the holes
                     if isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0
-                        couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(num2str(uniqueCases(numCase)), '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
+                        couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(outputDirectory, '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
                     else
                         couplingHoles{actualMarker, numMarkerToCheck} = [];
                     end
@@ -122,12 +126,13 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 end
             end
 
-            save(strcat('TempResults\', num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
+            save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
         else
             load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));
         end
         
-        
+        %% Get regions of biopsies
+        disp('');
 
         %matchingImagesWithinMarkers(imagesByCase);
 %         

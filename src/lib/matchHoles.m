@@ -118,7 +118,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                         set(ax2,'Visible','off');
                         imshow(imgOfMarker1);
                         title('Subplot 2: Template')
-                        print(h, strcat('TempResults\', outputDirectory, '_matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'), '-djpeg');
+                        print(h, strcat(outputDirectory, '_matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'), '-djpeg');
 
 
                         if error
