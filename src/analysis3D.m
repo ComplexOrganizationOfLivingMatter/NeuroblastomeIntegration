@@ -184,7 +184,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 end
             end
 
-            save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\finalGoodRegions_', date), 'pairedRegions');
+            save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\finalGoodRegions_', date), 'pairedRegions', '-v7.3');
         end
 
         %matchingImagesWithinMarkers(imagesByCase);
