@@ -148,13 +148,13 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                             actualHole1 = marker1Holes(hole1(numPairOfHoles), :);
                             actualHole2 = marker2Holes(hole2(numPairOfHoles), :);
                             h = figure('Visible', 'on', 'units','normalized','outerposition',[0 0 1 1]);
-                            title(num2str(numCase));
                             ax1 = subplot(1,2,1);
                             imgToShow = double(maskOfImagesByCase{marker1, 1}) * 255;
                             boundingBox = round(actualHole1.BoundingBox);
                             imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) = (imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) == 0 & actualHole1.Image{1}) * 155;
                             imgToShow(maskOfImagesByCase{marker1, 1} == 1) = 255;
-                            imshow(imgToShow, hot)
+                            hImg = imshow(imgToShow, hot);
+                            hImg.CDataMapping = 'scale';
                             title(strcat(possibleMarkers{marker1}, ': hole', num2str(hole1(numPairOfHoles))))
 
                             ax2 = subplot(1,2,2);
@@ -162,7 +162,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                             boundingBox = round(actualHole2.BoundingBox);
                             imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) = (imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) == 0 & actualHole2.Image{1}) * 155;
                             imgToShow(maskOfImagesByCase{marker2, 1} == 1) = 255;
-                            imshow(imgToShow, hot)
+                            hImg = imshow(imgToShow, hot);
+                            hImg.CDataMapping = 'scale';
                             title(strcat(possibleMarkers{marker2}, ': hole', num2str(hole2(numPairOfHoles))))
                             correct = [];
                             while isempty(correct)
