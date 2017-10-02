@@ -132,7 +132,57 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         end
         
         %% Get regions of biopsies
-        disp('');
+        finalGoodRegionsFiles = cellfun(@(x) isempty(strfind(x, 'finalGoodRegions_')) == 0, filesInDir);
+        if any(finalGoodRegionsFiles) == 0
+            pairedRegions = {};
+            %Refine coupling holes
+            for marker1 = 1:size(couplingHoles, 1)
+                for marker2 = 1:size(couplingHoles, 2)
+                    if isempty(couplingHoles{marker1, marker2}) == 0
+                        couplingHolesActual = couplingHoles{marker1, marker2};
+                        [hole1, hole2] = find(couplingHolesActual);
+
+                        marker1Holes = maskOfImagesByCase{marker1, 2};
+                        marker2Holes = maskOfImagesByCase{marker2, 2};
+                        for numPairOfHoles = 1:size(hole1, 1)
+                            actualHole1 = marker1Holes(hole1(numPairOfHoles), :);
+                            actualHole2 = marker2Holes(hole2(numPairOfHoles), :);
+                            h = figure('Visible', 'on', 'units','normalized','outerposition',[0 0 1 1]);
+                            title(num2str(numCase));
+                            ax1 = subplot(1,2,1);
+                            imgToShow = double(maskOfImagesByCase{marker1, 1}) * 255;
+                            boundingBox = round(actualHole1.BoundingBox);
+                            imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) = (imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) == 0 & actualHole1.Image{1}) * 155;
+                            imgToShow(maskOfImagesByCase{marker1, 1} == 1) = 255;
+                            imshow(imgToShow, hot)
+                            title(strcat(possibleMarkers{marker1}, ': hole', num2str(hole1(numPairOfHoles))))
+
+                            ax2 = subplot(1,2,2);
+                            imgToShow = double(maskOfImagesByCase{marker2, 1}) * 255;
+                            boundingBox = round(actualHole2.BoundingBox);
+                            imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) = (imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) == 0 & actualHole2.Image{1}) * 155;
+                            imgToShow(maskOfImagesByCase{marker2, 1} == 1) = 255;
+                            imshow(imgToShow, hot)
+                            title(strcat(possibleMarkers{marker2}, ': hole', num2str(hole2(numPairOfHoles))))
+                            correct = [];
+                            while isempty(correct)
+                                correct = input('Is it correct (0/1)? ');
+
+                                if isempty(correct) == 0
+                                    if isequal(correct, 1)
+                                        pairedRegions{end+1, 1} = {possibleMarkers{marker1}, hole1(numPairOfHoles), actualHole1};
+                                        pairedRegions{end, 2} = {possibleMarkers{marker2}, hole2(numPairOfHoles), actualHole2};
+                                    end
+                                end
+                            end
+                            close all
+                        end
+                    end
+                end
+            end
+
+            save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\finalGoodRegions_', date), 'pairedRegions');
+        end
 
         %matchingImagesWithinMarkers(imagesByCase);
 %         
