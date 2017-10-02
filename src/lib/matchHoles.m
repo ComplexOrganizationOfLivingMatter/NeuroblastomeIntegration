@@ -121,11 +121,8 @@ function [ correspondanceBetweenHoles ] = matchHoles( holesOfMarker1, holesOfMar
                         print(h, strcat(outputDirectory, '_matching_holes_', num2str(numHoleOfMarker1), '_', num2str(numHoleOfMarker2), '.jpg'), '-djpeg');
 
 
-                        if error
-                            correspondanceBetweenHoles(numHoleOfMarker2, numHoleOfMarker1) = maxCorrelation;
-                        else
-                            correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = maxCorrelation;
-                        end
+                        
+                        correspondanceBetweenHoles(numHoleOfMarker1, numHoleOfMarker2) = maxCorrelation;
                         close(h)
                     end
                 end
