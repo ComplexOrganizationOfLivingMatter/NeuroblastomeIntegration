@@ -23,25 +23,34 @@ function [ finalHoles ] = getCoupledRegions( holes )
     finalHoles = finalHoles(indicesPerArea, :);
     basicImage = finalHoles{1, 3}.Image{1};
     
+    finalHoles(1, 4) = {basicImage};
+    finalHoles(1, 5) = {finalHoles{1, 3}.Centroid};
     %Real cropped hole
     for numHole = 2:size(finalHoles, 1)
         actualImg = finalHoles{numHole, 3}.Image{1};
-        correlationBetweenHoles = normxcorr2(actualImg, basicImage);
-        [ypeak, xpeak] = find(correlationBetweenHoles == maxCorrelation);
+        correlationBetweenHoles = normxcorr2(basicImage, actualImg);
+        [ypeak, xpeak] = find(correlationBetweenHoles == max(correlationBetweenHoles(:)));
         if size(ypeak, 1) > 1
             xpeak = xpeak(1);
             ypeak = ypeak(1);
         end
-        yoffSet = ypeak-size(actualImg,1);
-        xoffSet = xpeak-size(actualImg,2);
-        correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(actualImg,2), size(actualImg,1)];
+        yoffSet = ypeak-size(basicImage,1);
+        xoffSet = xpeak-size(basicImage,2);
+        correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(basicImage,2), size(basicImage,1)];
         
-        finalHoles(numHole, 4) = croppedImg;
+        %New Image general for all markers
+        finalHoles(numHole, 4) = {imcrop(actualImg, correspondenceOfTheOldImage)};
+        
+        %New centroids for all markers
+        finalHoles(numHole, 5) = {finalHoles{numHole, 3}.Centroid - [xoffSet+1, yoffSet+1]};
     end
     
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
-    finalHoles
+    
+    
+    
+    finalHoles = table(finalHoles);
     
 end
 

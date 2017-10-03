@@ -216,6 +216,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 sameHoleInDifferentMarkers(numHole) = pairedRegions(1,1);
             end
         end
+        % The last hole
+        [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
         
         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
