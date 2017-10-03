@@ -1,4 +1,4 @@
-function [ finalHoles ] = getCoupledRegions( holes )
+function [ finalHoles ] = getCoupledRegions( holes, imgFiles )
 %GETCOUPLEDREGIONS Summary of this function goes here
 %   Detailed explanation goes here
 
