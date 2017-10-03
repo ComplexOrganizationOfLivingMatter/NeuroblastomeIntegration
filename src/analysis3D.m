@@ -191,27 +191,28 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 
         %Region analysis
         allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
-        holes = vertcat(allHolesCoupled{:});
-        [~, uniqueHolesIndices] = unique(holes.Centroid, 'rows');
-        uniqueHoles = holes(uniqueHolesIndices, :);
-        
         sameHoleInDifferentMarkers = pairedRegions(1, 1);
         
         numHole = 1;
         
         while isempty(pairedRegions) == 0
-            infoActualHoles = vertcat(sameHoleInDifferentMarkers{numHole}(:, 3));
+            infoActualHoles = vertcat(sameHoleInDifferentMarkers{numHole}{:, 3});
             %If two holes have the same area and centroids they are the
             %same
             coupledHoledActual = cellfun(@(x) ismember(x.Area, infoActualHoles.Area) & ismember(x.Centroid, infoActualHoles.Centroid, 'rows'), allHolesCoupled);
-            actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
-            %Removing found holes
-            pairedRegions(any(coupledHoledActual, 2), :) = [];
-            allHolesCoupled(any(coupledHoledActual, 2), :) = [];
-            
-            sameHoleInDifferentMarkers{numHole} = actualHoles;
+            if any(coupledHoledActual, 2)
+                actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
+                %Removing found holes
+                pairedRegions(any(coupledHoledActual, 2), :) = [];
+                allHolesCoupled(any(coupledHoledActual, 2), :) = [];
+
+                sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
+            else
+                numHole = numHole + 1;
+                sameHoleInDifferentMarkers(numHole) = pairedRegions(1,1);
+            end
         end
-        
+        numHole
         
         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
