@@ -1,4 +1,4 @@
-function [ filterOfMarkers, meanOfGraythreshPerMarker, uniqueCases ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks )
+function [ filterOfMarkers, meanOfGraythreshPerMarker, uniqueCases ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks, vtnMarker )
 %RELATIONMARKER_IMAGES Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -28,10 +28,19 @@ function [ filterOfMarkers, meanOfGraythreshPerMarker, uniqueCases ] = relationM
     filterOfMarkers = zeros(size(uniqueCases, 2), size(possibleMarkers, 2));
     meanOfGraythreshPerMarker = zeros(size(possibleMarkers, 2), 3);
     for numMarker = 1:size(possibleMarkers, 2)
-        foundMarkers = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0, onlyImagesFilesNoMasks);
-        casesInMarker = uniqueCasesIndices(foundMarkers);
-        %meanOfGraythreshPerMarker(numMarker, :) = calculateMeanGrayThreshOfImages(onlyImagesFilesNoMasks(foundMarkers));
-        filterOfMarkers(casesInMarker, numMarker) = find(foundMarkers)';
+        if strcmpi(possibleMarkers{numMarker}, 'vitronectine') && isempty(vtnMarker) == 0
+            for numVtnMarker = 1:size(vtnMarker, 2)
+                foundMarkers = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0 & isempty(strfind(lower(x), vtnMarker{numVtnMarker})) == 0, onlyImagesFilesNoMasks);
+                casesInMarker = uniqueCasesIndices(foundMarkers);
+                %meanOfGraythreshPerMarker(numMarker, :) = calculateMeanGrayThreshOfImages(onlyImagesFilesNoMasks(foundMarkers));
+                filterOfMarkers(casesInMarker, numMarker + numVtnMarker - 1) = find(foundMarkers)';
+            end
+        else
+            foundMarkers = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0, onlyImagesFilesNoMasks);
+            casesInMarker = uniqueCasesIndices(foundMarkers);
+            %meanOfGraythreshPerMarker(numMarker, :) = calculateMeanGrayThreshOfImages(onlyImagesFilesNoMasks(foundMarkers));
+            filterOfMarkers(casesInMarker, numMarker) = find(foundMarkers)';
+        end
     end
 end
 

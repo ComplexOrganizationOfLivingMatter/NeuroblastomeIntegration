@@ -18,8 +18,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     
     
     %Filtering by markers
-    [ filterOfMarkers, ~, uniqueCases ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks);
-    [ filterOfMarkersMasks, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesMasks);
+    [ filterOfMarkers, ~, uniqueCases ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks, {});
+    [ filterOfMarkersMasks, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesMasks, {'hepa', 'macr'});
     
 %     subWindowX = size(filterOfMarkers, 2);
 %     subWindowY = 1;
