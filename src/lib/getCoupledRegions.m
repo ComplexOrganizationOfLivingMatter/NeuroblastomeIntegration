@@ -50,13 +50,17 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles )
         %New Image general for all markers
         finalHoles(numHole, 4) = {imcrop(actualImg, correspondenceOfTheOldImage)};
         
-        newCentroid = regionprops(finalHoles{numHole, 4}, 'Centroid');
+        newCentroid = regionprops(finalHoles{numHole, 4});
+        if size(newCentroid, 1) > 1
+            newCentroid = [];
+            newCentroid.Centroid = [size(basicImage,2) / 2, size(basicImage,1) / 2];
+        end
         %New centroids for all markers
         finalHoles(numHole, 5) = {[newCentroid.Centroid(1) + finalHoles{numHole, 3}.BoundingBox(1) + xoffSet, newCentroid.Centroid(2) + finalHoles{numHole, 3}.BoundingBox(2) + yoffSet]};
         
         markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
         img = imread(maskFiles{markerIndex});
-        imshow(img)
+        figure; imshow(img)
         hold on
         plot(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2), '*')
         close 
