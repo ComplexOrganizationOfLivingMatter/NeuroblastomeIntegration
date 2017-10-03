@@ -208,6 +208,12 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 
                 sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
             else
+                %Unique holes of each marker
+                allHoles = vertcat(sameHoleInDifferentMarkers{numHole}{:, 3});
+                [~, uniqueHolesIndices] = unique(allHoles.Centroid, 'rows');
+                sameHoleInDifferentMarkers{numHole} = sameHoleInDifferentMarkers{numHole}(uniqueHolesIndices, :);
+                
+                %New hole
                 numHole = numHole + 1;
                 sameHoleInDifferentMarkers(numHole) = pairedRegions(1,1);
             end
