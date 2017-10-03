@@ -195,10 +195,17 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         [~, uniqueHolesIndices] = unique(holes.Centroid, 'rows');
         uniqueHoles = holes(uniqueHolesIndices, :);
         
-        sameHoleInDifferentMarkers = pairedRegions(1, 1);
-        for numCoupledHoles = 1:size(uniqueHoles, 1)
-            cellfun(@(x) x.Area == uniqueHoles(numCoupledHoles).Area & ismember(x.Centroid, uniqueHoles(numCoupledHoles).Centroid, 'rows'), allHolesCoupled);
+        sameHoleInDifferentMarkers = {};
+        
+        numCoupledHoles = 1;
+        
+        while isempty(pairedRegions) == 0
+            coupledHoledActual = cellfun(@(x) x.Area == uniqueHoles.Area(numCoupledHoles) & ismember(x.Centroid, uniqueHoles.Centroid(numCoupledHoles, :), 'rows'), allHolesCoupled);
+            actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
+            pairedRegions(any(coupledHoledActual, 2), :) = [];
+            sameHoleInDifferentMarkers{1} = actualHoles;
         end
+        
         
         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
