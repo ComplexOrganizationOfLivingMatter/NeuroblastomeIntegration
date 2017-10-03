@@ -209,7 +209,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
             else %New sequence of holes
                 %Unique holes of each marker
-                [finalHoles] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
+                [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
                 
                 %New hole
                 numHole = numHole + 1;
