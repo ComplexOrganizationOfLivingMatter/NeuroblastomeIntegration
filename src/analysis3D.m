@@ -195,15 +195,21 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         [~, uniqueHolesIndices] = unique(holes.Centroid, 'rows');
         uniqueHoles = holes(uniqueHolesIndices, :);
         
-        sameHoleInDifferentMarkers = {};
+        sameHoleInDifferentMarkers = pairedRegions(1, 1);
         
-        numCoupledHoles = 1;
+        numHole = 1;
         
         while isempty(pairedRegions) == 0
-            coupledHoledActual = cellfun(@(x) x.Area == uniqueHoles.Area(numCoupledHoles) & ismember(x.Centroid, uniqueHoles.Centroid(numCoupledHoles, :), 'rows'), allHolesCoupled);
+            infoActualHoles = vertcat(sameHoleInDifferentMarkers{numHole}(:, 3));
+            %If two holes have the same area and centroids they are the
+            %same
+            coupledHoledActual = cellfun(@(x) ismember(x.Area, infoActualHoles.Area) & ismember(x.Centroid, infoActualHoles.Centroid, 'rows'), allHolesCoupled);
             actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
+            %Removing found holes
             pairedRegions(any(coupledHoledActual, 2), :) = [];
-            sameHoleInDifferentMarkers{1} = actualHoles;
+            allHolesCoupled(any(coupledHoledActual, 2), :) = [];
+            
+            sameHoleInDifferentMarkers{numHole} = actualHoles;
         end
         
         
