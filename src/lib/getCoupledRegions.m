@@ -45,12 +45,14 @@ function [ finalHoles ] = getCoupledRegions( holes )
         finalHoles(numHole, 5) = {finalHoles{numHole, 3}.Centroid - [xoffSet+1, yoffSet+1]};
     end
     
+    finalHoles = cell2table(finalHoles);
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid'};
+    
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
     
     
     
-    finalHoles = table(finalHoles);
-    
+
 end
 
