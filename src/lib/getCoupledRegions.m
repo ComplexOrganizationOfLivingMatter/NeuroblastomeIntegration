@@ -1,4 +1,4 @@
-function [ finalHoles ] = getCoupledRegions( holes, imgFiles )
+function [ finalHoles ] = getCoupledRegions( holes, maskFiles )
 %GETCOUPLEDREGIONS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -42,7 +42,14 @@ function [ finalHoles ] = getCoupledRegions( holes, imgFiles )
         finalHoles(numHole, 4) = {imcrop(actualImg, correspondenceOfTheOldImage)};
         
         %New centroids for all markers
-        finalHoles(numHole, 5) = {finalHoles{numHole, 3}.Centroid - [xoffSet+1, yoffSet+1]};
+        finalHoles(numHole, 5) = {[finalHoles{numHole, 3}.Centroid(1) - xoffSet+1, finalHoles{numHole, 3}.Centroid(2) - yoffSet+1]};
+        
+        markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
+        img = imread(maskFiles{markerIndex});
+        imshow(img)
+        hold on
+        plot(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2), '*')
+        close 
     end
     
     finalHoles = cell2table(finalHoles);
