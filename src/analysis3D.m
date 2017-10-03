@@ -16,31 +16,10 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     onlyImagesFilesMasks = cellfun(@(x) isempty(strfind(lower(x), 'mask')) == 0 & isempty(strfind(lower(x), 'neg')) & isempty(strfind(lower(x), 'original')) & isempty(strfind(lower(x), 'cel')), onlyImagesFiles);
     onlyImagesFilesMasks = onlyImagesFiles(onlyImagesFilesMasks);
     
-    patientOfImagesSplitted = cellfun(@(x) strsplit(x, '\'), onlyImagesFilesNoMasks, 'UniformOutput', false);
-    patientOfImages = cellfun(@(x) strsplit(x{end-1}, '_'), patientOfImagesSplitted, 'UniformOutput', false);
     
-    patientOfImagesOnlyCase = cell(size(patientOfImages, 1), 1);
-    for numImage = 1:size(patientOfImages, 1)
-        newCase = patientOfImages{numImage};
-        if size(newCase, 2) > 1
-            if newCase{2}(1) == 'A' || newCase{2}(1) == 'B' || isempty(newCase{1})
-                patientOfImagesOnlyCase(numImage) = {strjoin(newCase(1:2), '_')};
-            else
-                patientOfImagesOnlyCase(numImage) = newCase(1);
-            end
-        else
-            patientOfImagesOnlyCase(numImage) = {newCase};
-        end
-    end
-    
-    
-    patientsOnlyNumbers = regexp([patientOfImagesOnlyCase{:}], '[0-9]{4,}', 'match');
-    patientsOnlyNumbers = cellfun(@(x) str2double(x), [patientsOnlyNumbers{:}]);
-    
-    [uniqueCases, ~, uniqueCasesIndices] = unique(patientsOnlyNumbers);
     %Filtering by markers
-    [ filterOfMarkers, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks, uniqueCasesIndices );
-    [ filterOfMarkersMasks, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesMasks, uniqueCasesIndices );
+    [ filterOfMarkers, ~, uniqueCases ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks);
+    [ filterOfMarkersMasks, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesMasks);
     
 %     subWindowX = size(filterOfMarkers, 2);
 %     subWindowY = 1;
