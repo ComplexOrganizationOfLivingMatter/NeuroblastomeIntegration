@@ -13,6 +13,9 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     onlyImagesFilesNoMasks = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'neg')) & isempty(strfind(lower(x), 'original')) & isempty(strfind(lower(x), 'cel')), onlyImagesFiles);
     onlyImagesFilesNoMasks = onlyImagesFiles(onlyImagesFilesNoMasks);
     
+    onlyImagesFilesMasks = cellfun(@(x) isempty(strfind(lower(x), 'mask')) == 0 & isempty(strfind(lower(x), 'neg')) & isempty(strfind(lower(x), 'original')) & isempty(strfind(lower(x), 'cel')), onlyImagesFiles);
+    onlyImagesFilesMasks = onlyImagesFiles(onlyImagesFilesMasks);
+    
     patientOfImagesSplitted = cellfun(@(x) strsplit(x, '\'), onlyImagesFilesNoMasks, 'UniformOutput', false);
     patientOfImages = cellfun(@(x) strsplit(x{end-1}, '_'), patientOfImagesSplitted, 'UniformOutput', false);
     
@@ -36,14 +39,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
     
     [uniqueCases, ~, uniqueCasesIndices] = unique(patientsOnlyNumbers);
     %Filtering by markers
-    filterOfMarkers = zeros(size(uniqueCases, 2), size(possibleMarkers, 2));
-    meanOfGraythreshPerMarker = zeros(size(possibleMarkers, 2), 3);
-    for numMarker = 1:size(possibleMarkers, 2)
-        foundMarkers = cellfun(@(x) isempty(strfind(lower(x), lower(possibleMarkers{numMarker}))) == 0, onlyImagesFilesNoMasks);
-        casesInMarker = uniqueCasesIndices(foundMarkers);
-        %meanOfGraythreshPerMarker(numMarker, :) = calculateMeanGrayThreshOfImages(onlyImagesFilesNoMasks(foundMarkers));
-        filterOfMarkers(casesInMarker, numMarker) = find(foundMarkers)';
-    end
+    [ filterOfMarkers, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesNoMasks, uniqueCasesIndices );
+    [ filterOfMarkersMasks, ~ ] = relationMarker_Images( possibleMarkers, onlyImagesFilesMasks, uniqueCasesIndices );
     
 %     subWindowX = size(filterOfMarkers, 2);
 %     subWindowY = 1;
