@@ -200,7 +200,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             %If two holes have the same area and centroids they are the
             %same
             coupledHoledActual = cellfun(@(x) ismember(x.Area, infoActualHoles.Area) & ismember(x.Centroid, infoActualHoles.Centroid, 'rows'), allHolesCoupled);
-            if any(coupledHoledActual, 2)
+            if any(any(coupledHoledActual, 2))
                 actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
                 %Removing found holes
                 pairedRegions(any(coupledHoledActual, 2), :) = [];
