@@ -185,8 +185,30 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             end
 
             save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\finalGoodRegions_', date), 'pairedRegions', '-v7.3');
+        else
+            load(strcat(filePath, '\', filesInDir{finalGoodRegionsFiles}));
         end
 
+        %Region analysis
+        allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
+        holes = vertcat(allHolesCoupled{:});
+        [~, uniqueHolesIndices] = unique(holes.Centroid, 'rows');
+        uniqueHoles = holes(uniqueHolesIndices, :);
+        
+        sameHoleInDifferentMarkers = pairedRegions(1, 1);
+        for numCoupledHoles = 1:size(uniqueHoles, 1)
+            cellfun(@(x) x.Area == uniqueHoles(numCoupledHoles).Area & ismember(x.Centroid, uniqueHoles(numCoupledHoles).Centroid, 'rows'), allHolesCoupled);
+        end
+        
+        possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
+        allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
+        %Order by importance (
+        [values, indices] = sort(sum(allCombinationsPonderations, 2));
+        
+        realSituations = {'Low', 'Mid', 'High'};
+        allCombinations = permn(realSituations, size(possibleMarkers, 2));
+        allCombinations(indices, :);
+        
         %matchingImagesWithinMarkers(imagesByCase);
 %         
 % %         figure;
