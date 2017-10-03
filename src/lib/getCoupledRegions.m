@@ -4,7 +4,9 @@ function [ finalHoles ] = getCoupledRegions( holes )
 
     allHoles = vertcat(holes{:, 3});
     [~, uniqueHolesIndices] = unique(allHoles.Centroid, 'rows');
+    clearvars allHoles
     finalHoles = holes(uniqueHolesIndices, :);
+    
     
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
@@ -16,14 +18,26 @@ function [ finalHoles ] = getCoupledRegions( holes )
     %Second, two holes may have differents size. Calculate the real
     %centroid taking into account that these two holes could represent
     %different areas or more extensive ones.
-    correlationBetweenHoles = normxcorr2(imgOfMarker1, imgOfMarker2);
-    [ypeak, xpeak] = find(correlationBetweenHoles==maxCorrelation);
-    if size(ypeak, 1) > 1
-        xpeak = xpeak(1);
-        ypeak = ypeak(1);
+    finalHolesAsTable = vertcat(finalHoles{:, 3});
+    [~, indicesPerArea] = sort(finalHolesAsTable.Area);
+    finalHoles = finalHoles(indicesPerArea, :);
+    basicImage = finalHoles{1, 3}.Image{1};
+    
+    %Real cropped hole
+    for numHole = 2:size(finalHoles, 1)
+        actualImg = finalHoles{numHole, 3}.Image{1};
+        correlationBetweenHoles = normxcorr2(actualImg, basicImage);
+        [ypeak, xpeak] = find(correlationBetweenHoles == maxCorrelation);
+        if size(ypeak, 1) > 1
+            xpeak = xpeak(1);
+            ypeak = ypeak(1);
+        end
+        yoffSet = ypeak-size(actualImg,1);
+        xoffSet = xpeak-size(actualImg,2);
+        correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(actualImg,2), size(actualImg,1)];
+        
+        finalHoles(numHole, 4) = croppedImg;
     end
-    yoffSet = ypeak-size(imgOfMarker1,1);
-    xoffSet = xpeak-size(imgOfMarker1,2);
     
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
