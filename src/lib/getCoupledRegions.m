@@ -24,7 +24,15 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles )
     basicImage = finalHoles{1, 3}.Image{1};
     
     finalHoles(1, 4) = {basicImage};
-    finalHoles(1, 5) = {finalHoles{1, 3}.Centroid};
+    finalHoles(1, 5) = {[finalHoles{1, 3}.Centroid(1) + finalHoles{1, 3}.BoundingBox(1), finalHoles{1, 3}.Centroid(2) + finalHoles{1, 3}.BoundingBox(2)]};
+    numHole = 1;
+    markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
+    img = imread(maskFiles{markerIndex});
+    imshow(img)
+    hold on
+    plot(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2), '*')
+    close
+    
     %Real cropped hole
     for numHole = 2:size(finalHoles, 1)
         actualImg = finalHoles{numHole, 3}.Image{1};
