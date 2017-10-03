@@ -207,18 +207,15 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 allHolesCoupled(any(coupledHoledActual, 2), :) = [];
 
                 sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
-            else
+            else %New sequence of holes
                 %Unique holes of each marker
-                allHoles = vertcat(sameHoleInDifferentMarkers{numHole}{:, 3});
-                [~, uniqueHolesIndices] = unique(allHoles.Centroid, 'rows');
-                sameHoleInDifferentMarkers{numHole} = sameHoleInDifferentMarkers{numHole}(uniqueHolesIndices, :);
+                [finalHoles] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
                 
                 %New hole
                 numHole = numHole + 1;
                 sameHoleInDifferentMarkers(numHole) = pairedRegions(1,1);
             end
         end
-        numHole
         
         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
