@@ -61,7 +61,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
         img = imread(maskFiles{markerIndex});
         imgWithCentroid = zeros(size(img));
-        imgWithCentroid(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2)) = 0;
+        imgWithCentroid(round(finalHoles{numHole, 5}(1)), round(finalHoles{numHole, 5}(2))) = 1;
         imgDistance = bwdist(imgWithCentroid);
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
         imgOfRegion = img(imgDistance);
