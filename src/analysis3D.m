@@ -168,7 +168,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         %Region analysis
         allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
         sameHoleInDifferentMarkers = pairedRegions(1, 1);
-        radiusOfTheAreaTaken = 350;
+        radiusOfTheAreaTaken = 750;
         numHole = 1;
         
         while isempty(pairedRegions) == 0

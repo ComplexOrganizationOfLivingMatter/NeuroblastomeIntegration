@@ -60,12 +60,21 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         
         markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
         img = imread(maskFiles{markerIndex});
+        imgWithCentroid = zeros(size(img));
+        imgWithCentroid(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2)) = 0;
+        imgDistance = bwdist(imgWithCentroid);
+        imgDistance = imgDistance <= radiusOfTheAreaTaken;
+        imgOfRegion = img(imgDistance);
+        
+        finalHoles(numHole, 6) = imgOfRegion;
         figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
+        close
+        figure; imshow(imgOfRegion);
         close
     end
     
     finalHoles = cell2table(finalHoles);
-    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid'};
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgOfRegion'};
     
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
