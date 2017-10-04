@@ -84,7 +84,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             similarHolesProperties.maxDistanceOfCorrelations = 700;
             similarHolesProperties.maxDistanceBetweenPixels = 100;
             similarHolesProperties.minCorrelation = 0.5;
-            %radiusOfTheAreaTaken = 350;
+            
             couplingHoles = cell(size(filterOfMarkers, 2));
             for actualMarker = 1:size(filterOfMarkers, 2)
                 for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
@@ -168,7 +168,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         %Region analysis
         allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
         sameHoleInDifferentMarkers = pairedRegions(1, 1);
-        
+        radiusOfTheAreaTaken = 350;
         numHole = 1;
         
         while isempty(pairedRegions) == 0
@@ -193,7 +193,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             end
         end
         % The last hole
-        [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)));
+        [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken);
         
         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));

@@ -1,4 +1,4 @@
-function [ finalHoles ] = getCoupledRegions( holes, maskFiles )
+function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTaken )
 %GETCOUPLEDREGIONS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -53,17 +53,15 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles )
         newCentroid = regionprops(finalHoles{numHole, 4});
         if size(newCentroid, 1) > 1
             newCentroid = [];
-            newCentroid.Centroid = [size(basicImage,2) / 2, size(basicImage,1) / 2];
+            newCentroid.Centroid = [ypeak / 2, ypeak / 2];
         end
         %New centroids for all markers
         finalHoles(numHole, 5) = {[newCentroid.Centroid(1) + finalHoles{numHole, 3}.BoundingBox(1) + xoffSet, newCentroid.Centroid(2) + finalHoles{numHole, 3}.BoundingBox(2) + yoffSet]};
         
         markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
         img = imread(maskFiles{markerIndex});
-        figure; imshow(img)
-        hold on
-        plot(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2), '*')
-        close 
+        figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
+        close
     end
     
     finalHoles = cell2table(finalHoles);
