@@ -65,7 +65,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         imgWithCentroid(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1))) = 1;
         imgDistance = bwdist(imgWithCentroid);
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
-        imgOfRegion = double(img) .* imgDistance;
+        imgOfRegion = (double(img)/255) .* imgDistance;
         
         %%  IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
         %% PUEDE SER QUE EXISTAN ZONAS CON AGUJEROS GRANDES Y REALMENTE NO PUEDA HABER MUCHA FIBRA.
@@ -83,14 +83,21 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         
         %Col 7: img of region
         finalHoles(numHole, 7) = {imgOfRegion};
-        figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
-        close
-        figure; imshow(imgOfRegion);
-        close
+        
+%         figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
+%         close
+%         figure; imshow(imgOfRegion);
+%         close
+        
+        finalHoles(numHole, 8) = {double(finalHoles{numHole, 6}) .* imgDistance};
+        
+        finalHoles(numHole, 9) = sum(finalHoles{numHole, 7}) / sum(finalHoles{numHole, 8});
+        
+        
     end
     
     finalHoles = cell2table(finalHoles);
-    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion'};
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'percentageCoveredByFibre'};
     
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
