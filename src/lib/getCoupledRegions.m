@@ -80,15 +80,11 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         %% PUEDE SER QUE EXISTAN ZONAS CON AGUJEROS GRANDES Y REALMENTE NO PUEDA HABER MUCHA FIBRA.
         %% HABRIA QUE PONDERAR ESTO DE ALGUNA MANERA (ZONAS CON MUCHA CAPACIDAD DE FIBRA Y ZONAS CON POCA DEBIDO A LOS AGUJEROS)
 
-        wholeImgs = cell(size(finalHoles, 1) , 1);
-        for numImg = 1:size(finalHoles, 1)
-            [in] = ismember(finalHoles(:, 1), maskOfImagesByCase(numImg, 3));
-            if any(in)
-                wholeImgs(in) = maskOfImagesByCase(numImg, 1);
-            end
-        end
         %Col 6: imgWhereFibreCanFall
-        finalHoles(:, 6) = wholeImgs;
+        [in, index] = ismember(finalHoles(numHole, 1), maskOfImagesByCase(:, 3));
+        if any(in)
+            finalHoles(numHole, 6) = {imresize(maskOfImagesByCase{index, 1}, size(imgDistance), 'nearest')};
+        end
         
         %Col 7: img of region
         finalHoles(numHole, 7) = {imgOfRegion};
