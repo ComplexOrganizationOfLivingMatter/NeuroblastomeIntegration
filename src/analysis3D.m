@@ -191,7 +191,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                     sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
                 else %New sequence of holes
                     %Unique holes of each marker
-                    [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
+                    [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken, horzcat(maskOfImagesByCase, possibleMarkers'));
 
                     actualInfoOfMarkers = sameHoleInDifferentMarkers{numHole};
                     meanOfPercentageOfFibrePerRegion(numHole) = mean(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
@@ -207,8 +207,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             actualInfoOfMarkers = sameHoleInDifferentMarkers{numHole};
             meanOfPercentageOfFibrePerRegion(numHole) = mean(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
             stdOfPercentageOfFibrePerRegion(numHole) = std(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
-
-
 
             save(strcat(filePath, '\sameHoleInDifferentMarkers_', date), 'sameHoleInDifferentMarkers', 'meanOfPercentageOfFibrePerRegion', 'stdOfPercentageOfFibrePerRegion', '-v7.3');
         else
