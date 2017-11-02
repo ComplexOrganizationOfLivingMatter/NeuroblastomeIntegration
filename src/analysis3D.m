@@ -165,37 +165,56 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             load(strcat(filePath, '\', filesInDir{finalGoodRegionsFiles}));
         end
 
-        %Region analysis
-        allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
-        sameHoleInDifferentMarkers = pairedRegions(1, 1);
-        radiusOfTheAreaTaken = 750;
-        numHole = 1;
         
-        while isempty(pairedRegions) == 0
-            infoActualHoles = vertcat(sameHoleInDifferentMarkers{numHole}{:, 3});
-            %If two holes have the same area and centroids they are the
-            %same
-            coupledHoledActual = cellfun(@(x) ismember(x.Area, infoActualHoles.Area) & ismember(x.Centroid, infoActualHoles.Centroid, 'rows'), allHolesCoupled);
-            if any(any(coupledHoledActual, 2))
-                actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
-                %Removing found holes
-                pairedRegions(any(coupledHoledActual, 2), :) = [];
-                allHolesCoupled(any(coupledHoledActual, 2), :) = [];
+        %% Region analysis
+        finalsameHoleInDifferentMarkersFiles = cellfun(@(x) isempty(strfind(x, 'sameHoleInDifferentMarkers_')) == 0, filesInDir);
+        if any(finalsameHoleInDifferentMarkersFiles) == 0
+            allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
+            sameHoleInDifferentMarkers = pairedRegions(1, 1);
+            radiusOfTheAreaTaken = 750;
+            numHole = 1;
 
-                sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
-            else %New sequence of holes
-                %Unique holes of each marker
-                [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
-                
-                %New hole
-                numHole = numHole + 1;
-                sameHoleInDifferentMarkers(numHole) = pairedRegions(1,1);
+            meanOfPercentageOfFibrePerRegion = [];
+            stdOfPercentageOfFibrePerRegion = [];
+
+            while isempty(pairedRegions) == 0
+                infoActualHoles = vertcat(sameHoleInDifferentMarkers{numHole}{:, 3});
+                %If two holes have the same area and centroids they are the
+                %same
+                coupledHoledActual = cellfun(@(x) ismember(x.Area, infoActualHoles.Area) & ismember(x.Centroid, infoActualHoles.Centroid, 'rows'), allHolesCoupled);
+                if any(any(coupledHoledActual, 2))
+                    actualHoles = vertcat(pairedRegions{any(coupledHoledActual, 2), :});
+                    %Removing found holes
+                    pairedRegions(any(coupledHoledActual, 2), :) = [];
+                    allHolesCoupled(any(coupledHoledActual, 2), :) = [];
+
+                    sameHoleInDifferentMarkers{numHole} = vertcat(sameHoleInDifferentMarkers{numHole}, actualHoles);
+                else %New sequence of holes
+                    %Unique holes of each marker
+                    [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole});
+
+                    actualInfoOfMarkers = sameHoleInDifferentMarkers{numHole};
+                    meanOfPercentageOfFibrePerRegion(numHole) = mean(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
+                    stdOfPercentageOfFibrePerRegion(numHole) = std(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
+
+                    %New hole
+                    numHole = numHole + 1;
+                    sameHoleInDifferentMarkers(numHole) = pairedRegions(1,1);
+                end
             end
+            % The last hole
+            [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken, horzcat(maskOfImagesByCase, possibleMarkers'));
+            actualInfoOfMarkers = sameHoleInDifferentMarkers{numHole};
+            meanOfPercentageOfFibrePerRegion(numHole) = mean(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
+            stdOfPercentageOfFibrePerRegion(numHole) = std(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
+
+
+
+            save(strcat(filePath, '\sameHoleInDifferentMarkers_', date), 'sameHoleInDifferentMarkers', 'meanOfPercentageOfFibrePerRegion', 'stdOfPercentageOfFibrePerRegion', '-v7.3');
+        else
+            load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
         end
-        % The last hole
-        [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken, horzcat(maskOfImagesByCase, possibleMarkers'));
         
-        save(strcat(filePath, '\smaeHoleInDifferentMarkers_', date), 'sameHoleInDifferentMarkers');
         
 %         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
 %         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
