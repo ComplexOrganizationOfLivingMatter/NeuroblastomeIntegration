@@ -6,7 +6,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     [~, uniqueHolesIndices] = unique(allHoles.Centroid, 'rows');
     clearvars allHoles
     finalHoles = holes(uniqueHolesIndices, :);
-    
+    vtnHoles = cellfun(@(x) isempty(strfind(x, 'Vitronectine')) == 0, finalHoles(:, 1));
+    finalHoles(end+1, :) = finalHoles(vtnHoles, :);
+    finalHoles(vtnHoles, 12) = {'MACR'};
+    finalHoles(end, 12) = {'HEPA'};
     
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
@@ -28,14 +31,14 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     numHole = 1;
     markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
     marker = maskFiles{markerIndex};
-    img = imread(marker);
-    imshow(img)
-    hold on
-    plot(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2), '*')
-    close
+%     img = imread(marker);
+%     imshow(img)
+%     hold on
+%     plot(finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2), '*')
+%     close
     
     %Real cropped hole
-    for numHole = 2:size(finalHoles, 1)
+    for numHole = 1:size(finalHoles, 1)
         actualImg = finalHoles{numHole, 3}.Image{1};
         correlationBetweenHoles = normxcorr2(basicImage, actualImg);
         [ypeak, xpeak] = find(correlationBetweenHoles == max(correlationBetweenHoles(:)));
@@ -59,6 +62,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         finalHoles(numHole, 5) = {[newCentroid.Centroid(1) + finalHoles{numHole, 3}.BoundingBox(1) + xoffSet, newCentroid.Centroid(2) + finalHoles{numHole, 3}.BoundingBox(2) + yoffSet]};
         
         markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
+        if sum(markerIndex) > 1
+            markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0 & isempty(strfind(lower(x), lower(finalHoles{numHole, 12}))) == 0 , maskFiles);
+        end
+        
         img = imread(maskFiles{markerIndex});
         img = img(:, :, 1);
         imgWithCentroid = zeros(size(img));
@@ -91,13 +98,15 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         
         finalHoles(numHole, 8) = {double(finalHoles{numHole, 6}) .* imgDistance};
         
-        finalHoles(numHole, 9) = sum(finalHoles{numHole, 7}) / sum(finalHoles{numHole, 8});
+        finalHoles(numHole, 9) = {sum(finalHoles{numHole, 7})};
+        finalHoles(numHole, 10) = {sum(finalHoles{numHole, 8})};
+        finalHoles(numHole, 11) = {sum(finalHoles{numHole, 7}) / sum(finalHoles{numHole, 8})};
         
         
     end
     
     finalHoles = cell2table(finalHoles);
-    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'percentageCoveredByFibre'};
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'fibreArea', 'possibleArea','percentageCoveredByFibre'};
     
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
