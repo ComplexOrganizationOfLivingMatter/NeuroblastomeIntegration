@@ -193,7 +193,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             end
         end
         % The last hole
-        [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken);
+        [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken, horzcat(maskOfImagesByCase, possibleMarkers'));
         
         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));

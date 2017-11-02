@@ -1,4 +1,4 @@
-function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTaken )
+function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTaken, maskOfImagesByCase )
 %GETCOUPLEDREGIONS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -67,7 +67,22 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
         imgOfRegion = double(img) .* imgDistance;
         
-        finalHoles(numHole, 6) = {imgOfRegion};
+        %%  IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
+        %% PUEDE SER QUE EXISTAN ZONAS CON AGUJEROS GRANDES Y REALMENTE NO PUEDA HABER MUCHA FIBRA.
+        %% HABRIA QUE PONDERAR ESTO DE ALGUNA MANERA (ZONAS CON MUCHA CAPACIDAD DE FIBRA Y ZONAS CON POCA DEBIDO A LOS AGUJEROS)
+
+        wholeImgs = cell(size(finalHoles, 1) , 1);
+        for numImg = 1:size(maskOfImagesByCase, 1)
+            [in, index] = ismember(maskOfImagesByCase(numImg, 3), finalHoles(:, 1));
+            if in
+                wholeImgs(index) = maskOfImagesByCase(numImg, 1);
+            end
+        end
+        %Col 6: imgWhereFibreCanFall
+        finalHoles = horzcat(finalHoles, wholeImgs);
+        
+        %Col 7: img of region
+        finalHoles(numHole, 7) = {imgOfRegion};
         figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
         close
         figure; imshow(imgOfRegion);
@@ -75,7 +90,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     end
     
     finalHoles = cell2table(finalHoles);
-    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgOfRegion'};
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion'};
     
     %Third, we are going to get the region within the real
     %image corresponding to the holes.
