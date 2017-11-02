@@ -79,10 +79,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         %% HABRIA QUE PONDERAR ESTO DE ALGUNA MANERA (ZONAS CON MUCHA CAPACIDAD DE FIBRA Y ZONAS CON POCA DEBIDO A LOS AGUJEROS)
 
         wholeImgs = cell(size(finalHoles, 1) , 1);
-        for numImg = 1:size(maskOfImagesByCase, 1)
-            [in, index] = ismember(maskOfImagesByCase(numImg, 3), finalHoles(:, 1));
-            if in
-                wholeImgs(index) = maskOfImagesByCase(numImg, 1);
+        for numImg = 1:size(finalHoles, 1)
+            [in] = ismember(finalHoles(:, 1), maskOfImagesByCase(numImg, 3));
+            if any(in)
+                wholeImgs(in) = maskOfImagesByCase(numImg, 1);
             end
         end
         %Col 6: imgWhereFibreCanFall
