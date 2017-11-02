@@ -7,9 +7,11 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     clearvars allHoles
     finalHoles = holes(uniqueHolesIndices, :);
     vtnHoles = cellfun(@(x) isempty(strfind(x, 'Vitronectine')) == 0, finalHoles(:, 1));
-    finalHoles(end+1, :) = finalHoles(vtnHoles, :);
-    finalHoles(vtnHoles, 12) = {'MACR'};
-    finalHoles(end, 12) = {'HEPA'};
+    if any(vtnHoles)
+        finalHoles(end+1, :) = finalHoles(vtnHoles, :);
+        finalHoles(vtnHoles, 12) = {'MACR'};
+        finalHoles(end, 12) = {'HEPA'};
+    end
     
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
@@ -28,9 +30,9 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     
     finalHoles(1, 4) = {basicImage};
     finalHoles(1, 5) = {finalHoles{1, 3}.Centroid};
-    numHole = 1;
-    markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
-    marker = maskFiles{markerIndex};
+%     numHole = 1;
+%     markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
+%     marker = maskFiles{markerIndex};
 %     img = imread(marker);
 %     imshow(img)
 %     hold on
@@ -74,11 +76,12 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
         imgOfRegion = (double(img)/255) .* imgDistance;
         
-        %%  IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
-        %Third, we are going to get the region within the real
-        %image corresponding to the holes.
-        %% PUEDE SER QUE EXISTAN ZONAS CON AGUJEROS GRANDES Y REALMENTE NO PUEDA HABER MUCHA FIBRA.
-        %% HABRIA QUE PONDERAR ESTO DE ALGUNA MANERA (ZONAS CON MUCHA CAPACIDAD DE FIBRA Y ZONAS CON POCA DEBIDO A LOS AGUJEROS)
+        % IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
+        % Third, we are going to get the region within the real
+        % image corresponding to the holes.
+        % There may be areas with big holes and it really couldn't contain
+        % any fibre. Therefore, we should ponderate in someway whether or
+        % not we could find much fibre within the are.
 
         %Col 6: imgWhereFibreCanFall
         [in, index] = ismember(finalHoles(numHole, 1), maskOfImagesByCase(:, 3));
