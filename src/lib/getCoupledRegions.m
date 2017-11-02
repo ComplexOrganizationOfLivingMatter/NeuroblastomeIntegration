@@ -11,6 +11,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         finalHoles(end+1, :) = finalHoles(vtnHoles, :);
         finalHoles(vtnHoles, 12) = {'MACR'};
         finalHoles(end, 12) = {'HEPA'};
+    else
+        finalHoles(:, 12) = {[]};
     end
     
     %First, we need to check if exist overlapping holes, i.e two holes in
@@ -108,7 +110,6 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         catch ex
             disp('Error');
             disp(ex.message)
-            disp(ex.stack)
         end
     end
     
