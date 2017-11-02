@@ -14,7 +14,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
     %At the end, we only should have one region per marker
-    if size(unique(finalHoles(:, 1)), 1) < size(finalHoles, 1) + 1
+    if size(unique(finalHoles(:, 1)), 1) + 1 < size(finalHoles, 1)
         disp('not yet');
     end
     
@@ -108,6 +108,6 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     end
     
     finalHoles = cell2table(finalHoles);
-    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'fibreArea', 'possibleArea', 'percentageCoveredByFibre', 'HEPA_OR_MACR'};
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'imgWhereFibreCanFall_Region', 'fibreArea', 'possibleArea', 'percentageCoveredByFibre', 'HEPA_OR_MACR'};
 end
 
