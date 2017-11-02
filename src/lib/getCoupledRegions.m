@@ -14,7 +14,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
     %At the end, we only should have one region per marker
-    if size(unique(finalHoles(:, 1)), 1) < size(finalHoles, 1)
+    if size(unique(finalHoles(:, 1)), 1) < size(finalHoles, 1) + 1
         disp('not yet');
     end
     
@@ -75,6 +75,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         imgOfRegion = (double(img)/255) .* imgDistance;
         
         %%  IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
+        %Third, we are going to get the region within the real
+        %image corresponding to the holes.
         %% PUEDE SER QUE EXISTAN ZONAS CON AGUJEROS GRANDES Y REALMENTE NO PUEDA HABER MUCHA FIBRA.
         %% HABRIA QUE PONDERAR ESTO DE ALGUNA MANERA (ZONAS CON MUCHA CAPACIDAD DE FIBRA Y ZONAS CON POCA DEBIDO A LOS AGUJEROS)
 
@@ -86,7 +88,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
             end
         end
         %Col 6: imgWhereFibreCanFall
-        finalHoles = horzcat(finalHoles, wholeImgs);
+        finalHoles(:, 6) = wholeImgs;
         
         %Col 7: img of region
         finalHoles(numHole, 7) = {imgOfRegion};
@@ -98,21 +100,14 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         
         finalHoles(numHole, 8) = {double(finalHoles{numHole, 6}) .* imgDistance};
         
-        finalHoles(numHole, 9) = {sum(finalHoles{numHole, 7})};
-        finalHoles(numHole, 10) = {sum(finalHoles{numHole, 8})};
-        finalHoles(numHole, 11) = {sum(finalHoles{numHole, 7}) / sum(finalHoles{numHole, 8})};
+        finalHoles(numHole, 9) = {sum(sum(finalHoles{numHole, 7}))};
+        finalHoles(numHole, 10) = {sum(sum(finalHoles{numHole, 8}))};
+        finalHoles(numHole, 11) = {finalHoles{numHole, 9} / finalHoles{numHole, 10}};
         
         
     end
     
     finalHoles = cell2table(finalHoles);
-    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'fibreArea', 'possibleArea','percentageCoveredByFibre'};
-    
-    %Third, we are going to get the region within the real
-    %image corresponding to the holes.
-    
-    
-    
-
+    finalHoles.Properties.VariableNames = {'Marker', 'NumHole', 'HoleProperties', 'CorrectedImage', 'CorrectedCentroid', 'imgWhereFibreCanFall', 'imgOfRegion', 'fibreArea', 'possibleArea', 'percentageCoveredByFibre', 'HEPA_OR_MACR'};
 end
 
