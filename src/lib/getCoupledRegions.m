@@ -29,8 +29,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 finalHoles(indicesOfDuplicated(1), 2) = {horzcat(finalHoles{duplicatedMarkers, 2})};
                 newHolesInfo = vertcat(finalHoles{duplicatedMarkers, 3});
                 
+                
                 %Create an image with the duplicated holes
-                mean(newHolesInfo);
                 allPixels = newHolesInfo.PixelList;
                 allPixels = vertcat(allPixels{:});
                 
@@ -49,11 +49,41 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 centroidsPonderated = newHolesInfo.Centroid .* repmat(areasOfHolesPonderated, 1, 2);
                 newCentroids = sum(centroidsPonderated);
                 
-                %Add centroid
-                newHolesInfo(end+1, :) = newCentroids;
+                % Add a duplicated first row
+                newHolesInfo = vertcat(newHolesInfo(1, :), newHolesInfo);
                 
-                
-                
+                %Add new info
+                % - Centroid
+                newHolesInfo.Centroid(1, :) = newCentroids;
+                % - Area
+                newHolesInfo.Area(1) = totalAreaOfHoles;
+                % - Img: with all the holes
+                newHolesInfo.Image(1) = {newImgWithAllHoles};
+                % - Bounding box
+                newBBox = zeros(1, 4);
+                newBBox([1 2]) = min(allPixels);
+                newBBox([3 4]) = max(allPixels) - min(allPixels);
+                newHolesInfo.BoundingBox(1, :) = newBBox;
+                newHolesInfo.MajorAxisLength(1) = 0;
+                newHolesInfo.MinorAxisLength(1) = 0;
+                newHolesInfo.Eccentricity(1) = 0;
+                newHolesInfo.Orientation(1) = -0;
+                newHolesInfo.ConvexHull{1} = {};
+                newHolesInfo.ConvexImage{1} = {};
+                newHolesInfo.ConvexArea(1) = 0;
+                newHolesInfo.FilledImage{1} = {};
+                newHolesInfo.FilledArea(1) = 0;
+                newHolesInfo.EulerNumber(1) = 0;
+                newHolesInfo.PixelIdxList{1} = {};
+                newHolesInfo.Perimeter(1) = 0;
+                newHolesInfo.PerimeterOld(1) = 0;
+                newHolesInfo.Extent(1) = 0;
+                newHolesInfo.Solidity(1) = 0;
+                newHolesInfo.EquivDiameter(1) = 0;
+                newHolesInfo.Extrema{1} = {};
+                % - Pixel list
+                [x, y] = find(newImgWithAllHoles);
+                newHolesInfo.PixelList{1} = {[x, y]};
                 
                 finalHoles(indicesOfDuplicated(1), 3) = {newHolesInfo};
                 
@@ -146,10 +176,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         %Col 7: img of region
         finalHoles(numHole, 7) = {imgOfRegion};
         
-        %         figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
-        %         close
-        %         figure; imshow(imgOfRegion);
-        %         close
+        figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
+        %close
+        figure; imshow(imgOfRegion);
+        %close
         
         finalHoles(numHole, 8) = {double(finalHoles{numHole, 6}) .* imgDistance};
         
