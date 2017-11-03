@@ -29,7 +29,18 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 finalHoles(indicesOfDuplicated(1), 2) = {horzcat(finalHoles{duplicatedMarkers, 2})};
                 newHolesInfo = vertcat(finalHoles{duplicatedMarkers, 3});
                 
+                %Create an image with the duplicated holes
+                mean(newHolesInfo);
+                allPixels = newHolesInfo.PixelList;
+                allPixels = vertcat(allPixels{:});
                 
+                allPixelsIds = newHolesInfo.PixelIdxList;
+                allPixelsIds = vertcat(allPixelsIds{:});
+                
+                [~, index] = ismember(duplicatedHoles(1, 1), maskOfImagesByCase(:, 3));
+                
+                newImgWithAllHoles = zeros(size(maskOfImagesByCase{index, 1}));
+                newImgWithAllHoles(allPixelsIds) = 1;
                 
                 %Create a new centroid with all the holes
                 %It is ponderated by its area
@@ -37,10 +48,12 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 areasOfHolesPonderated = newHolesInfo.Area / totalAreaOfHoles;
                 centroidsPonderated = newHolesInfo.Centroid .* repmat(areasOfHolesPonderated, 1, 2);
                 newCentroids = sum(centroidsPonderated);
-                mean(newHolesInfo);
-                %Add centroid
                 
-                %Create an image with the duplicated holes
+                %Add centroid
+                newHolesInfo(end+1, :) = newCentroids;
+                
+                
+                
                 
                 finalHoles(indicesOfDuplicated(1), 3) = {newHolesInfo};
                 
