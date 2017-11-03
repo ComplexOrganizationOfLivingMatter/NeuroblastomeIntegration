@@ -18,8 +18,35 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
     %At the end, we only should have one region per marker
-    if size(unique(finalHoles(:, 1)), 1) + 1 < size(finalHoles, 1)
-        disp('not yet');
+    uniqueMarkers = unique(finalHoles(:, 1));
+    if size(uniqueMarkers, 1) + 1 < size(finalHoles, 1)
+        for numMarker = 1:size(uniqueMarkers, 1)
+            duplicatedMarkers = ismember(finalHoles(:, 1), uniqueMarkers(numMarker));
+            if sum(duplicatedMarkers) > 1
+                duplicatedHoles = finalHoles(duplicatedMarkers, :);
+                indicesOfDuplicated = find(duplicatedMarkers);
+                % Unifying info
+                finalHoles(indicesOfDuplicated(1), 2) = {horzcat(finalHoles{duplicatedMarkers, 2})};
+                newHolesInfo = vertcat(finalHoles{duplicatedMarkers, 3});
+                
+                
+                
+                %Create a new centroid with all the holes
+                %It is ponderated by its area
+                totalAreaOfHoles = sum(newHolesInfo.Area);
+                areasOfHolesPonderated = newHolesInfo.Area / totalAreaOfHoles;
+                centroidsPonderated = newHolesInfo.Centroid .* repmat(areasOfHolesPonderated, 1, 2);
+                newCentroids = sum(centroidsPonderated);
+                mean(newHolesInfo);
+                %Add centroid
+                
+                %Create an image with the duplicated holes
+                
+                finalHoles(indicesOfDuplicated(1), 3) = {newHolesInfo};
+                
+                finalHoles(indicesOfDuplicated(2:end)) = [];
+            end
+        end
     end
     
     %Second, two holes may have differents size. Calculate the real
