@@ -18,6 +18,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
     %At the end, we only should have one region per marker
+    
+    % The results of this will be a table with all the necessary info of
+    % the unified holes. For example, the mean will be the total area of
+    % all the holes.
     uniqueMarkers = unique(finalHoles(:, 1));
     if size(uniqueMarkers, 1) + 1 < size(finalHoles, 1)
         for numMarker = 1:size(uniqueMarkers, 1)
@@ -49,8 +53,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 centroidsPonderated = newHolesInfo.Centroid .* repmat(areasOfHolesPonderated, 1, 2);
                 newCentroids = sum(centroidsPonderated);
                 
-                % Add a duplicated first row
-                newHolesInfo = vertcat(newHolesInfo(1, :), newHolesInfo);
+                % We only get a row and transform it into a mean of holes
+                newHolesInfo = newHolesInfo(1, :);
                 
                 %Add new info
                 % - Centroid
@@ -176,10 +180,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         %Col 7: img of region
         finalHoles(numHole, 7) = {imgOfRegion};
         
-        figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
-        %close
-        figure; imshow(imgOfRegion);
-        %close
+%         figure; imshow(insertShape(img, 'circle', [finalHoles{numHole, 5}(1), finalHoles{numHole, 5}(2) radiusOfTheAreaTaken], 'LineWidth', 5));
+%         %close
+%         figure; imshow(imgOfRegion);
+%         %close
         
         finalHoles(numHole, 8) = {double(finalHoles{numHole, 6}) .* imgDistance};
         
