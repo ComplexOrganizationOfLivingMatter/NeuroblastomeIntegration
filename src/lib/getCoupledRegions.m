@@ -101,7 +101,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     basicImage = finalHoles{1, 3}.Image{1};
     
     finalHoles(1, 4) = {basicImage};
-    finalHoles(1, 5) = {finalHoles{1, 3}.Centroid};
+    finalHoles(1, 5) = {finalHoles{1, 3}.Centroid(1)};
 %     numHole = 1;
 %     markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
 %     marker = maskFiles{markerIndex};
