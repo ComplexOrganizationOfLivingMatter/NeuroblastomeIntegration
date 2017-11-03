@@ -87,7 +87,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 
                 finalHoles(indicesOfDuplicated(1), 3) = {newHolesInfo};
                 
-                finalHoles(indicesOfDuplicated(2:end)) = [];
+                finalHoles(indicesOfDuplicated(2:end), :) = [];
             end
         end
     end
