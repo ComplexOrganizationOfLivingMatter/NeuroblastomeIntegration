@@ -65,8 +65,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 newHolesInfo.Image(1) = {newImgWithAllHoles};
                 % - Bounding box
                 newBBox = zeros(1, 4);
-                newBBox([1 2]) = min(allPixels);
-                newBBox([3 4]) = max(allPixels) - min(allPixels);
+                newBBox([2 1]) = min(allPixels);
+                newBBox([4 3]) = max(allPixels) - min(allPixels);
                 newHolesInfo.BoundingBox(1, :) = newBBox;
                 newHolesInfo.MajorAxisLength(1) = 0;
                 newHolesInfo.MinorAxisLength(1) = 0;
@@ -120,6 +120,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         actualImg = finalHoles{numHole, 3}.Image{1};
         
         try
+            %actualImg must be larger than basicImage
             correlationBetweenHoles = normxcorr2(basicImage, actualImg);
 
             [ypeak, xpeak] = find(correlationBetweenHoles == max(correlationBetweenHoles(:)));
@@ -129,7 +130,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
             end
             yoffSet = ypeak-size(basicImage,1);
             xoffSet = xpeak-size(basicImage,2);
-            correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(basicImage,2), size(basicImage,1)];
+            correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(basicImage, 2), size(basicImage, 1)];
+            %figure; imshow(insertShape(double(actualImg), 'FilledRectangle', correspondenceOfTheOldImage, 'Color', 'green'));
         catch ex
             disp('Error');
             disp(ex.message)
@@ -149,7 +151,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
             newCentroid.Centroid = [ypeak / 2, xpeak / 2];
         end
         %New centroids for all markers
-        finalHoles(numHole, 5) = {[newCentroid.Centroid(1) + finalHoles{numHole, 3}.BoundingBox(1) + xoffSet, newCentroid.Centroid(2) + finalHoles{numHole, 3}.BoundingBox(2) + yoffSet]};
+        finalHoles(numHole, 5) = {[newCentroid.Centroid(1) + finalHoles{numHole, 3}.BoundingBox(2) + yoffSet, newCentroid.Centroid(2) + finalHoles{numHole, 3}.BoundingBox(1) + xoffSet]};
         
         markerIndex = cellfun(@(x) isempty(strfind(lower(x), lower(finalHoles{numHole, 1}))) == 0, maskFiles);
         if sum(markerIndex) > 1
@@ -158,6 +160,8 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         
         img = imread(maskFiles{markerIndex});
         img = img(:, :, 1);
+        figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
+        
         imgWithCentroid = zeros(size(img));
         imgWithCentroid(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1))) = 1;
         imgDistance = bwdist(imgWithCentroid);
