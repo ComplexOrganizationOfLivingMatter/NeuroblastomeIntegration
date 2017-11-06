@@ -23,7 +23,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     % the unified holes. For example, the mean will be the total area of
     % all the holes.
     uniqueMarkers = unique(finalHoles(:, 1));
-    if size(uniqueMarkers, 1) + 1 < size(finalHoles, 1)
+    if (size(uniqueMarkers, 1) + any(vtnHoles)) < size(finalHoles, 1)
         for numMarker = 1:size(uniqueMarkers, 1)
             duplicatedMarkers = ismember(finalHoles(:, 1), uniqueMarkers(numMarker));
             if sum(duplicatedMarkers) > 1
@@ -149,6 +149,9 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         if size(newCentroid, 1) > 1
             newCentroid = [];
             newCentroid.Centroid = [ypeak / 2, xpeak / 2];
+        else
+            actualCentroid = horzcat(newCentroid.Centroid(:));
+            newCentroid.Centroid = [actualCentroid(2), actualCentroid(1)];
         end
         %New centroids for all markers
         finalHoles(numHole, 5) = {[newCentroid.Centroid(1) + finalHoles{numHole, 3}.BoundingBox(2) + yoffSet, newCentroid.Centroid(2) + finalHoles{numHole, 3}.BoundingBox(1) + xoffSet]};
@@ -160,13 +163,14 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         
         img = imread(maskFiles{markerIndex});
         img = img(:, :, 1);
-        figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         
         imgWithCentroid = zeros(size(img));
-        imgWithCentroid(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1))) = 1;
+        imgWithCentroid(round(finalHoles{numHole, 5}(1)), round(finalHoles{numHole, 5}(2))) = 1;
         imgDistance = bwdist(imgWithCentroid);
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
         imgOfRegion = (double(img)/255) .* imgDistance;
+        
+        %figure; imshow(imgOfRegion); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         
         % IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
         % Third, we are going to get the region within the real
