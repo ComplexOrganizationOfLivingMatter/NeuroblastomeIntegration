@@ -211,7 +211,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %             save(strcat(filePath, '\sameHoleInDifferentMarkers_', date), 'sameHoleInDifferentMarkers', 'meanOfPercentageOfFibrePerRegion', 'stdOfPercentageOfFibrePerRegion', '-v7.3');
             save(strcat(filePath, '\sameHoleInDifferentMarkers_', date), 'sameHoleInDifferentMarkers', '-v7.3');
         else
-            load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
+            %load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
         end
         
         

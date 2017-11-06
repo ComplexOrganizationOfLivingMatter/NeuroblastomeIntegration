@@ -168,10 +168,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         imgWithCentroid(round(finalHoles{numHole, 5}(1)), round(finalHoles{numHole, 5}(2))) = 1;
         imgDistance = bwdist(imgWithCentroid);
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
-        figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
+%         figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         imgOfRegion = (double(img)/255) .* imgDistance;
         
-        figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
+%         figure; imshow(imgOfRegion); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         
         % IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
         % Third, we are going to get the region within the real
