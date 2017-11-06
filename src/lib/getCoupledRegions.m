@@ -57,16 +57,16 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 newHolesInfo = newHolesInfo(1, :);
                 
                 %Add new info
-                % - Centroid
-                newHolesInfo.Centroid(1, :) = newCentroids;
+                % - Bounding box
+                newBBox = zeros(1, 4);
+                newBBox([1 2]) = min(allPixels);
+                newBBox([3 4]) = max(allPixels) - min(allPixels);
+                % - Centroid within the bounding box
+                newHolesInfo.Centroid(1, :) = newCentroids - min(allPixels);
                 % - Area
                 newHolesInfo.Area(1) = totalAreaOfHoles;
                 % - Img: with all the holes
-                newHolesInfo.Image(1) = {newImgWithAllHoles};
-                % - Bounding box
-                newBBox = zeros(1, 4);
-                newBBox([2 1]) = min(allPixels);
-                newBBox([4 3]) = max(allPixels) - min(allPixels);
+                newHolesInfo.Image(1) = {imcrop(newImgWithAllHoles, newBBox)};
                 newHolesInfo.BoundingBox(1, :) = newBBox;
                 newHolesInfo.MajorAxisLength(1) = 0;
                 newHolesInfo.MinorAxisLength(1) = 0;
@@ -168,9 +168,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         imgWithCentroid(round(finalHoles{numHole, 5}(1)), round(finalHoles{numHole, 5}(2))) = 1;
         imgDistance = bwdist(imgWithCentroid);
         imgDistance = imgDistance <= radiusOfTheAreaTaken;
+        figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         imgOfRegion = (double(img)/255) .* imgDistance;
         
-        %figure; imshow(imgOfRegion); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
+        figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         
         % IMPORTANT: GET INFO OF BIOPSY TAKING INTO ACCOUNT THE HOLES.
         % Third, we are going to get the region within the real
