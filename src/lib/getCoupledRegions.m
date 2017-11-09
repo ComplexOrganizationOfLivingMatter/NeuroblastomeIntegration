@@ -6,14 +6,6 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     [~, uniqueHolesIndices] = unique(allHoles.Centroid, 'rows');
     clearvars allHoles
     finalHoles = holes(uniqueHolesIndices, :);
-    vtnHoles = cellfun(@(x) isempty(strfind(x, 'Vitronectine')) == 0, finalHoles(:, 1));
-    if any(vtnHoles)
-        finalHoles(end+1, :) = finalHoles(vtnHoles, :);
-        finalHoles(vtnHoles, 12) = {'MACR'};
-        finalHoles(end, 12) = {'HEPA'};
-    else
-        finalHoles(:, 12) = {[]};
-    end
     
     %First, we need to check if exist overlapping holes, i.e two holes in
     %one marker that form a bigger one in another marker.
@@ -23,7 +15,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     % the unified holes. For example, the mean will be the total area of
     % all the holes.
     uniqueMarkers = unique(finalHoles(:, 1));
-    if (size(uniqueMarkers, 1) + any(vtnHoles)) < size(finalHoles, 1)
+    if (size(uniqueMarkers, 1)) < size(finalHoles, 1)
         for numMarker = 1:size(uniqueMarkers, 1)
             duplicatedMarkers = ismember(finalHoles(:, 1), uniqueMarkers(numMarker));
             if sum(duplicatedMarkers) > 1
@@ -94,6 +86,15 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
                 finalHoles(indicesOfDuplicated(2:end), :) = [];
             end
         end
+    end
+    
+    vtnHoles = cellfun(@(x) isempty(strfind(x, 'Vitronectine')) == 0, finalHoles(:, 1));
+    if any(vtnHoles)
+        finalHoles(end+1, :) = finalHoles(vtnHoles, :);
+        finalHoles(vtnHoles, 12) = {'MACR'};
+        finalHoles(end, 12) = {'HEPA'};
+    else
+        finalHoles(:, 12) = {[]};
     end
     
     %Second, two holes may have differents size. Calculate the real
