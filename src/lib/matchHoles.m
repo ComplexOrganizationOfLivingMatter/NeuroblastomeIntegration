@@ -5,6 +5,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( maskOfImagesByCase1, maskO
 %	 - Shape : We do a correlation between them, if any of them can be a
 %	 subset of the other.
 
+    %% MANUALLY MATCHING
     holesOfMarker1 = maskOfImagesByCase1{1, 2};
     holesOfMarker2 = maskOfImagesByCase2{1, 2};
 
@@ -65,6 +66,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( maskOfImagesByCase1, maskO
     close all
         
         
+    %% AUTOMATIC MATCHING OF HOLES: TOO COMPLEX AND NOT TOO GOOD
         %     distanceBetweenHoles = pdist2(holesOfMarker1.Centroid, holesOfMarker2.Centroid);
 %     closerHoles = distanceBetweenHoles < similarHolesProperties.maxDistanceOfCentroids;
     
