@@ -81,8 +81,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         couplingHolesFiles = cellfun(@(x) isempty(strfind(x, 'couplingHoles_')) == 0, filesInDir);
         if any(couplingHolesFiles) == 0
             %% Matching of marker images regarding their holes
-            similarHolesProperties.maxDistanceOfCorrelations = 700;
-            similarHolesProperties.maxDistanceBetweenPixels = 100;
+            similarHolesProperties.maxDistanceOfCorrelations = 1500;
+            similarHolesProperties.maxDistanceBetweenPixels = 500;
             similarHolesProperties.minCorrelation = 0.5;
             
             couplingHoles = cell(size(filterOfMarkers, 2));
@@ -90,15 +90,10 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
                     %Match the holes
                     if isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0
-                        couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase{actualMarker, 2}, maskOfImagesByCase{numMarkerToCheck, 2}, similarHolesProperties, strcat(outputDirectory, '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
+                        couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase(actualMarker, :), maskOfImagesByCase(numMarkerToCheck, :), similarHolesProperties, strcat(outputDirectory, '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
                     else
                         couplingHoles{actualMarker, numMarkerToCheck} = [];
                     end
-
-                    % Once we have the coupling of holes. We have to get the matching
-                    % areas, which will be a circular region of radius
-                    % 'radiusOfTheAreaTaken'
-
                 end
             end
 
@@ -124,36 +119,10 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                             for numPairOfHoles = 1:size(hole1, 1)
                                 actualHole1 = marker1Holes(hole1(numPairOfHoles), :);
                                 actualHole2 = marker2Holes(hole2(numPairOfHoles), :);
-                                h = figure('Visible', 'on', 'units','normalized','outerposition',[0 0 1 1]);
-                                ax1 = subplot(1,2,1);
-                                imgToShow = double(maskOfImagesByCase{marker1, 1}) * 255;
-                                boundingBox = round(actualHole1.BoundingBox);
-                                imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) = (imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) == 0 & actualHole1.Image{1}) * 155;
-                                imgToShow(maskOfImagesByCase{marker1, 1} == 1) = 255;
-                                hImg = imshow(imgToShow, hot);
-                                hImg.CDataMapping = 'scale';
-                                title(strcat(possibleMarkers{marker1}, ': hole', num2str(hole1(numPairOfHoles))))
-
-                                ax2 = subplot(1,2,2);
-                                imgToShow = double(maskOfImagesByCase{marker2, 1}) * 255;
-                                boundingBox = round(actualHole2.BoundingBox);
-                                imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) = (imgToShow(boundingBox(2):boundingBox(2)+boundingBox(4) - 1, boundingBox(1):boundingBox(1)+boundingBox(3) - 1) == 0 & actualHole2.Image{1}) * 155;
-                                imgToShow(maskOfImagesByCase{marker2, 1} == 1) = 255;
-                                hImg = imshow(imgToShow, hot);
-                                hImg.CDataMapping = 'scale';
-                                title(strcat(possibleMarkers{marker2}, ': hole', num2str(hole2(numPairOfHoles))))
-                                correct = [];
-                                while isempty(correct)
-                                    correct = input('Is it correct (0/1)? ');
-
-                                    if isempty(correct) == 0
-                                        if isequal(correct, 1)
-                                            pairedRegions{end+1, 1} = {possibleMarkers{marker1}, hole1(numPairOfHoles), actualHole1};
-                                            pairedRegions{end, 2} = {possibleMarkers{marker2}, hole2(numPairOfHoles), actualHole2};
-                                        end
-                                    end
-                                end
-                                close all
+                                
+                                pairedRegions{end+1, 1} = {possibleMarkers{marker1}, hole1(numPairOfHoles), actualHole1};
+                                pairedRegions{end, 2} = {possibleMarkers{marker2}, hole2(numPairOfHoles), actualHole2};
+                                
                             end
                         end
                     end
