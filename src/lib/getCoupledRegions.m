@@ -123,7 +123,10 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         try
             %actualImg must be larger than basicImage
             correlationBetweenHoles = normxcorr2(basicImage, actualImg);
-
+            
+            correlationBetweenHoles(1:size(basicImage,1), :) = 0;
+            correlationBetweenHoles(:, 1:size(basicImage,2)) = 0;
+            
             [ypeak, xpeak] = find(correlationBetweenHoles == max(correlationBetweenHoles(:)));
             if size(ypeak, 1) > 1
                 xpeak = xpeak(1);
@@ -131,6 +134,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
             end
             yoffSet = ypeak-size(basicImage,1);
             xoffSet = xpeak-size(basicImage,2);
+            
             correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(basicImage, 2), size(basicImage, 1)];
             %figure; imshow(insertShape(double(actualImg), 'FilledRectangle', correspondenceOfTheOldImage, 'Color', 'green'));
         catch ex
