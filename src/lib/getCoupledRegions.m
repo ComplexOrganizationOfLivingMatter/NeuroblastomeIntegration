@@ -137,12 +137,12 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
             
             correspondenceOfTheOldImage = [xoffSet+1, yoffSet+1, size(basicImage, 2), size(basicImage, 1)];
             %figure; imshow(insertShape(double(actualImg), 'FilledRectangle', correspondenceOfTheOldImage, 'Color', 'green'));
+            auxiliarCentroid = [size(basicImage,1)/2, size(basicImage,2)];
         catch ex
             disp('Error');
             disp(ex.message)
             correspondenceOfTheOldImage = [1, 1, size(actualImg,2), size(actualImg,1)];
-            ypeak = size(actualImg, 1);
-            xpeak = size(actualImg, 2);
+            auxiliarCentroid = [size(actualImg,1)/2, size(actualImg,2)];
             yoffSet = 1;
             xoffSet = 1;
         end
@@ -153,7 +153,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         newCentroid = regionprops(finalHoles{numHole, 4});
         if size(newCentroid, 1) > 1
             newCentroid = [];
-            newCentroid.Centroid = [ypeak / 2, xpeak / 2];
+            newCentroid.Centroid = auxiliarCentroid;
         else
             actualCentroid = horzcat(newCentroid.Centroid(:));
             newCentroid.Centroid = [actualCentroid(2), actualCentroid(1)];
