@@ -16,8 +16,8 @@ function [ correspondanceBetweenHoles ] = matchHoles( maskOfImagesByCase1, maskO
     ax2 = subplot(1,2,2);
     imshow(maskOfImagesByCase2{1, 1});
 
-    finishedStep = [];
-    while isempty(finishedStep) || isequal(finishedStep, 0)
+    moreSteps = [];
+    while isempty(moreSteps) || isequal(moreSteps, 1)
 
         %% Left image
         disp('Select hole of left image');
@@ -60,7 +60,7 @@ function [ correspondanceBetweenHoles ] = matchHoles( maskOfImagesByCase1, maskO
             end
         end
 
-        finishedStep = input('Do you want to add more correlations? (0/1) ');
+        moreSteps = input('Do you want to add more correlations? (0/1) ');
     end
     close all
         
