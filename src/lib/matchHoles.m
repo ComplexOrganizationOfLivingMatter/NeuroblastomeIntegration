@@ -29,39 +29,43 @@ function [ correspondanceBetweenHoles ] = matchHoles( maskOfImagesByCase1, maskO
         holeOfMarker1 = holesOfMarker1(holeIndex1, :);
         paintHole( maskOfImagesByCase1, holeOfMarker1, ax1 );
 
-        correct = input('Is it correct (0/1)? ');
-        if isequal(correct, 1) == 0
-            pixelsPerHole = holesOfMarker1.PixelList;
-            holeIndex1 = cellfun(@(x) ismember(pointOfHole1, x, 'rows'), pixelsPerHole);
-            holeOfMarker1 = holesOfMarker1(holeIndex1, :);
-            paintHole( maskOfImagesByCase1, holeOfMarker1, ax1 );
-        end
+        correct = input('Is it correct (0/1)? 99 to exit ');
+        if isequal(correct, 99) == 0
+            if isequal(correct, 1) == 0
+                pixelsPerHole = holesOfMarker1.PixelList;
+                holeIndex1 = cellfun(@(x) ismember(pointOfHole1, x, 'rows'), pixelsPerHole);
+                holeOfMarker1 = holesOfMarker1(holeIndex1, :);
+                paintHole( maskOfImagesByCase1, holeOfMarker1, ax1 );
+            end
 
-        %% Right image
-        disp('Select hole of right image');
-        [x, y] = getpts(ax2);
-        pointOfHole2 = [round(x), round(y)];
-        distancesToCentroid = pdist2(pointOfHole2, holesOfMarker2.Centroid);
-        [~, holeIndex2] = min(distancesToCentroid);
-        holeOfMarker2 = holesOfMarker2(holeIndex2, :);
-        paintHole( maskOfImagesByCase2, holeOfMarker2, ax2 );
-
-        correct = input('Is it correct (0/1)? ');
-        if isequal(correct, 1) == 0
-            pixelsPerHole = holesOfMarker2.PixelList;
-            holeIndex2 = cellfun(@(x) ismember(pointOfHole2, x, 'rows'), pixelsPerHole);
+            %% Right image
+            disp('Select hole of right image');
+            [x, y] = getpts(ax2);
+            pointOfHole2 = [round(x), round(y)];
+            distancesToCentroid = pdist2(pointOfHole2, holesOfMarker2.Centroid);
+            [~, holeIndex2] = min(distancesToCentroid);
             holeOfMarker2 = holesOfMarker2(holeIndex2, :);
             paintHole( maskOfImagesByCase2, holeOfMarker2, ax2 );
-        end
 
-        correct = input('Correct correlation? (0/1) ');
-        if isempty(correct) == 0
-            if isequal(correct, 1)
-                correspondanceBetweenHoles(holeIndex1, holeIndex2) = 1;
+            correct = input('Is it correct (0/1)? ');
+            if isequal(correct, 1) == 0
+                pixelsPerHole = holesOfMarker2.PixelList;
+                holeIndex2 = cellfun(@(x) ismember(pointOfHole2, x, 'rows'), pixelsPerHole);
+                holeOfMarker2 = holesOfMarker2(holeIndex2, :);
+                paintHole( maskOfImagesByCase2, holeOfMarker2, ax2 );
             end
-        end
 
-        moreSteps = input('Do you want to add more correlations? (0/1) ');
+            correct = input('Correct correlation? (0/1) ');
+            if isempty(correct) == 0
+                if isequal(correct, 1)
+                    correspondanceBetweenHoles(holeIndex1, holeIndex2) = 1;
+                end
+            end
+
+            moreSteps = input('Do you want to add more correlations? (0/1) ');
+        else
+            moreSteps = 0;
+        end
     end
     close all
         
