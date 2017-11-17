@@ -114,15 +114,15 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                     % move on
                     emptyMarkers = cellfun(@isempty, maskOfImagesByCase);
                     emptyMarkers(1, :) = 1;
-                    [holesOfMarkerActualMarker, holesOfRestMarkers] = cellfun(@find, couplingHoles(actualMarker, emptyMarkers(:, 1) == 0), 'UniformOutput', false);
-                    holesOfMarkerActualMarker = vertcat(holesOfMarkerActualMarker{:});
-                    holesOfRestMarkers = vertcat(holesOfRestMarkers{:});
-                    [counts, holeNumber] = hist(holesOfMarkerActualMarker, length(unique(holesOfMarkerActualMarker)));
+                    [holesOfMarkerActualMarker, holesOfRestMarkers] = cellfun(@find, unique(couplingHoles(actualMarker, emptyMarkers(:, 1) == 0)), 'UniformOutput', false);
+                    holesOfMarkerActualMarkerMat = vertcat(holesOfMarkerActualMarker{:});
+                    %holesOfRestMarkers = vertcat(holesOfRestMarkers{:});
+                    [counts, holeNumber] = hist(holesOfMarkerActualMarkerMat, length(unique(holesOfMarkerActualMarkerMat)));
                     [maxNumber, holeIndex] = max(counts);
                     if maxNumber >= sum(emptyMarkers(:, 1) == 0)
-                        restOfMarkersNumbers = holesOfRestMarkers(holesOfMarkerActualMarker == holeNumber(holeIndex));
+                        restOfMarkersNumbers = holesOfRestMarkers(cellfun(@(x) ismember(holeNumber(holeIndex), x), holesOfMarkerActualMarker));
                         holesOrder{actualMarker} = holeNumber(holeIndex);
-                        holesOrder(emptyMarkers(:, 1) == 0) = mat2cell(restOfMarkersNumbers, ones(size(restOfMarkersNumbers, 1), 1), 1);
+                        holesOrder(emptyMarkers(:, 1) == 0) = restOfMarkersNumbers;
                     end
                 end
             end
