@@ -167,7 +167,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         
         %% Region analysis
         finalsameHoleInDifferentMarkersFiles = cellfun(@(x) isempty(strfind(x, 'sameHoleInDifferentMarkers_')) == 0, filesInDir);
-        if any(finalsameHoleInDifferentMarkersFiles) == 0
+        if any(finalsameHoleInDifferentMarkersFiles) == 0 && isempty(pairedRegions) == 0
             allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
             sameHoleInDifferentMarkers = pairedRegions(1, 1);
             radiusOfTheAreaTaken = 750;
