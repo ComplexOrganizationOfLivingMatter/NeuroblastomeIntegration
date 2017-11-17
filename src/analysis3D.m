@@ -114,7 +114,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                     % move on
                     emptyMarkers = cellfun(@isempty, maskOfImagesByCase);
                     emptyMarkers(1, :) = 1;
-                    [holesOfMarkerActualMarker, holesOfRestMarkers] = cellfun(@find, unique(couplingHoles(actualMarker, emptyMarkers(:, 1) == 0)), 'UniformOutput', false);
+                    [holesOfMarkerActualMarker, holesOfRestMarkers] = cellfun(@find, couplingHoles(actualMarker, emptyMarkers(:, 1) == 0), 'UniformOutput', false);
+                    holesOfMarkerActualMarker = cellfun(@unique, holesOfMarkerActualMarker, 'UniformOutput', false);
                     holesOfMarkerActualMarkerMat = vertcat(holesOfMarkerActualMarker{:});
                     %holesOfRestMarkers = vertcat(holesOfRestMarkers{:});
                     [counts, holeNumber] = hist(holesOfMarkerActualMarkerMat, length(unique(holesOfMarkerActualMarkerMat)));
