@@ -148,17 +148,34 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
             elseif optionSelected == 2
                 maskFiles = onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :));
+                imgOfRegions = cell(size(filterOfMarkersMasks, 2), 1);
                 for numImageByCase = 1:size(imagesByCase, 2)
                     if isempty(imagesByCase{numImageByCase}) == 0
                         set(gcf, 'currentaxes', imgAxes(numImageByCase));
                         [x, y] = getpts(gca);
                         centroidOfRegions(numImageByCase, :) = [y, x];
-                        actualMask = maskFiles{numImageByCase};
+                        actualMask = imread(maskFiles{numImageByCase});
                         
-                        [ imgOfRegion ] = regionOfImage( actualMask, radiusOfTheAreaTaken, x, y );
+                        imgOfRegions{numImageByCase} = regionOfImage(actualMask(:, :, 1), radiusOfTheAreaTaken, x, y );
+                        % Region of image of the possible region
+                        noMaskRegion = regionOfImage(maskOfImagesByCase{numImageByCase, 1}, radiusOfTheAreaTaken, x, y );
+                        
+                        fibreArea(numImageByCase) = sum(imgOfRegions{numImageByCase}(:));
+                        possibleArea(numImageByCase) = sum(noMaskRegion(:));
+                        percentageCoveredByFibre(numImageByCase) = fibreArea/possibleArea;
                     end
                 end
-                vtnMacrFile = maskFiles{end};
+                vtnMacrFile = imread(maskFiles{end});
+                imgOfRegions{numImageByCase+1} = regionOfImage( vtnMacrFile(:, :, 1), radiusOfTheAreaTaken, x, y );
+                fibreArea(numImageByCase+1) = sum(imgOfRegions{numImageByCase+1}(:));
+                possibleArea(numImageByCase+1) = sum(noMaskRegion(:));
+                percentageCoveredByFibre(numImageByCase+1) = fibreArea/possibleArea;
+                HEPA_OR_MACR(numImageByCase) = 'HEPA';
+                HEPA_OR_MACR(numImageByCase+1) = 'MACR';
+                
+                table(imgOfRegions, fibreArea, possibleArea, percentageCoveredByFibre, HEPA_OR_MACR);
+                
+                save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'centroidOfRegions', 'imgOfRegions');
             end
         else
             load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));

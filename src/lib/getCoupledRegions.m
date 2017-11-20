@@ -96,7 +96,6 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
     else
         finalHoles(:, 12) = {[]};
     end
-    
     %Second, two holes may have differents size. Calculate the real
     %centroid taking into account that these two holes could represent
     %different areas or more extensive ones.
@@ -169,7 +168,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         img = imread(maskFiles{markerIndex});
         img = img(:, :, 1);
         
-        imgOfRegion = regionOfImage( img, radiusOfTheAreaTaken, round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)));
+        [imgOfRegion, imgDistance] = regionOfImage( img, radiusOfTheAreaTaken, round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)));
         
 %         figure; imshow(imgOfRegion); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         
