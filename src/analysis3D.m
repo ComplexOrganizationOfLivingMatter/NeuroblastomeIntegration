@@ -177,9 +177,14 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 sameRegionInDifferentMarkers = table(imgOfRegions, fibreArea', possibleArea', percentageCoveredByFibre', HEPA_OR_MACR);
                 
                 save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'sameRegionInDifferentMarkers');
+                close all
             end
         else
             load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));
+        end
+        
+        if optionSelected == 99
+            continue
         end
         
         %% Get regions of biopsies
