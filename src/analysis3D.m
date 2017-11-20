@@ -88,17 +88,24 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             
             holesOrder = cell(size(filterOfMarkers, 2), 1);
             
+            figure;
+            for numImageByCase = 1:size(imagesByCase, 2)
+                if isempty(imagesByCase(numImageByCase)) == 0
+                    subplot(2, 3, numImageByCase);
+                    imshow(imagesByCase{numImageByCase});
+                end
+            end
             disp('Menu:')
-            dips('1- Continue with match holes')
+            disp('1- Continue with match holes')
             disp('2- Couple all the 5 regions with a window')
             disp('99- Next marker')
             optionSelected = input('Option: ');
             
             if optionSelected == 1
+                close all
                 couplingHoles = cell(size(filterOfMarkers, 2));
                 for actualMarker = 1:size(filterOfMarkers, 2)
                     for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
-
                         %If we've coupled the first marker with the rest just
                         %put that holes with each other
                         if isempty(holesOrder{numMarkerToCheck}) == 0 && isempty(holesOrder{actualMarker}) == 0 
@@ -137,7 +144,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 
                 save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
             elseif optionSelected == 2
-                imagesByCase
+                
             end
         else
             load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));
