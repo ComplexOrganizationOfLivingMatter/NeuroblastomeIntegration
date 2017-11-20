@@ -26,6 +26,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %     subWindowX = size(filterOfMarkers, 2);
 %     subWindowY = 1;
     for numCase = 1:size(filterOfMarkers, 1)
+        optionSelected = 0;
         outputDirectory = strcat(outputFatherDir, num2str(uniqueCases(numCase)));
         mkdir(outputDirectory)
         for numImage = 1:size(filterOfMarkers, 2)
@@ -183,7 +184,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));
         end
         
-        if optionSelected == 99
+        if isequal(optionSelected, 99)
             continue
         end
         
