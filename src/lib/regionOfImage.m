@@ -3,7 +3,7 @@ function [ imgOfRegion ] = regionOfImage( img, radiusOfTheAreaTaken, xCentroid, 
 %   Detailed explanation goes here
 
 imgWithCentroid = zeros(size(img));
-imgWithCentroid(yCentroid, xCentroid) = 1;
+imgWithCentroid(round(yCentroid), round(xCentroid)) = 1;
 imgDistance = bwdist(imgWithCentroid);
 imgDistance = imgDistance <= radiusOfTheAreaTaken;
 %         figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
