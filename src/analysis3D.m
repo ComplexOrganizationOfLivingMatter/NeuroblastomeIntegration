@@ -88,47 +88,57 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             
             holesOrder = cell(size(filterOfMarkers, 2), 1);
             
-            couplingHoles = cell(size(filterOfMarkers, 2));
-            for actualMarker = 1:size(filterOfMarkers, 2)
-                for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
-                    
-                    %If we've coupled the first marker with the rest just
-                    %put that holes with each other
-                    if isempty(holesOrder{numMarkerToCheck}) == 0 && isempty(holesOrder{actualMarker}) == 0 
-                       	couplingHolesActual = zeros(size(maskOfImagesByCase{actualMarker, 2}, 1), size(maskOfImagesByCase{numMarkerToCheck, 2}, 1));
-                        
-                        couplingHolesActual(holesOrder{actualMarker}, holesOrder{numMarkerToCheck}) = 1;
-                        
-                        couplingHoles{actualMarker, numMarkerToCheck} = couplingHolesActual;
-                        
-                    elseif isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0 %Match the holes
-                        couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase(actualMarker, :), maskOfImagesByCase(numMarkerToCheck, :), similarHolesProperties, strcat(outputDirectory, '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
-                    else
-                        couplingHoles{actualMarker, numMarkerToCheck} = [];
-                    end
-                end
-                
-                if actualMarker == 1
-                    %% If we've found for the first marker all its correspondent hole, we don't need to continue.
-                    % Just put that holes in its correspondent place and
-                    % move on
-                    emptyMarkers = cellfun(@isempty, maskOfImagesByCase);
-                    emptyMarkers(1, :) = 1;
-                    [holesOfMarkerActualMarker, holesOfRestMarkers] = cellfun(@find, couplingHoles(actualMarker, emptyMarkers(:, 1) == 0), 'UniformOutput', false);
-                    holesOfMarkerActualMarker = cellfun(@unique, holesOfMarkerActualMarker, 'UniformOutput', false);
-                    holesOfMarkerActualMarkerMat = vertcat(holesOfMarkerActualMarker{:});
-                    %holesOfRestMarkers = vertcat(holesOfRestMarkers{:});
-                    [counts, holeNumber] = hist(holesOfMarkerActualMarkerMat, length(unique(holesOfMarkerActualMarkerMat)));
-                    [maxNumber, holeIndex] = max(counts);
-                    if maxNumber >= sum(emptyMarkers(:, 1) == 0)
-                        restOfMarkersNumbers = holesOfRestMarkers(cellfun(@(x) ismember(holeNumber(holeIndex), x), holesOfMarkerActualMarker));
-                        holesOrder{actualMarker} = holeNumber(holeIndex);
-                        holesOrder(emptyMarkers(:, 1) == 0) = restOfMarkersNumbers;
-                    end
-                end
-            end
+            disp('Menu:')
+            dips('1- Continue with match holes')
+            disp('2- Couple all the 5 regions with a window')
+            disp('99- Next marker')
+            optionSelected = input('Option: ');
+            
+            if optionSelected == 1
+                couplingHoles = cell(size(filterOfMarkers, 2));
+                for actualMarker = 1:size(filterOfMarkers, 2)
+                    for numMarkerToCheck = actualMarker+1:size(filterOfMarkers, 2)
 
-            save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
+                        %If we've coupled the first marker with the rest just
+                        %put that holes with each other
+                        if isempty(holesOrder{numMarkerToCheck}) == 0 && isempty(holesOrder{actualMarker}) == 0 
+                            couplingHolesActual = zeros(size(maskOfImagesByCase{actualMarker, 2}, 1), size(maskOfImagesByCase{numMarkerToCheck, 2}, 1));
+
+                            couplingHolesActual(holesOrder{actualMarker}, holesOrder{numMarkerToCheck}) = 1;
+
+                            couplingHoles{actualMarker, numMarkerToCheck} = couplingHolesActual;
+
+                        elseif isempty(maskOfImagesByCase{actualMarker, 2}) == 0 && isempty(maskOfImagesByCase{numMarkerToCheck, 2}) == 0 %Match the holes
+                            couplingHoles{actualMarker, numMarkerToCheck} = matchHoles(maskOfImagesByCase(actualMarker, :), maskOfImagesByCase(numMarkerToCheck, :), similarHolesProperties, strcat(outputDirectory, '\', possibleMarkers{actualMarker}, '_', possibleMarkers{numMarkerToCheck}));
+                        else
+                            couplingHoles{actualMarker, numMarkerToCheck} = [];
+                        end
+                    end
+
+                    if actualMarker == 1
+                        %% If we've found for the first marker all its correspondent hole, we don't need to continue.
+                        % Just put that holes in its correspondent place and
+                        % move on
+                        emptyMarkers = cellfun(@isempty, maskOfImagesByCase);
+                        emptyMarkers(1, :) = 1;
+                        [holesOfMarkerActualMarker, holesOfRestMarkers] = cellfun(@find, couplingHoles(actualMarker, emptyMarkers(:, 1) == 0), 'UniformOutput', false);
+                        holesOfMarkerActualMarker = cellfun(@unique, holesOfMarkerActualMarker, 'UniformOutput', false);
+                        holesOfMarkerActualMarkerMat = vertcat(holesOfMarkerActualMarker{:});
+                        %holesOfRestMarkers = vertcat(holesOfRestMarkers{:});
+                        [counts, holeNumber] = hist(holesOfMarkerActualMarkerMat, length(unique(holesOfMarkerActualMarkerMat)));
+                        [maxNumber, holeIndex] = max(counts);
+                        if maxNumber >= sum(emptyMarkers(:, 1) == 0)
+                            restOfMarkersNumbers = holesOfRestMarkers(cellfun(@(x) ismember(holeNumber(holeIndex), x), holesOfMarkerActualMarker));
+                            holesOrder{actualMarker} = holeNumber(holeIndex);
+                            holesOrder(emptyMarkers(:, 1) == 0) = restOfMarkersNumbers;
+                        end
+                    end
+                end
+
+                save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
+            elseif optionSelected == 2
+                imagesByCase
+            end
         else
             load(strcat(filePath, '\', filesInDir{couplingHolesFiles}));
         end
