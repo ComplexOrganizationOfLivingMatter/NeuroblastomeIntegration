@@ -4,6 +4,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %   How to run it:
 %   analysis3D('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos', {'COLAGENO', 'VasosSanguineos', 'RET', 'GAGs', 'LymphaticVessels', 'Vitronectine'});
 
+    
+    radiusOfTheAreaTaken = 750;
 
     outputFatherDir = '..\Results\3Danalysis\';
     allFiles = getAllFiles(imagesPath);
@@ -151,6 +153,9 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                         set(gcf, 'currentaxes', imgAxes(numImageByCase));
                         [x, y] = getpts(gca);
                         centroidOfRegions(numImageByCase, :) = [y, x];
+                        actualMask = maskFiles{numImageByCase};
+                        
+                        [ imgOfRegion ] = regionOfImage( actualMask, radiusOfTheAreaTaken, x, y );
                     end
                 end
                 vtnMacrFile = maskFiles{end};
@@ -200,7 +205,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             if exist('centroidOfRegions', 'var') == 0 && isempty(pairedRegions) == 0
                 allHolesCoupled = cellfun(@(x) x(3), pairedRegions);
                 sameHoleInDifferentMarkers = pairedRegions(1, 1);
-                radiusOfTheAreaTaken = 750;
                 numHole = 1;
 
                 meanOfPercentageOfFibrePerRegion = [];

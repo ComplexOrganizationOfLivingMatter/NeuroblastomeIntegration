@@ -169,12 +169,7 @@ function [ finalHoles ] = getCoupledRegions( holes, maskFiles, radiusOfTheAreaTa
         img = imread(maskFiles{markerIndex});
         img = img(:, :, 1);
         
-        imgWithCentroid = zeros(size(img));
-        imgWithCentroid(round(finalHoles{numHole, 5}(1)), round(finalHoles{numHole, 5}(2))) = 1;
-        imgDistance = bwdist(imgWithCentroid);
-        imgDistance = imgDistance <= radiusOfTheAreaTaken;
-%         figure; imshow(img); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
-        imgOfRegion = (double(img)/255) .* imgDistance;
+        imgOfRegion = regionOfImage( img, radiusOfTheAreaTaken, round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)));
         
 %         figure; imshow(imgOfRegion); hold on; plot(round(finalHoles{numHole, 5}(2)), round(finalHoles{numHole, 5}(1)), 'r*')
         
