@@ -277,6 +277,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             %load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
         end
         
+        clearvars sameRegionInDifferentMarkers
         
 %         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
 %         allCombinationsPonderations = permn(possibleSituations, size(possibleMarkers, 2));
