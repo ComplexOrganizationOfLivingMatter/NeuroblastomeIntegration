@@ -277,6 +277,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             %load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
         end
         
+        % We remove it because we check if it is created in previous steps.
+        % In order to do coupling or if i've selected only a few centroids
         clearvars sameRegionInDifferentMarkers
         
 %         possibleSituations = (1:3).^2; % {'Low', 'Mid', 'High'};
