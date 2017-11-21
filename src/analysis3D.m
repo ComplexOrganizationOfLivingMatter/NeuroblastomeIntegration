@@ -92,13 +92,13 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             holesOrder = cell(size(filterOfMarkers, 2), 1);
             
             figure;
-            
             for numImageByCase = 1:size(imagesByCase, 2)
                 if isempty(imagesByCase(numImageByCase)) == 0
                     imgAxes(numImageByCase) = subplot(2, 3, numImageByCase);
                     imshow(imagesByCase{numImageByCase});
                 end
             end
+            title(strcat('Case: ', num2str(uniqueCases(numCase))));
             disp('Menu:')
             disp('1- Continue with match holes')
             disp('2- Couple all the 5 regions with a window')
