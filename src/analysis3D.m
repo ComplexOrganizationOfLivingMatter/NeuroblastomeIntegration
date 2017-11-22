@@ -4,7 +4,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %   How to run it:
 %   analysis3D('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos', {'COLAGENO', 'VasosSanguineos', 'RET', 'GAGs', 'LymphaticVessels', 'Vitronectine'});
 
-    
+    xlsInfo = [];
     radiusOfTheAreaTaken = 750;
 
     outputFatherDir = '..\Results\3Danalysis\';
@@ -284,12 +284,14 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         end
         
         
+        
         if exist('sameRegionInDifferentMarkers', 'var')
             sameRegionInDifferentMarkers
         else
             sameHoleInDifferentMarkers = horzcat(sameHoleInDifferentMarkers{:});
-            xlsInfo = table(sameHoleInDifferentMarkers.Marker, sameHoleInDifferentMarkers.fibreArea, sameHoleInDifferentMarkers.possibleArea, sameHoleInDifferentMarkers.percentageCoveredByFibre, sameHoleInDifferentMarkers.HEPA_OR_MACR);
-            xlsInfo.Case = num2str(uniqueCases(numCase));
+            xlsInfoActual = table(sameHoleInDifferentMarkers.Marker, sameHoleInDifferentMarkers.fibreArea, sameHoleInDifferentMarkers.possibleArea, sameHoleInDifferentMarkers.percentageCoveredByFibre, sameHoleInDifferentMarkers.HEPA_OR_MACR);
+            xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
+            xlsInfo = vertcat(xlsInfo, xlsInfoActual);
         end
         
         % We remove it because we check if it is created in previous steps.
