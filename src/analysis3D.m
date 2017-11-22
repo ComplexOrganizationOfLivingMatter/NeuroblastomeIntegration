@@ -288,10 +288,13 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         if exist('sameRegionInDifferentMarkers', 'var')
             sameRegionInDifferentMarkers
         else
-            sameHoleInDifferentMarkers = horzcat(sameHoleInDifferentMarkers{:});
-            xlsInfoActual = table(sameHoleInDifferentMarkers.Marker, sameHoleInDifferentMarkers.fibreArea, sameHoleInDifferentMarkers.possibleArea, sameHoleInDifferentMarkers.percentageCoveredByFibre, sameHoleInDifferentMarkers.HEPA_OR_MACR);
-            xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
-            xlsInfo = vertcat(xlsInfo, xlsInfoActual);
+            for numCoupling = 1:length(sameHoleInDifferentMarkers)
+                sameHoleInDifferentMarkers = sameHoleInDifferentMarkers{numCoupling};
+                xlsInfoActual = table(sameHoleInDifferentMarkers.Marker, sameHoleInDifferentMarkers.fibreArea, sameHoleInDifferentMarkers.possibleArea, sameHoleInDifferentMarkers.percentageCoveredByFibre, sameHoleInDifferentMarkers.HEPA_OR_MACR);
+                xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
+                xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
+                xlsInfo = vertcat(xlsInfo, xlsInfoActual);
+            end
         end
         
         % We remove it because we check if it is created in previous steps.
