@@ -149,8 +149,9 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
             elseif optionSelected == 2
                 HEPA_OR_MACR = cell(size(filterOfMarkersMasks, 2), 1);
-                maskFiles = onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :));
-                imgOfRegions = cell(size(filterOfMarkersMasks, 2), 1);
+                masksOfHoles = filterOfMarkersMasks(numCase, :);
+                maskFiles = onlyImagesFilesMasks(masksOfHoles(masksOfHoles ~= 0));
+                imgOfRegions = cell(size(masksOfHoles(masksOfHoles ~= 0), 2), 1);
                 for numImageByCase = 1:size(imagesByCase, 2)
                     if isempty(imagesByCase{numImageByCase}) == 0
                         set(gcf, 'currentaxes', imgAxes(numImageByCase));
@@ -178,6 +179,10 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 sameRegionInDifferentMarkers = table(imgOfRegions, fibreArea', possibleArea', percentageCoveredByFibre', HEPA_OR_MACR);
                 
                 save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'sameRegionInDifferentMarkers');
+                close all
+            else
+                couplingHoles = cell(size(filterOfMarkers, 2));
+                save(strcat(outputFatherDir, num2str(uniqueCases(numCase)), '\couplingHoles_', date), 'couplingHoles');
                 close all
             end
         else
@@ -275,8 +280,11 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 disp('No coupling at all!');
             end
         else
-            %load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
+            load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
         end
+        
+        
+        
         
         % We remove it because we check if it is created in previous steps.
         % In order to do coupling or if i've selected only a few centroids
