@@ -4,7 +4,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 %   How to run it:
 %   analysis3D('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos', {'COLAGENO', 'VasosSanguineos', 'RET', 'GAGs', 'LymphaticVessels', 'Vitronectine'});
 
-    xlsInfo = [];
+    xlsInfo = cell2table(cell(1, length(possibleMarkers) +2));
+    xlsInfo.Properties.VariableNames(2:end) = {'row1', 'row2', 'row3', 'row4', 'row5', 'row6', 'row7'};
     radiusOfTheAreaTaken = 750;
 
     outputFatherDir = '..\Results\3Danalysis\';
@@ -288,10 +289,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             numCoupling = 1;
             possibleMarkersModified = cell2table(horzcat(possibleMarkers, possibleMarkers{end})');
             xlsInfoActual = horzcat(possibleMarkersModified, sameRegionInDifferentMarkers(:, 2:end));
-%             xlsInfoActual.Properties.VariableNames{5} = 'Var5';
-%             xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
-%             xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
-%             xlsInfo = vertcat(xlsInfo, xlsInfoActual);
 
             [~, index] = ismember(xlsInfoActual.Var1, possibleMarkers);
             [macrMarkers] = cellfun(@(x) isequal(x, 'MACR'), xlsInfoActual.HEPA_OR_MACR);
@@ -303,10 +300,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         else
             for numCoupling = 1:length(sameHoleInDifferentMarkers)
                 actualCoupling = sameHoleInDifferentMarkers{numCoupling};
-%                 xlsInfoActual = table(actualCoupling.Marker, actualCoupling.fibreArea, actualCoupling.possibleArea, actualCoupling.percentageCoveredByFibre, actualCoupling.HEPA_OR_MACR);
-%                 xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
-%                 xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
-%                 xlsInfo = vertcat(xlsInfo, xlsInfoActual);
                 
                 [~, index] = ismember(actualCoupling.Marker, possibleMarkers);
                 [macrMarkers] = cellfun(@(x) isequal(x, 'MACR'), actualCoupling.HEPA_OR_MACR);
@@ -353,6 +346,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 % %         end
     end
     
-    writetable(xlsInfo, strcat(outputFatherDir, 'correlations_', date, '.xls'))
+    writetable(xlsInfo, strcat(outputFatherDir, 'correlations_PercentageOfFibre_', date, '.xls'))
 end
 
