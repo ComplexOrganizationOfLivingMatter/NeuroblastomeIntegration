@@ -260,7 +260,8 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                     end
                 end
                 % The last hole
-                [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(filterOfMarkersMasks(numCase, :)), radiusOfTheAreaTaken, horzcat(maskOfImagesByCase, possibleMarkers'));
+                masksOfHoles = filterOfMarkersMasks(numCase, :);
+                [sameHoleInDifferentMarkers{numHole}] = getCoupledRegions(sameHoleInDifferentMarkers{numHole}, onlyImagesFilesMasks(masksOfHoles(masksOfHoles~= 0)), radiusOfTheAreaTaken, horzcat(maskOfImagesByCase, possibleMarkers'));
                 actualInfoOfMarkers = sameHoleInDifferentMarkers{numHole};
                 meanOfPercentageOfFibrePerRegion(numHole) = mean(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
                 stdOfPercentageOfFibrePerRegion(numHole) = std(actualInfoOfMarkers.fibreArea / mean(actualInfoOfMarkers.possibleArea)) * 100;
