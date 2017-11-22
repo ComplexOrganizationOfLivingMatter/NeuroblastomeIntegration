@@ -294,7 +294,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             [macrMarkers] = cellfun(@(x) isequal(x, 'MACR'), xlsInfoActual.HEPA_OR_MACR);
             row = cell(1, length(possibleMarkers) +1);
             
-            row(index + macrMarkers) = num2cell(xlsInfoActual.Var2);
+            row(index + macrMarkers) = num2cell(xlsInfoActual.Var2 / mean(actualCoupling.possibleArea));
 
             xlsInfo = vertcat(xlsInfo, horzcat(cell2table({num2str(uniqueCases(numCase))}), cell2table(row)));
         else
@@ -305,7 +305,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 [macrMarkers] = cellfun(@(x) isequal(x, 'MACR'), actualCoupling.HEPA_OR_MACR);
                 row = cell(1, length(possibleMarkers) +1);
                 
-                row(index + macrMarkers) = num2cell(actualCoupling.fibreArea);
+                row(index + macrMarkers) = num2cell(actualCoupling.fibreArea / mean(actualCoupling.possibleArea));
                 
                 xlsInfo = vertcat(xlsInfo, horzcat(cell2table({num2str(uniqueCases(numCase))}), cell2table(row)));
             end
