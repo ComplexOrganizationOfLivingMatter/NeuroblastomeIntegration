@@ -285,19 +285,22 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         
         % Export all this info to an excel
         if exist('sameRegionInDifferentMarkers', 'var')
+            numCoupling = 1;
             possibleMarkersModified = cell2table(horzcat(possibleMarkers, possibleMarkers{end})');
             xlsInfoActual = horzcat(possibleMarkersModified, sameRegionInDifferentMarkers(:, 2:end));
             xlsInfoActual.Properties.VariableNames{5} = 'Var5';
+            xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
+            xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
+            xlsInfo = vertcat(xlsInfo, xlsInfoActual);
         else
             for numCoupling = 1:length(sameHoleInDifferentMarkers)
                 actualCoupling = sameHoleInDifferentMarkers{numCoupling};
                 xlsInfoActual = table(actualCoupling.Marker, actualCoupling.fibreArea, actualCoupling.possibleArea, actualCoupling.percentageCoveredByFibre, actualCoupling.HEPA_OR_MACR);
+                xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
+                xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
+                xlsInfo = vertcat(xlsInfo, xlsInfoActual);
             end
         end
-        
-        xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
-        xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
-        xlsInfo = vertcat(xlsInfo, xlsInfoActual);
         
         % We remove it because we check if it is created in previous steps.
         % In order to do coupling or if i've selected only a few centroids
@@ -334,6 +337,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 % %         end
     end
     
-    xlswrite(strcat(outputFatherDir, 'correlations_', date), xlsInfo)
+    writetable(xlsInfo, strcat(outputFatherDir, 'correlations_', date, '.xls'))
 end
 
