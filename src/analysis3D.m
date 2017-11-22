@@ -284,7 +284,13 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
         end
         
         
-        
+        if exist('sameRegionInDifferentMarkers', 'var')
+            sameRegionInDifferentMarkers
+        else
+            sameHoleInDifferentMarkers = horzcat(sameHoleInDifferentMarkers{:});
+            xlsInfo = table(sameHoleInDifferentMarkers.Marker, sameHoleInDifferentMarkers.fibreArea, sameHoleInDifferentMarkers.possibleArea, sameHoleInDifferentMarkers.percentageCoveredByFibre, sameHoleInDifferentMarkers.HEPA_OR_MACR);
+            xlsInfo.Case = num2str(uniqueCases(numCase));
+        end
         
         % We remove it because we check if it is created in previous steps.
         % In order to do coupling or if i've selected only a few centroids
@@ -320,5 +326,7 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 % %             end
 % %         end
     end
+    
+    xlswrite(strcat(outputFatherDir, 'correlations_', date), xlsInfo)
 end
 
