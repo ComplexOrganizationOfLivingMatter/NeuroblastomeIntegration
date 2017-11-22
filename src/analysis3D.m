@@ -346,6 +346,6 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 % %         end
     end
     
-    writetable(xlsInfo, strcat(outputFatherDir, 'correlations_PercentageOfFibre_', date, '.xls'))
+    writetable(xlsInfo, strcat(outputFatherDir, 'correlations_PercentageOfFibreByMeanCoveredArea_', date, '.xls'))
 end
 
