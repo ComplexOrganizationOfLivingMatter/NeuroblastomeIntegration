@@ -283,14 +283,18 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
             load(strcat(filePath, '\', filesInDir{finalsameHoleInDifferentMarkersFiles}));
         end
         
-        
-        
+        % Export all this info to an excel
         if exist('sameRegionInDifferentMarkers', 'var')
-            sameRegionInDifferentMarkers
+            possibleMarkersModified = cell2table(horzcat(possibleMarkers, possibleMarkers{end})');
+            xlsInfoActual = horzcat(possibleMarkersModified, sameRegionInDifferentMarkers(:, 2:end));
+            xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
+            xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
+            xlsInfoActual.Properties.VariableNames{5} = 'Var5';
+            xlsInfo = vertcat(xlsInfo, xlsInfoActual);
         else
             for numCoupling = 1:length(sameHoleInDifferentMarkers)
-                sameHoleInDifferentMarkers = sameHoleInDifferentMarkers{numCoupling};
-                xlsInfoActual = table(sameHoleInDifferentMarkers.Marker, sameHoleInDifferentMarkers.fibreArea, sameHoleInDifferentMarkers.possibleArea, sameHoleInDifferentMarkers.percentageCoveredByFibre, sameHoleInDifferentMarkers.HEPA_OR_MACR);
+                actualCoupling = sameHoleInDifferentMarkers{numCoupling};
+                xlsInfoActual = table(actualCoupling.Marker, actualCoupling.fibreArea, actualCoupling.possibleArea, actualCoupling.percentageCoveredByFibre, actualCoupling.HEPA_OR_MACR);
                 xlsInfoActual.Case = repmat({num2str(uniqueCases(numCase))}, size(xlsInfoActual, 1) , 1);
                 xlsInfoActual.NumCoupling = repmat({num2str(numCoupling)}, size(xlsInfoActual, 1) , 1);
                 xlsInfo = vertcat(xlsInfo, xlsInfoActual);
