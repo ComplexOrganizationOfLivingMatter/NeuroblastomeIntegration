@@ -295,11 +295,11 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
 
             [~, index] = ismember(xlsInfoActual.Var1, possibleMarkers);
             [macrMarkers] = cellfun(@(x) isequal(x, 'MACR'), xlsInfoActual.HEPA_OR_MACR);
-            row = zeros(1, length(possibleMarkers) +1);
+            row = cell(1, length(possibleMarkers) +1);
 
-            row(index + macrMarkers) = xlsInfoActual.Var2;
+            row(index + macrMarkers) = {xlsInfoActual.Var2};
 
-            xlsInfo = vertcat(xlsInfo, horzcat(cell2table({num2str(uniqueCases(numCase))}), array2table(row)));
+            xlsInfo = vertcat(xlsInfo, horzcat(cell2table({num2str(uniqueCases(numCase))}), cell2table(row)));
         else
             for numCoupling = 1:length(sameHoleInDifferentMarkers)
                 actualCoupling = sameHoleInDifferentMarkers{numCoupling};
@@ -310,11 +310,11 @@ function [ ] = analysis3D( imagesPath, possibleMarkers )
                 
                 [~, index] = ismember(actualCoupling.Marker, possibleMarkers);
                 [macrMarkers] = cellfun(@(x) isequal(x, 'MACR'), actualCoupling.HEPA_OR_MACR);
-                row = zeros(1, length(possibleMarkers) +1);
+                row = cell(1, length(possibleMarkers) +1);
                 
-                row(index + macrMarkers) = actualCoupling.fibreArea;
+                row(index + macrMarkers) = {actualCoupling.fibreArea};
                 
-                xlsInfo = vertcat(xlsInfo, horzcat(cell2table({num2str(uniqueCases(numCase))}), array2table(row)));
+                xlsInfo = vertcat(xlsInfo, horzcat(cell2table({num2str(uniqueCases(numCase))}), cell2table(row)));
             end
         end
         
