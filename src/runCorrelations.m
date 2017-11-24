@@ -1,5 +1,6 @@
 
-markersTable = PercentageOfFibre;
+%markersTable = PercentageOfFibre;
+markersTable = totalFibre;
 
 nonEmptyCases = cellfun(@(x) isempty(x) == 0, markersTable.Riskreal);
 highRiskCases = cellfun(@(x) isequal(x, 'NoRisk') == 0, markersTable.Riskreal);
@@ -8,12 +9,27 @@ correlatingMarkers( markersTable(highRiskCases & nonEmptyCases, :) )
 disp('No risk real')
 correlatingMarkers( markersTable(highRiskCases == 0 & nonEmptyCases, :) )
 
+highRiskCasesNames = cell(size(highRiskCases, 1), 1);
+highRiskCasesNames(highRiskCases) = {'HighRisk'};
+highRiskCasesNames(highRiskCases == 0) = {'NoRisk'};
+figure
+gplotmatrix(table2array(markersTable(nonEmptyCases, 5:end)), [], highRiskCasesNames(nonEmptyCases), 'gr', '.', [], 'on', '', markersTable.Properties.VariableNames(5:end), markersTable.Properties.VariableNames(5:end))
+title('Risk real');
+%text([.08 .24 .43 .66 .83], repmat(-.1,1,5), markersTable.Properties.VariableNames(5:end), 'FontSize',8);
+
 nonEmptyCases = cellfun(@(x) isempty(x) == 0, markersTable.Riskcalculated);
 highRiskCases = cellfun(@(x) isequal(x, 'NoRisk') == 0, markersTable.Riskcalculated);
 disp('High risk')
 correlatingMarkers( markersTable(highRiskCases & nonEmptyCases, :) )
 disp('No risk')
 correlatingMarkers( markersTable(highRiskCases == 0 & nonEmptyCases, :) )
+highRiskCasesNames = cell(size(highRiskCases, 1), 1);
+highRiskCasesNames(highRiskCases) = {'HighRisk'};
+highRiskCasesNames(highRiskCases == 0) = {'NoRisk'};
+
+figure
+gplotmatrix(table2array(markersTable(nonEmptyCases, 5:end)), [], highRiskCasesNames(nonEmptyCases), 'gr', '.', [], 'on', '', markersTable.Properties.VariableNames(5:end), markersTable.Properties.VariableNames(5:end))
+title('Risk calculated');
 
 nonEmptyCases = cellfun(@(x) isempty(x) == 0, markersTable.Instability);
 highRiskCases = cellfun(@(x) isequal(x, 'High'), markersTable.Instability);
@@ -22,6 +38,12 @@ correlatingMarkers( markersTable(highRiskCases & nonEmptyCases, :) )
 disp('Rest Instability')
 correlatingMarkers( markersTable(highRiskCases == 0 & nonEmptyCases, :) )
 
+highRiskCasesNames = cell(size(highRiskCases, 1), 1);
+highRiskCasesNames(highRiskCases) = {'High'};
+highRiskCasesNames(highRiskCases == 0) = {'Rest'};
+figure
+gplotmatrix(table2array(markersTable(nonEmptyCases, 5:end)), [], highRiskCasesNames(nonEmptyCases), 'gr', '.', [], 'on', '', markersTable.Properties.VariableNames(5:end), markersTable.Properties.VariableNames(5:end))
+title('Instability');
 
 
 noNaNsFeatures=table2array(markersTable(:, 5:end));
