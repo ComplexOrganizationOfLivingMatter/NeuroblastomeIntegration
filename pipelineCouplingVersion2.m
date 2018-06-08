@@ -32,7 +32,7 @@ for numCD163File = 1:length(cd163Files)
             
             distancesCD163_Ret = pdist2(cd163Centroids, retBranchesPoints);
             
-            minDistancesCD163_Ret = min(distancesCD163_Ret, [], 2);
+            [minDistancesCD163_Ret, minDistancesCD163_RetPositions] = min(distancesCD163_Ret, [], 2);
             
             %Paint closest distances
             figure;
@@ -40,8 +40,8 @@ for numCD163File = 1:length(cd163Files)
             hold on;
             imshow(reticulineBranchPoints, colormap('parula'));
             for numCentroidCD163 = 1:size(cd163Centroids, 1)
-                
-                plot([cd163Centroids(numCentroidCD163, 1) ; ], [cd163Centroids(numCentroidCD163, 2); ]);
+                retMinPos = minDistancesCD163_RetPositions(numCentroidCD163);
+                plot([cd163Centroids(numCentroidCD163, 1) ; reticulineBranchPoints(retMinPos, 1)], [cd163Centroids(numCentroidCD163, 2); reticulineBranchPoints(retMinPos, 2)]);
             end
             
             
