@@ -16,11 +16,34 @@ for numCD163File = 1:length(cd163Files)
             retImg = imread(strcat(actualRETFileName.folder, '\', actualRETFileName.name));
             cd163Img = imread(strcat(cd163ActualFile.folder, '\', cd163ActualFile.name));
             
-            retImg = retImg(:, :, 1);
-            cd163Img = cd163Img(:, :, 1);
+            retImg = retImg(:, :, 1) > 0;
+            cd163Img = cd163Img(:, :, 1)  > 0;
             
-            cd163Centroids = regionprops(cd163Img > 0, 'Centroid');
+            % Getting centroids of CD163 img marker
+            cd163Centroids = regionprops(cd163Img, 'Centroid');
             cd163Centroids = vertcat(cd163Centroids.Centroid);
+            
+            % Getting topological info from RET img
+            retSkeletonImg = bwskel(retImg);
+            reticulineBranchPoints = bwmorph(retSkeletonImg, 'branchpoints');
+            
+            [x, y] = find(reticulineBranchPoints);
+            retBranchesPoints = horzcat(y ,x);
+            
+            distancesCD163_Ret = pdist2(cd163Centroids, retBranchesPoints);
+            
+            minDistancesCD163_Ret = min(distancesCD163_Ret, [], 2);
+            
+            %Paint closest distances
+            figure;
+            imshow(cd163Img)
+            hold on;
+            imshow(reticulineBranchPoints, colormap('parula'));
+            for numCentroidCD163 = 1:size(cd163Centroids, 1)
+                
+                plot([cd163Centroids(numCentroidCD163, 1) ; ], [cd163Centroids(numCentroidCD163, 2); ]);
+            end
+            
             
             disp('');
             
