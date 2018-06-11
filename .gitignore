@@ -76,3 +76,4 @@ src/lib/plot2svg-master
 *.svg
 *.mat
 *.Rhistory
+logFile
