@@ -95,6 +95,8 @@ casesRisk = {'00B18084'	'High'	'HighRisk'
 '332948'	'High'	'HighRisk'
 };
 
+thresholdOfDistance = 20;
+
 results = [];
 caseNames = {};
 
@@ -146,7 +148,8 @@ for numCD163File = 1:length(cd163Files)
 %                 plot([cd163Centroids(numCentroidCD163, 1) , retBranchesPoints(retMinPos, 1)], [cd163Centroids(numCentroidCD163, 2), retBranchesPoints(retMinPos, 2)]);
 %             end
             
-            results(end+1, 1:2) = horzcat(mean(minDistancesCD163_Ret),std(minDistancesCD163_Ret));
+            results(end+1, 1:6) = horzcat(mean(minDistancesCD163_Ret),std(minDistancesCD163_Ret), mean(sum(distancesCD163_Ret < thresholdOfDistance, 2)), std(sum(distancesCD163_Ret < thresholdOfDistance, 2)), ...
+                mean(distancesCD163_Ret(distancesCD163_Ret < thresholdOfDistance)), std(distancesCD163_Ret(distancesCD163_Ret < thresholdOfDistance)));
             
             
         else
@@ -154,6 +157,7 @@ for numCD163File = 1:length(cd163Files)
             fid = fopen('logFile','a+');
             % write the error to file
             % first line: message
+            fprintf(fid,'-------%s----------\r\n', datestr(datetime('now')));
             fprintf(fid,'%s\r\n', caseName);
             
             % close file
@@ -162,10 +166,14 @@ for numCD163File = 1:length(cd163Files)
     end
 end
 
-resultsTable = table(caseNames', results(:, 1), results(:, 2));
+resultsTable = horzcat(table(caseNames'), array2table(results));
 resultsTable.Properties.VariableNames{1} = 'Case';
 resultsTable.Properties.VariableNames{2} = 'MeanBranches';
 resultsTable.Properties.VariableNames{3} = 'StdBranches';
+resultsTable.Properties.VariableNames{4} = 'MeanNumberOfBranchesCloser';
+resultsTable.Properties.VariableNames{5} = 'StdNumberOfBranchesCloser';
+resultsTable.Properties.VariableNames{6} = 'MeanDistanceWithinThreshold';
+resultsTable.Properties.VariableNames{7} = 'StdDistanceWithinThreshold';
 
 correspondance = cellfun(@(x) find(contains(resultsTable{:, 1}, x)) , casesRisk(:, 1), 'UniformOutput', false);
 
@@ -174,7 +182,7 @@ correspondance( cellfun(@(x) isempty(x), correspondance), :) = [];
 correspondance = cell2mat(correspondance);
 
 resultsTable(:, end+1:end+2) = casesRisk(correspondance, 2:3);
-resultsTable.Properties.VariableNames{4} = 'Instability';
-resultsTable.Properties.VariableNames{5} = 'RiskCalculated';
+resultsTable.Properties.VariableNames{end-1} = 'Instability';
+resultsTable.Properties.VariableNames{end} = 'RiskCalculated';
 resultsTable = movevars(resultsTable, 'Instability', 'Before', 'MeanBranches');
 resultsTable = movevars(resultsTable, 'RiskCalculated', 'Before', 'MeanBranches');
