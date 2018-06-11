@@ -103,13 +103,17 @@ for numCD163File = 1:length(cd163Files)
     if contains(cd163ActualFile.name, 'POSITIVAS') % Only positive images
         fileName = strsplit(cd163ActualFile.name, '_');
         caseName = fileName{1};
+        
+        if endsWith(caseName, 'B') || endsWith(caseName, 'A') %REGEX
+            caseName = caseName(:, 1:end-1);
+        end
+        
         actualRETFile = cellfun(@(x) contains(x, caseName) & contains(x, 'CELS', 'IgnoreCase',true) == 0, {retFiles.name});
         
         if sum(actualRETFile) > 0
             caseNames(end+1) = {caseName};
             actualRETFileName = retFiles(actualRETFile);
             
-            actualRETFileName.folder
             retImg = imread(strcat(actualRETFileName.folder, '\', actualRETFileName.name));
             cd163Img = imread(strcat(cd163ActualFile.folder, '\', cd163ActualFile.name));
             
@@ -144,7 +148,6 @@ for numCD163File = 1:length(cd163Files)
             
             results(end+1, 1:2) = horzcat(mean(minDistancesCD163_Ret),std(minDistancesCD163_Ret));
             
-            disp('');
             
         else
             warning(strcat('No positive marker for RET: ', caseName));
