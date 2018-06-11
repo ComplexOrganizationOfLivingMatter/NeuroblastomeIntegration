@@ -127,7 +127,8 @@ for numCD163File = 1:length(cd163Files)
             cd163Centroids = vertcat(cd163Centroids.Centroid);
             
             % Getting topological info from RET img
-            retSkeletonImg = bwskel(retImg);
+            %retSkeletonImg = bwskel(retImg);
+            retSkeletonImg = bwmorph(retImg, 'skel', Inf);
             reticulineBranchPoints = bwmorph(retSkeletonImg, 'branchpoints');
             
             [x, y] = find(reticulineBranchPoints);
