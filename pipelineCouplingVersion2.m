@@ -148,11 +148,28 @@ for numCD163File = 1:length(cd163Files)
             
                 cd163ImgWithShapes = imread(strcat(actualFormOfCD163File.folder, '\', actualFormOfCD163File.name));
                 
-                cd163holesProperties = regionprops(cd163ImgWithShapes(:, :, 1) == 0, 'all');
+                cd163holes1Properties = regionprops(bwconncomp(cd163ImgWithShapes(:, :, 1) == 0, 4), 'all');
+                cd163holes2Properties = regionprops(bwconncomp(sum(cd163ImgWithShapes(:, :, 4:5), 3) == 0, 4), 'all');
+                cd163holesProperties = vertcat(cd163holes1Properties, cd163holes2Properties(2:end));
                 
-                for numAdditionalChannel = 4:size(cd163ImgWithShapes, 3)
-                    regionprops(cd163ImgWithShapes(:, :, numAdditionalChannel), 'all');
+                cd163holesCentroids = vertcat(cd163holesProperties.Centroid);
+                closestHole = pdist2(cd163Centroids, cd163holesCentroids);
+                [~, positionsClosestHole] = min(closestHole, [], 2);
+                
+                if length(unique(positionsClosestHole)) ~= size(cd163Centroids, 1)
+                    warning('Possible two cells as one')
+                    fid = fopen('logFile','a+');
+                    % write the error to file
+                    % first line: message
+                    fprintf(fid,'-------%s----------\r\n', datestr(datetime('now')));
+                    fprintf(fid,'Possible cells together not segmented well for CD163: %s\r\n', caseName);
+
+                    % close file
+                    fclose(fid);
                 end
+                
+                
+                
             end
             
 %             %Paint closest distances
