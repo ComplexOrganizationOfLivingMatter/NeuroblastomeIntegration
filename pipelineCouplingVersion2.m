@@ -1,5 +1,6 @@
 
 cd163Files = dir('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\CD163\Images\**\*.tif');
+cd163_WithFormsFiles = dir('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\CD163\Images_NoSegmented\**\*.tif');
 retFiles = dir('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\RET\Images\**\*.tif');
 
 casesRisk = {'00B18084'	'High'	'HighRisk'
@@ -95,7 +96,7 @@ casesRisk = {'00B18084'	'High'	'HighRisk'
 '332948'	'High'	'HighRisk'
 };
 
-thresholdOfDistance = 20;
+thresholdOfDistance = 50;%0.005;
 
 results = [];
 caseNames = {};
@@ -127,8 +128,8 @@ for numCD163File = 1:length(cd163Files)
             cd163Centroids = vertcat(cd163Centroids.Centroid);
             
             % Getting topological info from RET img
-            %retSkeletonImg = bwskel(retImg);
-            retSkeletonImg = bwmorph(retImg, 'skel', Inf);
+            retSkeletonImg = bwskel(retImg);
+            %retSkeletonImg = bwmorph(retImg, 'skel', Inf);
             reticulineBranchPoints = bwmorph(retSkeletonImg, 'branchpoints');
             
             [x, y] = find(reticulineBranchPoints);
@@ -137,6 +138,22 @@ for numCD163File = 1:length(cd163Files)
             distancesCD163_Ret = pdist2(cd163Centroids, retBranchesPoints);
             
             [minDistancesCD163_Ret, minDistancesCD163_RetPositions] = min(distancesCD163_Ret, [], 2);
+            
+            actualFormOfCD163File = cellfun(@(x) contains(x, caseName) & contains(x, 'POSITIVAS', 'IgnoreCase',true), {cd163_WithFormsFiles.name});
+            
+            if sum(actualFormOfCD163File) > 0
+                disp('Forms!');
+                
+                actualFormOfCD163File = cd163_WithFormsFiles(actualFormOfCD163File);
+            
+                cd163ImgWithShapes = imread(strcat(actualFormOfCD163File.folder, '\', actualFormOfCD163File.name));
+                
+                cd163holesProperties = regionprops(cd163ImgWithShapes(:, :, 1) == 0, 'all');
+                
+                for numAdditionalChannel = 4:size(cd163ImgWithShapes, 3)
+                    regionprops(cd163ImgWithShapes(:, :, numAdditionalChannel), 'all');
+                end
+            end
             
 %             %Paint closest distances
 %             figure;
