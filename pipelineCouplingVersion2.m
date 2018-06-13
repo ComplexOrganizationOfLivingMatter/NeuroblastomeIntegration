@@ -124,8 +124,8 @@ for numCD163File = 1:length(cd163Files)
             cd163Img = cd163Img(:, :, 1)  > 0;
             
             % Getting centroids of CD163 img marker
-            cd163Centroids = regionprops(cd163Img, 'Centroid');
-            cd163Centroids = vertcat(cd163Centroids.Centroid);
+            cd163AllInfo = regionprops(cd163Img, 'Centroid');
+            cd163Centroids = vertcat(cd163AllInfo.Centroid);
             
             % Getting topological info from RET img
             retSkeletonImg = bwskel(retImg);
@@ -139,18 +139,37 @@ for numCD163File = 1:length(cd163Files)
             
             [minDistancesCD163_Ret, minDistancesCD163_RetPositions] = min(distancesCD163_Ret, [], 2);
             
+                        
+%             %Paint closest distances
+%             figure;
+%             composedImg = double(cd163Img)*40;
+%             imshow(composedImg, colormap('hot'))
+%             hold on;
+%             for numCentroidCD163 = 1:size(cd163Centroids, 1)
+%                 plot(retBranchesPoints(retMinPos, 1), retBranchesPoints(retMinPos, 2), 'r*');
+%                 retMinPos = minDistancesCD163_RetPositions(numCentroidCD163);
+%                 plot([cd163Centroids(numCentroidCD163, 1) , retBranchesPoints(retMinPos, 1)], [cd163Centroids(numCentroidCD163, 2), retBranchesPoints(retMinPos, 2)]);
+%             end
+
+            
+            results(end+1, 1:6) = horzcat(mean(minDistancesCD163_Ret),std(minDistancesCD163_Ret), mean(sum(distancesCD163_Ret < thresholdOfDistance, 2)), std(sum(distancesCD163_Ret < thresholdOfDistance, 2)), ...
+                mean(distancesCD163_Ret(distancesCD163_Ret < thresholdOfDistance)), std(distancesCD163_Ret(distancesCD163_Ret < thresholdOfDistance)));
+            
             actualFormOfCD163File = cellfun(@(x) contains(x, caseName) & contains(x, 'POSITIVAS', 'IgnoreCase',true), {cd163_WithFormsFiles.name});
             
             if sum(actualFormOfCD163File) > 0
-                disp('Forms!');
                 
                 actualFormOfCD163File = cd163_WithFormsFiles(actualFormOfCD163File);
             
                 cd163ImgWithShapes = imread(strcat(actualFormOfCD163File.folder, '\', actualFormOfCD163File.name));
                 
                 cd163holes1Properties = regionprops(bwconncomp(cd163ImgWithShapes(:, :, 1) == 0, 4), 'all');
-                cd163holes2Properties = regionprops(bwconncomp(sum(cd163ImgWithShapes(:, :, 4:5), 3) == 0, 4), 'all');
-                cd163holesProperties = vertcat(cd163holes1Properties, cd163holes2Properties(2:end));
+                if size(cd163ImgWithShapes, 3) > 3
+                    cd163holes2Properties = regionprops(bwconncomp(sum(cd163ImgWithShapes(:, :, 4:end), 3) == 0, 4), 'all');
+                    cd163holesProperties = vertcat(cd163holes1Properties, cd163holes2Properties(2:end));
+                else
+                    cd163holesProperties = cd163holes1Properties;
+                end
                 
                 cd163holesCentroids = vertcat(cd163holesProperties.Centroid);
                 closestHole = pdist2(cd163Centroids, cd163holesCentroids);
@@ -168,25 +187,20 @@ for numCD163File = 1:length(cd163Files)
                     fclose(fid);
                 end
                 
+                cd163holesPropertiesTable = struct2table(cd163holesProperties(positionsClosestHole));
+                cd163holesPropertiesTable.Properties.VariableNames(2) = {'OldCentroid'};
+                cd163AllInfo = horzcat(struct2table(cd163AllInfo), cd163holesPropertiesTable);
                 
+                % < 0.85  -> star or ellongated
+                % > 0.85  -> circle-like or disk
+                branchPointsDistanceToStarsLike = distancesCD163_Ret(cd163AllInfo.Solidity < 0.85, :);
+                branchPointsDistanceToCircleLike = distancesCD163_Ret(cd163AllInfo.Solidity >= 0.85, :);
                 
+
+                results(end, 7:10) = [mean(min(branchPointsDistanceToStarsLike, [], 2)), std(min(branchPointsDistanceToStarsLike, [], 2)), mean(min(branchPointsDistanceToCircleLike, [], 2)), std(min(branchPointsDistanceToCircleLike, [], 2))];
+                results(end, 11:12) = [mean(sum(branchPointsDistanceToStarsLike < thresholdOfDistance, 2)), std(sum(branchPointsDistanceToStarsLike < thresholdOfDistance, 2))];
+                results(end, 13:14) = [mean(sum(branchPointsDistanceToCircleLike < thresholdOfDistance, 2)), std(sum(branchPointsDistanceToCircleLike < thresholdOfDistance, 2))];
             end
-            
-%             %Paint closest distances
-%             figure;
-%             composedImg = double(cd163Img)*40;
-%             imshow(composedImg, colormap('hot'))
-%             hold on;
-%             for numCentroidCD163 = 1:size(cd163Centroids, 1)
-%                 plot(retBranchesPoints(retMinPos, 1), retBranchesPoints(retMinPos, 2), 'r*');
-%                 retMinPos = minDistancesCD163_RetPositions(numCentroidCD163);
-%                 plot([cd163Centroids(numCentroidCD163, 1) , retBranchesPoints(retMinPos, 1)], [cd163Centroids(numCentroidCD163, 2), retBranchesPoints(retMinPos, 2)]);
-%             end
-            
-            results(end+1, 1:6) = horzcat(mean(minDistancesCD163_Ret),std(minDistancesCD163_Ret), mean(sum(distancesCD163_Ret < thresholdOfDistance, 2)), std(sum(distancesCD163_Ret < thresholdOfDistance, 2)), ...
-                mean(distancesCD163_Ret(distancesCD163_Ret < thresholdOfDistance)), std(distancesCD163_Ret(distancesCD163_Ret < thresholdOfDistance)));
-            
-            
         else
             warning(strcat('No positive marker for RET: ', caseName));
             fid = fopen('logFile','a+');
