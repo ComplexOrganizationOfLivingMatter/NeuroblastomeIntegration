@@ -217,12 +217,21 @@ end
 
 resultsTable = horzcat(table(caseNames'), array2table(results));
 resultsTable.Properties.VariableNames{1} = 'Case';
-resultsTable.Properties.VariableNames{2} = 'MeanBranches';
-resultsTable.Properties.VariableNames{3} = 'StdBranches';
+resultsTable.Properties.VariableNames{2} = 'MeanMinToClosestBranch';
+resultsTable.Properties.VariableNames{3} = 'StdMinToClosestBranch';
 resultsTable.Properties.VariableNames{4} = 'MeanNumberOfBranchesCloser';
 resultsTable.Properties.VariableNames{5} = 'StdNumberOfBranchesCloser';
 resultsTable.Properties.VariableNames{6} = 'MeanDistanceWithinThreshold';
 resultsTable.Properties.VariableNames{7} = 'StdDistanceWithinThreshold';
+resultsTable.Properties.VariableNames{8} = 'Stars_MeanMinToClosestBranch';
+resultsTable.Properties.VariableNames{9} = 'Stars_StdMinToClosestBranch';
+resultsTable.Properties.VariableNames{10} = 'Circle_MeanMinToClosestBranch';
+resultsTable.Properties.VariableNames{11} = 'Circle_StdMinToClosestBranch';
+resultsTable.Properties.VariableNames{12} = 'Stars_MeanNumberOfCloserBranches';
+resultsTable.Properties.VariableNames{13} = 'Stars_StdNumberOfCloserBranches';
+resultsTable.Properties.VariableNames{14} = 'Circle_MeanNumberOfCloserBranches';
+resultsTable.Properties.VariableNames{15} = 'Circle_StdNumberOfCloserBranches';
+
 
 correspondance = cellfun(@(x) find(contains(resultsTable{:, 1}, x)) , casesRisk(:, 1), 'UniformOutput', false);
 
@@ -233,5 +242,5 @@ correspondance = cell2mat(correspondance);
 resultsTable(:, end+1:end+2) = casesRisk(correspondance, 2:3);
 resultsTable.Properties.VariableNames{end-1} = 'Instability';
 resultsTable.Properties.VariableNames{end} = 'RiskCalculated';
-resultsTable = movevars(resultsTable, 'Instability', 'Before', 'MeanBranches');
-resultsTable = movevars(resultsTable, 'RiskCalculated', 'Before', 'MeanBranches');
+resultsTable = movevars(resultsTable, 'Instability', 'Before', 'MeanMinToClosestBranch');
+resultsTable = movevars(resultsTable, 'RiskCalculated', 'Before', 'MeanMinToClosestBranch');
