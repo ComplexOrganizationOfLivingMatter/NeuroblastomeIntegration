@@ -449,7 +449,7 @@ analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosC
 analyzeGraphletsDistances('E:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\RET\NDUMP2\DivideByPacient\AgainstHexagons\', 'ret', 'gdda');
 
 %% Pipeline
-params = {{'ret', 'CD31', 'VTN', 'COL'}, {'RET', 'VasosSanguineos', 'Vitronectine', 'COLAGENO'}};
+params = {{'ret', 'CD31', 'VTN', 'COL', 'GAGs', 'CD240'}, {'RET', 'VasosSanguineos', 'Vitronectine', 'COLAGENO', 'GAGs', 'LymphaticVessels'}};
 
 parfor i = 1:size(params{1}, 2)
     pipelineAnalyzeNetworksWithGraphlets(params{1}{i}, params{2}{i});
@@ -457,28 +457,114 @@ end
 
 pipelineAnalyzeNetworksWithGraphlets( 'VTN', 'Vitronectine');
 pipelineAnalyzeNetworksWithGraphlets( 'ret', 'RET' );
-pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos');
 %pipelineAnalyzeNetworksWithGraphlets( 'CD163', 'CD163');
 pipelineAnalyzeNetworksWithGraphlets( 'COL', 'COLAGENO');
 pipelineAnalyzeNetworksWithGraphlets( 'GAGs', 'GAGs');
+pipelineAnalyzeNetworksWithGraphlets( 'CD31', 'VasosSanguineos');
+pipelineAnalyzeNetworksWithGraphlets( 'CD240', 'LymphaticVessels');
 
 
-analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\RET\NDUMP2\DivideByPacient\AgainstControl\', 'ret', 'gdda');
-analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VasosSanguineos\NDUMP2\DivideByPacient\AgainstControl\', 'CD31', 'gdda');
-analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'MACR', 'gdda');
-analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\VTN\NDUMP2\DivideByPacient\AgainstControl\', 'HEPA', 'gdda');
-analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\Markers\COL\NDUMP2\DivideByPacient\AgainstControl\', 'COL', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\RET\NDUMP2\DivideByPacient\AgainstNewControl\', 'ret', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\VasosSanguineos\NDUMP2\DivideByPacient\AgainstNewControl\', 'CD31', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\VTN\NDUMP2\DivideByPacient\AgainstNewControl\', 'MACR', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\VTN\NDUMP2\DivideByPacient\AgainstNewControl\', 'HEPA', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\COL\NDUMP2\DivideByPacient\AgainstNewControl\', 'COL', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\GAGs\NDUMP2\DivideByPacient\AgainstNewControl\', 'GAGs', 'gdda');
+analyzeGraphletsDistances('..\Results\graphletsCount\NuevosCasos\GraphletsMarkers\LymphaticVessels\NDUMP2\DivideByPacient\AgainstNewControl', 'CD240', 'gdda');
 
+
+%Weights
+
+analyzeGraphletsDistances('D:\Pablo\Neuroblastoma\Results\graphletsCount\NuevosCasos\GraphletsMarkers\RET\NDUMP2\DivideByPacient\AgainstControlWeights\', 'ret', 'gdda');
 %% painting networks
-load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\MinimumSpanningTree\mst_04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50Diamet.mat')
-load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\DistanceMatrixWeights\04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50DiametDistanceMatrix.mat')
-imageName = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Images\Y04B\04B7005A\04B07005A_Y04B_VTN_HEPA_Mask.tif';
-paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids);
-
-load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\SortingAlgorithm\sorting_04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50DiametItFinal.mat')
-paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids);
-
-load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\IterationAlgorithm\minimumDistanceClassesBetweenPairs04B07005A_Y04B_VTN_HEPA_MaskContigousHexagonalMeanAreaMask50DiametItFinal.mat')
-paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids);
+load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\MinimumSpanningTree\mst__04B00051B_Y04B_VTN_MACR_maskContigousHexagonalMeanAreaMask50Diamet.mat')
+imageName = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Images\Y04B\_04B00051A\_04B00051B_Y04B_VTN_MACR_mask.tif';
+load('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\DistanceMatrixWeights\_04B00051B_Y04B_VTN_MACR_maskContigousHexagonalMeanAreaMask50DiametDistanceMatrix.mat');
+paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids, '04B00051 MACR', 'MST');
 
 
+%% Painting networks
+sortingDirectory = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\SortingAlgorithm\';
+iterationDirectory = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\IterationAlgorithm\';
+mstDirectory = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\MinimumSpanningTree\';
+imageDirectory = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Images\';
+distanceMatrixDirectory = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Networks\DistanceMatrixWeights\';
+
+cases = {'01B21578' %HighRisk
+    '06B05411' %NoRisk
+    '06B01779' %NoRisk
+    '11B17262' %HighRisk
+    };
+
+allFiles = {getAllFiles(sortingDirectory); getAllFiles(iterationDirectory); getAllFiles(imageDirectory); getAllFiles(distanceMatrixDirectory); getAllFiles(mstDirectory)};
+
+marker = {'HEPA'};
+
+for numCase = 3:size(cases, 1)
+    for numMarker = 1:size(marker, 2)
+        close all
+        load(allFiles{4}{cellfun(@(x) isempty(strfind(x, marker{numMarker})) == 0 & isempty(strfind(x, cases{numCase})) == 0, allFiles{4})});
+        %imageName = allFiles{3}{cellfun(@(x) isempty(strfind(x, cases{numCase})) == 0 & isempty(strfind(lower(x), 'def')) == 0, allFiles{3})};
+        imageName = allFiles{3}{cellfun(@(x) isempty(strfind(x, marker{numMarker})) == 0 & isempty(strfind(x, cases{numCase})) == 0 & isempty(strfind(lower(x), 'mask')) == 0, allFiles{3})};
+        %MST
+        load(allFiles{5}{cellfun(@(x) isempty(strfind(lower(x), 'control')) & isempty(strfind(x, marker{numMarker})) == 0 & isempty(strfind(x, cases{numCase})) == 0, allFiles{5})});
+        %paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids, strcat(cases{numCase}, marker{numMarker}),'mst');
+        %painting sorting
+        load(allFiles{1}{cellfun(@(x) isempty(strfind(lower(x), 'control')) & isempty(strfind(lower(x), 'final')) == 0 & isempty(strfind(x, marker{numMarker})) == 0 & isempty(strfind(x, cases{numCase})) == 0, allFiles{1})});
+        %paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids, strcat(cases{numCase}, marker{numMarker}), 'sorting');
+        %painting iteration
+        load(allFiles{2}{cellfun(@(x) isempty(strfind(lower(x), 'control')) & isempty(strfind(lower(x), 'final')) == 0 & isempty(strfind(x, marker{numMarker})) == 0 & isempty(strfind(x, cases{numCase})) == 0, allFiles{2})});
+        paintNetworkIntoARealImage(imageName, adjacencyMatrix, centroids, strcat(cases{numCase}, marker{numMarker}),'iteration');
+    end
+end
+
+
+
+%% 3D analysis
+analysis3D('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos', {'COLAGENO', 'VasosSanguineos', 'RET', 'GAGs', 'LymphaticVessels', 'Vitronectine'});
+
+
+%% Get a region with hexagons
+Img = double(x_04B00051B_Y04B_VTN_MACR_mask);
+maskName = strcat('..\Mascaras\HexagonalMask', num2str(50), 'Diamet.mat');
+mask = importdata(maskName);
+mask = mask(1:size(Img, 1), 1:size(Img,2));
+
+ImgMasked = Img .* mask;
+
+maskRGB(:, :, 1) = double(mask==0) * 102 / 255;
+maskRGB(:, :, 2) = double(mask==0) * 153 / 255;
+maskRGB(:, :, 3) = double(mask==0) * 1 ;
+
+imgSkel = bwmorph(Img,'skel',inf);
+imgBranchingPoints = bwmorph(imgSkel,'branchpoints');
+
+imgBranchingPoints = imgBranchingPoints .* ImgMasked;
+
+imgToOverlap = ImgMasked;
+imgBranchingPointsRGB = maskRGB;
+imgBranchingPointsRGB(find(imgToOverlap > 0)) = imgToOverlap(imgToOverlap > 0);
+imgBranchingPointsRGB(find(imgToOverlap > 0) + (size(ImgMasked, 1) * size(ImgMasked, 2))) = imgToOverlap(imgToOverlap > 0);
+imgBranchingPointsRGB(find(imgToOverlap > 0) + (size(ImgMasked, 1) * size(ImgMasked, 2))*2) = imgToOverlap(imgToOverlap > 0);
+
+boundingBox = [2980.5 3732.5 384 312];
+imgCropped = imcrop(imgBranchingPointsRGB, boundingBox);
+figure; imshow(imgCropped);
+
+
+%% Quantifying Intra and pericellular VN
+imgFiles = 'D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\Vitronectine\Images\';
+tmas = dir(imgFiles);
+
+casesToStore = {};
+meanClosestVN = [];
+for numTma = 3:size(tmas, 1)
+    actualTma = tmas(numTma);
+    allCases = dir(strcat(actualTma.folder, '\', actualTma.name));
+    for numCase = 3:size(allCases, 1)
+        actualCase = allCases(numCase);
+        casesToStore(end+1) = {actualCase.name};
+        meanClosestVN(end+1) = quantifyingIntraCellularVN(strcat(actualCase.folder, '\', actualCase.name, '\'));
+    end
+end
+ allResults =table(casesToStore', meanClosestVN');
