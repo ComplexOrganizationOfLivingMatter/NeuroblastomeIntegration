@@ -77,3 +77,4 @@ src/lib/plot2svg-master
 *.mat
 *.Rhistory
 logFile
+*.pdf
