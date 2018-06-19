@@ -2,7 +2,7 @@ function [output] = quantifyingIntraCellularVN(inputFile)
 %QUANTIFYINGINTRACELLULARVN Summary of this function goes here
 %   Detailed explanation goes here
 allFiles = dir(strcat(inputFile, '*.tif'));
-intraCellularThreshold = 30;
+intraCellularThreshold = 8;
 
 negativeCellsFile = allFiles(cellfun(@(x) contains(x, 'CELS', 'IgnoreCase', true), {allFiles.name}));
 negCellsImg = imread(strcat(negativeCellsFile.folder, '\', negativeCellsFile.name));
@@ -13,7 +13,7 @@ periIntraCellImg = imread(strcat(periIntraCellularFile.folder, '\', periIntraCel
 periIntraCellImg = periIntraCellImg(:, :, 1) > 0;
 
 centroidsNegCells = regionprops(negCellsImg, 'Centroid');
-centroidsNegCellsCentroids = vertcat(centroidsNegCells.Centroid);
+centroidsNegCellsCentroids = round(vertcat(centroidsNegCells.Centroid));
 
 [x, y] = find(periIntraCellImg);
 periIntraCellPixels = horzcat(y, x);
@@ -21,18 +21,20 @@ periIntraCellPixels = horzcat(y, x);
 %Closest VN
 distanceCentroids = pdist2(centroidsNegCellsCentroids, periIntraCellPixels, 'euclidean', 'Smallest', 1);
 
+output = mean(distanceCentroids);
+
 %Quantify intracellular
 negCellsCentroidsImg = zeros(size(negCellsImg));
 for numCentroid = 1:size(centroidsNegCellsCentroids, 1)
-    negCellsCentroidsImg(centroidsNegCellsCentroids(numCentroid, 1), centroidsNegCellsCentroids(numCentroid, 2)) = 1;
+    negCellsCentroidsImg(centroidsNegCellsCentroids(numCentroid, 2), centroidsNegCellsCentroids(numCentroid, 1)) = 1;
 end
 distImgNegCells = bwdist(negCellsCentroidsImg);
 
-totalPeriIntraCellVTN = sum(periIntraCellImg);
+totalPeriIntraCellVTN = sum(periIntraCellImg(:));
 totalIntraCellVN = sum(periIntraCellImg(distImgNegCells < intraCellularThreshold));
 
 percentageOfIntraCellVN = totalIntraCellVN/totalPeriIntraCellVTN;
 
-output = mean(distanceCentroids);
+output = percentageOfIntraCellVN;
 end
 
