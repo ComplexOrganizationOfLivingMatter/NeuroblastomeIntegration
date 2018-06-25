@@ -3,7 +3,7 @@ cd163Files = dir('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\CD163\I
 cd163_WithFormsFiles = dir('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\CD163\Images_NoSegmented\**\*.tif');
 retFiles = dir('D:\Pablo\Neuroblastoma\Datos\Data\NuevosCasos160\Casos\RET\Images\**\*.tif');
 
-casesRisk = {'00B18084'	'High'	'HighRisk'
+casesInfo = {'00B18084'	'High'	'HighRisk'
 '00B18416'	'High'	'HighRisk'
 '01B21578'	'High'	'HighRisk'
 '02B08103'	'High'	'HighRisk'
@@ -96,7 +96,194 @@ casesRisk = {'00B18084'	'High'	'HighRisk'
 '332948'	'High'	'HighRisk'
 };
 
-thresholdOfDistance = 50;%0.005;
+casesInfo2 = {1.0	1.0	1.0	1.0	1	1.0	0.0	0.0
+1.0	1.0	1.0	2.0	1	1.0	999.0	1.0
+1.0	0.0	1.0	1.0	1	1.0	1.0	0.0
+1.0	1.0	1.0	2.0	1	1.0	1.0	0.0
+1.0	1.0	1.0	1.0	1	1.0	1.0	1.0
+1.0	0.0	1.0	0.0	999	0.0	0.0	0.0
+0.0	1.0	1.0	1.0	1	0.0	0.0	1.0
+1.0	0.0	0.0	999.0	999	999.0	999.0	0.0
+0.0	0.0	1.0	1.0	999	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	0.0	1	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+1.0	1.0	1.0	1.0	1	0.0	1.0	1.0
+0.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+1.0	0.0	1.0	2.0	1	0.0	1.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	1.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	999.0	0.0
+1.0	999.0	1.0	1.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+0.0	0.0	0.0	999.0	999	0.0	999.0	999.0
+0.0	0.0	1.0	0.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+1.0	1.0	1.0	2.0	1	0.0	0.0	1.0
+0.0	0.0	1.0	1.0	999	0.0	0.0	999.0
+1.0	1.0	1.0	1.0	1	0.0	0.0	1.0
+0.0	0.0	1.0	1.0	1	0.0	1.0	1.0
+1.0	0.0	1.0	0.0	1	0.0	999.0	999.0
+0.0	1.0	1.0	1.0	1	1.0	1.0	0.0
+0.0	0.0	1.0	0.0	1	0.0	0.0	0.0
+0.0	0.0	1.0	0.0	0	0.0	999.0	0.0
+1.0	0.0	0.0	999.0	0	0.0	0.0	0.0
+1.0	1.0	1.0	1.0	1	0.0	1.0	1.0
+0.0	0.0	1.0	1.0	1	1.0	1.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+1.0	1.0	1.0	1.0	1	0.0	0.0	1.0
+0.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+1.0	0.0	1.0	2.0	1	1.0	0.0	0.0
+1.0	0.0	1.0	0.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	999.0	1	1.0	0.0	1.0
+1.0	0.0	1.0	2.0	1	1.0	0.0	1.0
+1.0	0.0	1.0	0.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+1.0	1.0	1.0	999.0	1	0.0	999.0	1.0
+0.0	1.0	1.0	1.0	1	1.0	999.0	0.0
+1.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+1.0	1.0	1.0	1.0	1	1.0	999.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+1.0	0.0	1.0	0.0	0	0.0	0.0	0.0
+0.0	1.0	1.0	1.0	1	1.0	0.0	1.0
+1.0	999.0	0.0	999.0	999	0.0	999.0	999.0
+1.0	0.0	0.0	999.0	999	0.0	0.0	999.0
+1.0	999.0	1.0	1.0	0	0.0	999.0	0.0
+1.0	0.0	1.0	2.0	1	1.0	0.0	0.0
+1.0	0.0	0.0	999.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	1	1.0	0.0	0.0
+1.0	0.0	1.0	1.0	1	0.0	999.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	999.0	0.0
+1.0	0.0	0.0	999.0	999	0.0	0.0	999.0
+0.0	1.0	1.0	1.0	1	0.0	0.0	1.0
+1.0	1.0	1.0	1.0	1	0.0	0.0	1.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	1.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+1.0	0.0	1.0	0.0	0	0.0	0.0	0.0
+0.0	0.0	1.0	1.0	1	0.0	1.0	0.0
+0.0	0.0	1.0	1.0	0	0.0	999.0	0.0
+0.0	0.0	1.0	2.0	1	0.0	999.0	0.0
+0.0	1.0	0.0	999.0	1	0.0	0.0	999.0
+0.0	0.0	1.0	1.0	1	0.0	0.0	0.0
+1.0	1.0	1.0	1.0	1	0.0	0.0	0.0
+1.0	0.0	1.0	1.0	1	1.0	0.0	0.0
+1.0	1.0	1.0	2.0	1	1.0	0.0	0.0
+1.0	1.0	1.0	2.0	1	0.0	0.0	0.0
+0.0	1.0	1.0	1.0	1	0.0	0.0	1.0
+1.0	0.0	1.0	2.0	1	0.0	0.0	1.0
+1.0	1.0	0.0	999.0	1	1.0	0.0	1.0
+0.0	0.0	1.0	2.0	0	0.0	0.0	0.0
+1.0	0.0	1.0	2.0	1	1.0	999.0	0.0   
+};
+
+caseInfoExitus = {0.0	0.0
+1.0	1.0
+0.0	0.0
+1.0	0.0
+0.0	1.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+999	999
+0.0	0.0
+999	999
+1.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+999	999
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+999	999
+0.0	0.0
+0.0	0.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	1.0
+0.0	0.0
+1.0	1.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+1.0	1.0
+1.0	1.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+999	999
+0.0	0.0
+0.0	0.0
+0.0	0.0
+1.0	1.0
+0.0	0.0
+0.0	0.0
+999	999
+0.0	1.0
+999	999
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	0.0
+0.0	1.0
+0.0	0.0
+999	999
+999	999
+0.0	0.0
+999	999
+1.0	1.0
+1.0	1.0
+1.0	1.0
+0.0	1.0
+0.0	1.0
+999	999
+999	999
+1.0	0.0
+1.0	1.0};
+
+casesInfo = horzcat(casesInfo, casesInfo2, caseInfoExitus);
+
+thresholdOfDistance = 30;%0.005;
 
 results = [];
 caseNames = {};
@@ -200,6 +387,9 @@ for numCD163File = 1:length(cd163Files)
                 results(end, 7:10) = [mean(min(branchPointsDistanceToStarsLike, [], 2)), std(min(branchPointsDistanceToStarsLike, [], 2)), mean(min(branchPointsDistanceToCircleLike, [], 2)), std(min(branchPointsDistanceToCircleLike, [], 2))];
                 results(end, 11:12) = [mean(sum(branchPointsDistanceToStarsLike < thresholdOfDistance, 2)), std(sum(branchPointsDistanceToStarsLike < thresholdOfDistance, 2))];
                 results(end, 13:14) = [mean(sum(branchPointsDistanceToCircleLike < thresholdOfDistance, 2)), std(sum(branchPointsDistanceToCircleLike < thresholdOfDistance, 2))];
+                
+            else
+                results(end, 7:14) = NaN;
             end
         else
             warning(strcat('No positive marker for RET: ', caseName));
@@ -233,14 +423,38 @@ resultsTable.Properties.VariableNames{14} = 'Circle_MeanNumberOfCloserBranches';
 resultsTable.Properties.VariableNames{15} = 'Circle_StdNumberOfCloserBranches';
 
 
-correspondance = cellfun(@(x) find(contains(resultsTable{:, 1}, x)) , casesRisk(:, 1), 'UniformOutput', false);
+correspondance = cellfun(@(x) find(contains(resultsTable{:, 1}, x)) , casesInfo(:, 1), 'UniformOutput', false);
 
-casesRisk( cellfun(@(x) isempty(x), correspondance), :) = [];
+casesInfo( cellfun(@(x) isempty(x), correspondance), :) = [];
 correspondance( cellfun(@(x) isempty(x), correspondance), :) = [];
 correspondance = cell2mat(correspondance);
 
-resultsTable(:, end+1:end+2) = casesRisk(correspondance, 2:3);
-resultsTable.Properties.VariableNames{end-1} = 'Instability';
-resultsTable.Properties.VariableNames{end} = 'RiskCalculated';
-resultsTable = movevars(resultsTable, 'Instability', 'Before', 'MeanMinToClosestBranch');
-resultsTable = movevars(resultsTable, 'RiskCalculated', 'Before', 'MeanMinToClosestBranch');
+resultsTable(:, end+1:end+12) = casesInfo(correspondance, 2:13);
+% resultsTable.Properties.VariableNames{end-1} = 'Instability';
+% resultsTable.Properties.VariableNames{end} = 'RiskCalculated';
+% resultsTable = movevars(resultsTable, 'Instability', 'Before', 'MeanMinToClosestBranch');
+% resultsTable = movevars(resultsTable, 'RiskCalculated', 'Before', 'MeanMinToClosestBranch');
+
+variableNames = {'Instability', 'RiskCalculated', 'INRG_EDAD', 'INRG_ESTADIO', 'INRG_HistoCat', 'INRG_HistoDif', 'INRG_SCA', 'INRG_MYCN', 'INRG_PLOIDIA', 'INRG_11q', 'NEUPAT_recaida', 'NEUPAT_exitus'};
+
+resultsTable.Properties.VariableNames(end-11:end) = variableNames;
+
+resultsTable.Instability = grp2idx(categorical(resultsTable.Instability, {'VeryLow', 'Low', 'Medium', 'High'}, 'Ordinal', true));
+resultsTable.RiskCalculated = grp2idx(categorical(resultsTable.RiskCalculated, {'NoRisk', 'HighRisk'}, 'Ordinal', true));
+
+% NaNs instead of 999
+removing999sTable = table2array(resultsTable(:, 18:end));
+removing999sTable(removing999sTable == 999) = nan;
+resultsTable(:, 18:end) = array2table(removing999sTable);
+
+namesCorrCoef = resultsTable.Properties.VariableNames(2:end);
+[resultsCorrCoef, pValuesCorrCoef] = corrcoef(table2array(resultsTable(:, 2:end)), 'Rows', 'pairwise');
+tableCorrCoef = array2table(resultsCorrCoef, 'VariableNames', namesCorrCoef, 'RowNames', namesCorrCoef);
+tableCorrCoef(1:14,:) = [];
+tableCorrCoef = removevars(tableCorrCoef, {'Instability','RiskCalculated','INRG_EDAD','INRG_ESTADIO','INRG_HistoCat','INRG_HistoDif','INRG_SCA','INRG_MYCN','INRG_PLOIDIA','INRG_11q','NEUPAT_recaida','NEUPAT_exitus'});
+
+tablePValuesCorrCoef = array2table(pValuesCorrCoef, 'VariableNames', namesCorrCoef, 'RowNames', namesCorrCoef);
+tablePValuesCorrCoef(1:14,:) = [];
+tablePValuesCorrCoef = removevars(tablePValuesCorrCoef, {'Instability','RiskCalculated','INRG_EDAD','INRG_ESTADIO','INRG_HistoCat','INRG_HistoDif','INRG_SCA','INRG_MYCN','INRG_PLOIDIA','INRG_11q','NEUPAT_recaida','NEUPAT_exitus'});
+
+table2array(tablePValuesCorrCoef) < 0.1
