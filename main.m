@@ -567,4 +567,7 @@ for numTma = 3:size(tmas, 1)
         meanClosestVN(end+1) = quantifyingIntraCellularVN(strcat(actualCase.folder, '\', actualCase.name, '\'));
     end
 end
- allResults =table(casesToStore', meanClosestVN');
+ allResults = table(casesToStore', meanClosestVN');
+ 
+ 
+ %% 
