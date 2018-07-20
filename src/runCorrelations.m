@@ -2,6 +2,7 @@
 %markersTable = PercentageOfFibre;
 markersTable = totalFibre;
 
+%% Correlations
 nonEmptyCases = cellfun(@(x) isempty(x) == 0, markersTable.Riskreal);
 highRiskCases = cellfun(@(x) isequal(x, 'NoRisk') == 0, markersTable.Riskreal);
 disp('High risk real')
@@ -46,6 +47,7 @@ gplotmatrix(table2array(markersTable(nonEmptyCases, 5:end)), [], highRiskCasesNa
 title('Instability');
 
 
+%% PCA
 noNaNsFeatures=table2array(markersTable(:, 5:end));
 nanRows = isnan(noNaNsFeatures);
 totalFibreNoNaNs = totalFibre(any(nanRows, 2) == 0, :);
