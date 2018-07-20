@@ -26,7 +26,7 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
         %createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
         compareQuantitiesOfPixelsWithinImages( strcat(basePath, '\Networks\DistanceMatrixWeights\'), strcat(marker, '_HEPA_mask'), strcat(basePath, '\Networks\DistanceMatrixWeights\'), strcat(marker, '_MACR_mask') );
         createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrixWeights'), marker);
-    elseif isequal(lower(marker), lower('RET')) || isequal(dirName, 'VasosSanguineos') ||  isequal(lower(marker), lower('COL')) ||  isequal(lower(marker), lower('GAGs')) || isequal(lower(marker), lower('CD240'))
+    elseif isequal(lower(marker), lower('RET')) || isequal(dirName, 'VasosSanguineos') ||  isequal(lower(marker), lower('COL')) ||  isequal(lower(marker), lower('GAGs')) || isequal(lower(marker), lower('CD240')) || isequal(lower(marker), lower('LYVE1'))
         %createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_mask'));
         createMinimumSpanningTreeFromNetworks(strcat(basePath, '\Networks\DistanceMatrixWeights'), marker);
