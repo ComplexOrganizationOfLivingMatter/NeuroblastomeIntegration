@@ -457,4 +457,9 @@ tablePValuesCorrCoef = array2table(pValuesCorrCoef, 'VariableNames', namesCorrCo
 tablePValuesCorrCoef(1:14,:) = [];
 tablePValuesCorrCoef = removevars(tablePValuesCorrCoef, {'Instability','RiskCalculated','INRG_EDAD','INRG_ESTADIO','INRG_HistoCat','INRG_HistoDif','INRG_SCA','INRG_MYCN','INRG_PLOIDIA','INRG_11q','NEUPAT_recaida','NEUPAT_exitus'});
 
-table2array(tablePValuesCorrCoef) < 0.1
+
+for actualIndex = 1:size(tablePValuesCorrCoef, 1)
+    toCopyCorrCoef = tableCorrCoef(actualIndex, table2array(tablePValuesCorrCoef(actualIndex, :)) < 0.1)
+    toCopyPvalues = tablePValuesCorrCoef(actualIndex, table2array(tablePValuesCorrCoef(actualIndex, :)) < 0.1)
+    toCopyPvalues.Properties.VariableNames
+end
