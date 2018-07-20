@@ -24,7 +24,7 @@ function [numberOfHolesPerFilledCell, numberOfHolesPerCell, eulerNumberPerFilled
     eulerNumberPerCell = zeros(length(lengthAllCells), 1);
     numberOfHolesPerCell = zeros(length(lengthAllCells), 1);
     
-    parfor i = 1:lengthAllCells
+    for i = 1:lengthAllCells
         num = classes(classes == i);
         if num > 0
             eulerNumberPerCell(i) = bweuler(ImgMasked == num, 8);

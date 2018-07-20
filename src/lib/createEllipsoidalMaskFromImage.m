@@ -4,8 +4,8 @@ function [ maskImage2, boundingBox ] = createEllipsoidalMaskFromImage(originalBi
     boundingBox = regionprops(maskOfBiopsy, 'BoundingBox');
     
     boundingBox = boundingBox.BoundingBox;
-    figure;
-    imshow(originalBinImage);
+    hFig = figure('Visible', 'on');
+    imagesc(originalBinImage);
     h = imellipse(gca, boundingBox);
     api = iptgetapi(h);
 
@@ -14,7 +14,7 @@ function [ maskImage2, boundingBox ] = createEllipsoidalMaskFromImage(originalBi
     api.setPositionConstraintFcn(fcn);
 
     maskImage2 = createMask(h);
-    close all
+    close(hFig)
 
 end
 
