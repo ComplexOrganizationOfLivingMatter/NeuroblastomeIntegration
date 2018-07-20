@@ -86,7 +86,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     end
                 end
                 if size(distanceMatrix, 1) > 15 && isempty(strfind(lower(imageName), lower('NEG'))) == 1
-                    createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName);
+                    createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, markerName);
                 end
             end
         end

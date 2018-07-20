@@ -1,4 +1,4 @@
-function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, imageName)
+function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, markerName)
 %CREATENETWORKSWITHCONTROLS Summary of this function goes here
 %   Detailed explanation goes here
     
@@ -13,7 +13,10 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
         fullPathSplitted = strsplit(fullPathImage, '\');
         filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
         filesOriginal = filesOriginal(vertcat(filesOriginal{:, 4}) == 0, :);
-        originalImage = cellfun(@(x) isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'txt')) & isempty(strfind(lower(x), 'cels')), filesOriginal(:, 1));
+        
+        caseName = strsplit(lower(fullPathSplitted{end}), lower(markerName));
+        
+        originalImage = cellfun(@(x) isempty(strfind(lower(x), lower(caseName{1}))) == 0 & isempty(strfind(lower(x), 'mask')) & isempty(strfind(lower(x), 'txt')) & isempty(strfind(lower(x), 'cels')), filesOriginal(:, 1));
         if sum(originalImage) > 0
             nameOriginalImage = {filesOriginal{originalImage}};
             if sum(originalImage) > 1

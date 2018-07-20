@@ -12,20 +12,28 @@ from numpy import genfromtxt
 
 
 mypaths = []
-basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
 
-mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
-#mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
-mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrix/')
-#mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
-mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
-#mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
-mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
-#mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
-mypaths.append(basePath + 'GAGs/Networks/DistanceMatrix/')
-#mypaths.append(basePath + 'GAGs/Networks/ControlNetwork/')
+##Initial Analysis
+#basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/NuevosCasos160/Casos/'
+#Mice analysis
+basePath = '/home/ubuntu/vboxshare/Neuroblastoma/Datos/Data/Mice/round0/'
 
-#mypaths.append('/home/pablo/vboxshare/Neuroblastoma/NeuroblastomeIntegration/TempResults/')
+# # mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrix/')
+# # mypaths.append(basePath + 'Vitronectine/Networks/DistanceMatrixWeights/')
+# mypaths.append(basePath + 'Vitronectine/Networks/ControlNetwork/')
+# # # mypaths.append(basePath + 'COLAGENO/Networks/DistanceMatrix/')
+# mypaths.append(basePath + 'COLAGENO/Networks/ControlNetwork/')
+# # # mypaths.append(basePath + 'VasosSanguineos/Networks/DistanceMatrix/')
+# mypaths.append(basePath + 'VasosSanguineos/Networks/ControlNetwork/')
+# #mypaths.append(basePath + 'RET/Networks/DistanceMatrix/')
+# mypaths.append(basePath + 'RET/Networks/ControlNetwork/')
+# # mypaths.append(basePath + 'GAGs/Networks/DistanceMatrixWeights/')
+# mypaths.append(basePath + 'GAGs/Networks/ControlNetwork/')
+
+# mypaths.append(basePath + 'LymphaticVessels/Networks/DistanceMatrixWeights/')
+# mypaths.append(basePath + 'LymphaticVessels/Networks/ControlNetwork/')
+
+
 
 for mypath in mypaths:
 	onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
