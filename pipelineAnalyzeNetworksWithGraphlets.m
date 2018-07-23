@@ -9,13 +9,13 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     
     basePath = strcat(pathFiles, dirName);
     mkdir(basePath, '\Networks\ControlNetwork');
-    mkdir(basePath, '\Networks\DistanceMatrix');
+    %mkdir(basePath, '\Networks\DistanceMatrix');
     mkdir(basePath, '\Networks\DistanceMatrixWeights');
     mkdir(basePath, '\Networks\IterationAlgorithm');
     mkdir(basePath, '\Networks\SortingAlgorithm');
     
-    mkdir(basePath, '\Networks\IterationUsingWeightsAlgorithm');
-    mkdir(basePath, '\Networks\SortingUsingWeightsAlgorithm');
+    %mkdir(basePath, '\Networks\IterationUsingWeightsAlgorithm');
+    %mkdir(basePath, '\Networks\SortingUsingWeightsAlgorithm');
     
     mkdir(basePath, '\Networks\GraphletVectors');
     mkdir(basePath, '\Networks\MinimumSpanningTree');
