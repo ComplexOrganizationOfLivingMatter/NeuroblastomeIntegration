@@ -25,7 +25,7 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
         if isempty(imageNameSplitted{1})
             caseName = imageNameSplitted{2};
         else
-            caseName = imageNameSplitted{1};
+            caseName = strjoin(imageNameSplitted(1:end-1), '_');
         end
         
         imageNameTrimmed = strrep(imageName, 'DiametDistanceMatrix.mat', '');

@@ -21,10 +21,10 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
             fileNameSplitted = strsplit(fileName, '_');
             
             if isempty(fileNameSplitted{1})
-                fileNamePositive = fileNameSplitted{2};
+                fileNamePositive = strjoin(fileNameSplitted(2:end-1), '_');
                 fileNameNegative = cellfun(@(x) isempty(strfind(x, fileNameSplitted{2})) == 0 & isempty(strfind(lower(x), 'cels')) == 0, allFiles);
             else
-                fileNamePositive = fileNameSplitted{1};
+                fileNamePositive = strjoin(fileNameSplitted(1:end-1), '_');
                 fileNameNegative = cellfun(@(x) isempty(strfind(x, fileNameSplitted{1})) == 0 & isempty(strfind(lower(x), 'cels')) == 0, allFiles);
             end
             

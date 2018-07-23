@@ -14,9 +14,9 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo, filter )
         fileName = fileName{1};
         fileNameSplittedSplitted = strsplit(fileName, '_');
         if isempty(fileNameSplittedSplitted{1})
-            fileNameFinal = fileNameSplittedSplitted(2);
+            fileNameFinal = strjoin(fileNameSplittedSplitted(2:end-1), '_');
         else
-            fileNameFinal = fileNameSplittedSplitted(1);
+            fileNameFinal = strjoin(fileNameSplittedSplitted(1:end-1), '_');
         end
         load(fullPathFile);
         if isempty(characteristicsTable)
