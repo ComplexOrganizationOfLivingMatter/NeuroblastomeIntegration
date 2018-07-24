@@ -52,7 +52,7 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
 %     while answer ~= 'y'
 %         answer = input('Have you executed minimumDistance.py? [y/n] ');
 %     end
-%     
+
     disp('Leda files...');
     disp('Iteration');
     calculateLEDAFilesFromDirectory(strcat(outputDir, '\IterationAlgorithm\'));
@@ -60,5 +60,16 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     calculateLEDAFilesFromDirectory(strcat(outputDir, '\SortingAlgorithm\'));
     disp('MST');
     calculateLEDAFilesFromDirectory(strcat(outputDir, '\MinimumSpanningTree\'));
+    
+%     %Execute ./runGraphletCounter.sh to get graphlets
+%     %algorithm
+%     answer = 'n';
+%     while answer ~= 'y'
+%         answer = input('Have you executed ./runGraphletCounter.sh? [y/n] ');
+%     end
+    
+    sortBySample(strcat(outputDir, 'GraphletsCount\'));
+    analyzeGraphletsDistances(strcat(outputDir, 'GraphletsCount\'), marker, 'gdda');
+    
 end
 
