@@ -34,7 +34,7 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
         
         infoFile1 = importdata(fullPathImage);
         
-        imagesToGetSize = allImages(cellfun(@(x) isempty(strfind(strrep(x, ' ', '_'), caseName)) == 0 & isempty(strfind(lower(x), lower('Mask'))) == 0, allImages));
+        imagesToGetSize = allImages(cellfun(@(x) isempty(strfind(strrep(regexprep(strrep(x, ' ', '_'), '_+', '_'), '.', '-'), caseName)) == 0 & isempty(strfind(lower(x), lower('Mask'))) == 0, allImages));
         Img = imread(imagesToGetSize{1});
 
         maskName = strcat('..\Mascaras\HexagonalMask', num2str(numMask), 'Diamet.mat');

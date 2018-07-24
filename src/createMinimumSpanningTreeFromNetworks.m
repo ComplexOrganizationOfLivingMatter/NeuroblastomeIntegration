@@ -19,11 +19,11 @@ function [ ] = createMinimumSpanningTreeFromNetworks( currentPath, markerWeWant 
         fileName = fullPathFileNameSplitted(end);
         fileName = fileName{1};
         %Path name
-        basePath = strjoin(fullPathFileNameSplitted(1:6), '\');
+        basePath = strjoin(fullPathFileNameSplitted(1:end-1), '\');
         %If it's a directory and positive image (marker positive). Also we exclude the files of col, ret, CD31 and GAG
         if isempty(strfind(lower(fullPathFileName), lower(markerWeWant))) == 0 && isempty(strfind(lower(fullPathFileName), lower('CELS'))) == 1
             nameFileNoExtension = strsplit(strrep(fileName(1:end-18),' ','_'), '.');
-            outputFileName = strcat(basePath, '\Networks\MinimumSpanningTree\mst_', nameFileNoExtension{1}, '.mat');
+            outputFileName = strcat(basePath, '\MinimumSpanningTree\mst_', nameFileNoExtension{1}, '.mat');
             if exist(outputFileName, 'file') ~= 2 && isempty(strfind(fileName, 'DistanceMatrix')) == 0
                 fileName
                 if exist(strrep(fullPathFileName, '.mat', '.csv'), 'file') ~= 2

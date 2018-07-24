@@ -1,4 +1,4 @@
-function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
+function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName, outputDir)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 %
@@ -12,12 +12,6 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
         fullPathImageSplitted = strsplit(fullPathImage, '\');
         imageName = fullPathImageSplitted(end);
         imageName = imageName{1};
-        %Path name
-        if isempty(strfind(PathCurrent, '\\'))
-            basePath = strjoin(fullPathImageSplitted(1:6), '\');
-        else
-            basePath = strjoin(fullPathImageSplitted(1:4), '\');
-        end
 
         if size(strfind(lower(imageName), lower(markerName)), 1) == 1
             imageName
@@ -27,7 +21,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
             for numMask = [50] %100
                 inNameFile = strsplit(strrep(imageName,' ','_'), '.tif');
                 inNameFile(1) = strrep(inNameFile(1), '.', '-');
-                outputFileName = strcat(basePath, '\Networks\DistanceMatrixWeights\', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat');
+                outputFileName = strcat(outputDir, '\DistanceMatrixWeights\', inNameFile(1), 'ContigousHexagonalMeanAreaMask', num2str(numMask),'DiametDistanceMatrix.mat');
                 distanceMatrix = '';
                 eulerNumberArray(end+1) = {bweuler(Img, 4)};
                 imageNameArray(end+1) = {imageName};
@@ -87,7 +81,7 @@ function [ ] = getMinimumDistancesFromHexagonalGrid(PathCurrent, markerName)
                     end
                 end
                 if size(distanceMatrix, 1) > 15 && isempty(strfind(lower(imageName), lower('NEG'))) == 1
-                    createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, markerName);
+                    createNetworksWithControls(fullPathImage, Img, distanceMatrix, outputDir, numMask, inNameFile, markerName);
                 end
             end
         end

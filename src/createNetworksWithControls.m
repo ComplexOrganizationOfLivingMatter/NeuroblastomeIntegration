@@ -1,4 +1,4 @@
-function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, basePath, numMask, inNameFile, markerName)
+function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, outputDir, numMask, inNameFile, markerName)
 %CREATENETWORKSWITHCONTROLS Summary of this function goes here
 %   Detailed explanation goes here
     
@@ -8,7 +8,7 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
     else
         maskName = inNameFile(1);
     end
-    outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', maskName , 'Control', num2str(10), '.mat');
+    outputControlFile = strcat(outputDir, '\ControlNetwork\', maskName , 'Control', num2str(10), '.mat');
     if exist(outputControlFile{:}, 'file') ~= 2
         fullPathSplitted = strsplit(fullPathImage, '\');
         filesOriginal = struct2cell(dir(strjoin(fullPathSplitted(1:end-1), '\')))';
@@ -33,14 +33,14 @@ function [ ] = createNetworksWithControls(fullPathImage, Img, distanceMatrix, ba
             maskImage = generateCircularRoiFromImage(fullPathImage, size(Img)/2);
         end
         for numControl = 1:10
-            outputControlFile = strcat(basePath, '\Networks\ControlNetwork\', maskName , 'Control', num2str(numControl), '.mat');
+            outputControlFile = strcat(outputDir, '\ControlNetwork\', maskName , 'Control', num2str(numControl), '.mat');
             if exist(outputControlFile{:}, 'file') ~= 2
-                outputControl = strcat(basePath, '\Networks\ControlNetwork\', maskName, 'Control', num2str(numControl));
+                outputControl = strcat(outputDir, '\ControlNetwork\', maskName, 'Control', num2str(numControl));
                 generateVoronoiInsideCircle(10, size(distanceMatrix, 1), radiusOfEllipse, maskImage, outputControl);
             end
             clear Img
 
-            outputControlFileDistance = strcat(basePath, '\Networks\ControlNetwork\', maskName ,'Control', num2str(numControl), 'DistanceMatrix.mat');
+            outputControlFileDistance = strcat(outputDir, '\ControlNetwork\', maskName ,'Control', num2str(numControl), 'DistanceMatrix.mat');
             if exist(outputControlFileDistance{:}, 'file') ~= 2
                 load(outputControlFile{:});
                 distanceMatrixControl = pdist(initCentroids, 'euclidean');
