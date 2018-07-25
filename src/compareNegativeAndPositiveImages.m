@@ -1,4 +1,4 @@
-function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
+function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant, outputDir )
 %COMPARENEGATIVEANDPOSITIVEIMAGES Summary of this function goes here
 %   Detailed explanation goes here
     NUM_MASK = 50;
@@ -66,6 +66,6 @@ function [ ] = compareNegativeAndPositiveImages( currentPath, markerWeWant )
             end
         end
     end
-    xlswrite(strcat(basePath, '\negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector', eulerNumberVector'));
+    xlswrite(strcat(outputDir, '\negativeVsPositive.xls'), padcat(fileNamePositiveVector', fileNameNegativeVector', meanMinDistanceBetweenPositiveAndNegativeVector', eulerNumberVector'));
 end
 
