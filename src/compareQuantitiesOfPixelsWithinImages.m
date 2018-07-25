@@ -1,4 +1,4 @@
-function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathInfo2, strInfo2 )
+function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathInfo2, strInfo2, imagesPath )
 %COMPAREQUANTITIESOFPIXELSWITHINIMAGES Summary of this function goes here
 %   Detailed explanation goes here
     files1 = getAllFiles(pathInfo1);
@@ -8,9 +8,9 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
     
     
     fullPathImageSplitted = strsplit(pathInfo1, '\');
-    basePath = strjoin(fullPathImageSplitted(1:end-3), '\');
+    basePath = strjoin(fullPathImageSplitted(1:end-2), '\');
     
-    allImages = getAllFiles(strcat(basePath, '\Images\'));
+    allImages = getAllFiles(strcat(imagesPath, '\Images\'));
     
     vtnDifferences = cell(length(files1), 1);
     meanVTNDifference = zeros(length(files1), 1);
@@ -63,6 +63,6 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
     end
     pacients
     stdVTNDifference = cellfun(@(x) std(x), vtnDifferences);
-    save(strcat(basePath, '\Networks\vtnDifferences'), 'pacients', 'meanVTNDifference', 'stdVTNDifference','vtnDifferences');
+    save(strcat(basePath, '\vtnDifferences'), 'pacients', 'meanVTNDifference', 'stdVTNDifference','vtnDifferences');
 end
 

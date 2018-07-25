@@ -25,14 +25,15 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     if isequal(marker, 'VTN')
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_HEPA_mask'), outputDir);
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_MACR_mask'), outputDir);
-        %%createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
-        compareQuantitiesOfPixelsWithinImages( strcat(outputDir, '\DistanceMatrixWeights\'), strcat(marker, '_HEPA_mask'), strcat(outputDir, '\DistanceMatrixWeights\'), strcat(marker, '_MACR_mask') );
-        createMinimumSpanningTreeFromNetworks(strcat(basePath, '\DistanceMatrixWeights'), marker);
+        %createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
+        compareQuantitiesOfPixelsWithinImages( strcat(outputDir, '\DistanceMatrixWeights\'), strcat(marker, '_HEPA_mask'), strcat(outputDir, '\DistanceMatrixWeights\'), strcat(marker, '_MACR_mask'), basePath );
+        createMinimumSpanningTreeFromNetworks(strcat(outputDir, '\DistanceMatrixWeights'), marker);
     elseif isequal(lower(marker), lower('RET')) || isequal(dirName, 'VasosSanguineos') ||  isequal(lower(marker), lower('COL')) ||  isequal(lower(marker), lower('GAGs')) || isequal(lower(marker), lower('CD240')) || isequal(lower(marker), lower('LYVE1'))
         %createNetworkMinimumDistance(strcat(basePath, '\Images\'), strcat(marker, '_CELS_'));
         getMinimumDistancesFromHexagonalGrid(strcat(basePath, '\Images\'), strcat(marker, '_mask'), outputDir);
-        createMinimumSpanningTreeFromNetworks(strcat(basePath, '\DistanceMatrixWeights'), marker);
+        createMinimumSpanningTreeFromNetworks(strcat(outputDir, '\DistanceMatrixWeights'), marker);
     else
+        %This functions may not work
         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_POSITIVAS_');
         createNetworkMinimumDistance(strcat(basePath, '\Images\'), '_NEGATIVAS_');
     end
@@ -40,14 +41,13 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     if isequal(marker, 'VTN')
         exportCharacteristicsAsCSV(strcat(outputDir, '\DistanceMatrixWeights'), '_HEPA_');
         exportCharacteristicsAsCSV(strcat(outputDir, '\DistanceMatrixWeights'), '_MACR_');
-        compareNegativeAndPositiveImages(strcat(outputDir, '\Images\'), marker);
+        compareNegativeAndPositiveImages(strcat(basePath, '\Images\'), marker);
     else
         exportCharacteristicsAsCSV(strcat(outputDir, '\DistanceMatrixWeights'), []);
     end
           
 
-%     %Execute minimumDistances.py to get the networks with the Sorting
-%     %algorithm
+%     %Execute minimumDistances.py to get the networks
 %     answer = 'n';
 %     while answer ~= 'y'
 %         answer = input('Have you executed minimumDistance.py? [y/n] ');
@@ -62,14 +62,24 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     calculateLEDAFilesFromDirectory(strcat(outputDir, '\MinimumSpanningTree\'));
     
 %     %Execute ./runGraphletCounter.sh to get graphlets
-%     %algorithm
 %     answer = 'n';
 %     while answer ~= 'y'
 %         answer = input('Have you executed ./runGraphletCounter.sh? [y/n] ');
 %     end
     
-    sortBySample(strcat(outputDir, 'GraphletsCount\'));
-    analyzeGraphletsDistances(strcat(outputDir, 'GraphletsCount\'), marker, 'gdda');
+    sortBySample(strcat(outputDir, '\GraphletsCount\'), marker);
+    
+%     %Execute ./runNetworkComparisonGraphlets.sh  to get the distances between real image and control
+%     answer = 'n';
+%     while answer ~= 'y'
+%         answer = input('Have you executed ./runNetworkComparisonGraphlets.sh? [y/n] ');
+%     end
+    if isequal(marker, 'VTN')
+        analyzeGraphletsDistances(strcat(outputDir, '\GraphletsCount\'), 'MACR', 'gdda');
+        analyzeGraphletsDistances(strcat(outputDir, '\GraphletsCount\'), 'HEPA', 'gdda');
+    else
+        analyzeGraphletsDistances(strcat(outputDir, '\GraphletsCount\'), marker, 'gdda');
+    end
     
 end
 
