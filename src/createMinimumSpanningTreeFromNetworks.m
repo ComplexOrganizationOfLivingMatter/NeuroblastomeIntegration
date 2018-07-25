@@ -19,7 +19,7 @@ function [ ] = createMinimumSpanningTreeFromNetworks( currentPath, markerWeWant 
         fileName = fullPathFileNameSplitted(end);
         fileName = fileName{1};
         %Path name
-        basePath = strjoin(fullPathFileNameSplitted(1:end-1), '\');
+        basePath = strjoin(fullPathFileNameSplitted(1:end-2), '\');
         %If it's a directory and positive image (marker positive). Also we exclude the files of col, ret, CD31 and GAG
         if isempty(strfind(lower(fullPathFileName), lower(markerWeWant))) == 0 && isempty(strfind(lower(fullPathFileName), lower('CELS'))) == 1
             nameFileNoExtension = strsplit(strrep(fileName(1:end-18),' ','_'), '.');

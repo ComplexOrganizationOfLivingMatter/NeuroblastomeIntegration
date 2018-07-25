@@ -8,7 +8,7 @@ sortDirectoriesByMarker('..\Datos\Data\Mice\ToSort\', 'VN', 'VTN', '..\Datos\Dat
 sortDirectoriesByMarker('..\Datos\Data\Mice\ToSort\', 'LYVE1', 'LYVE1', '..\Datos\Data\Mice\round0\LymphaticVessels\Images\')
 sortDirectoriesByMarker('..\Datos\Data\Mice\ToSort\', 'CD34', 'CD34', '..\Datos\Data\Mice\round0\VasosSanguineos\Images\')
 
-params = {{'ret', 'CD34', 'VTN', 'COL', 'GAGs', 'LYVE1'}, {'RET', 'VasosSanguineos', 'Vitronectine', 'COLAGENO', 'GAGs', 'LymphaticVessels'}};
+params = {{'VTN', 'ret', 'CD34', 'COL', 'GAGs', 'LYVE1'}, {'Vitronectine', 'RET', 'VasosSanguineos', 'COLAGENO', 'GAGs', 'LymphaticVessels'}};
 
 for i = 1:size(params{1}, 2)
     pipelineAnalyzeNetworksWithGraphlets(params{1}{i}, params{2}{i}, '..\Datos\Data\Mice\round0\');

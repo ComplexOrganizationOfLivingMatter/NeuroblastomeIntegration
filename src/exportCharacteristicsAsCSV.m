@@ -27,9 +27,9 @@ function [ ] = exportCharacteristicsAsCSV( pathOfInfo, filter )
     end
     
     if isempty(filter)
-        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} , '_', date, '.xls'));
+        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 2} , '_', date, '.xls'));
     else
-        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 3} , '_', filter, '_', date,'.xls'));
+        writetable(characteristicsTable, strcat(strjoin(fileNameSplitted(1:end - 2), '\'), '\characteristics', fileNameSplitted{end - 2} , '_', filter, '_', date,'.xls'));
     end
 end
 
