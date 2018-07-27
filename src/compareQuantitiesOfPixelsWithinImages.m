@@ -61,8 +61,8 @@ function [ ] = compareQuantitiesOfPixelsWithinImages( pathInfo1, strInfo1, pathI
         end
         pacients(indexFile1) = {caseName};
     end
-    pacients
     stdVTNDifference = cellfun(@(x) std(x), vtnDifferences);
-    save(strcat(basePath, '\vtnDifferences'), 'pacients', 'meanVTNDifference', 'stdVTNDifference','vtnDifferences');
+    writetable(table(pacients, meanVTNDifference, stdVTNDifference), strcat(basePath, '\vtnDifferences.xls'));
+    %save(strcat(basePath, '\vtnDifferences'), 'pacients', 'meanVTNDifference', 'stdVTNDifference','vtnDifferences');
 end
 
