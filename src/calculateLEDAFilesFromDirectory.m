@@ -15,8 +15,10 @@ function [ ] = calculateLEDAFilesFromDirectory(PathCurrent)
             outputLEDAFileName = strcat(strjoin(fullPathImageSplitted(1:end-2), '\'), '\GraphletsCount\', inNameFile(1), '.gw');
             outputLEDAFileNameExists = strcat(strjoin(fullPathImageSplitted(1:end-2), '\'), '\GraphletVectors\', inNameFile(1), '.gw');
             if exist(outputLEDAFileNameExists{:}, 'file') ~= 2 && exist(outputLEDAFileName{:}, 'file') ~= 2
-                load(fullPathImage);
-                if exist('adjacencyMatrix', 'var') == 1
+                fileObj = matfile(fullPathImage);
+                vars = whos(fileObj);
+                if ismember('adjacencyMatrix', {vars.name})
+                    adjacencyMatrix = fileObj.adjacencyMatrix;
                     adjacencyMatrix(adjacencyMatrix > 0) = 1;
                     try
                         generateLEDAFromAdjacencyMatrix(sparse(adjacencyMatrix), outputLEDAFileName{:})
@@ -27,7 +29,8 @@ function [ ] = calculateLEDAFilesFromDirectory(PathCurrent)
                         %error('An unexpected error has occured')
                     end
                 end
-                if exist('adjacencyMatrixComplete', 'var') == 1
+                if ismember('adjacencyMatrixComplete', {vars.name})
+                    adjacencyMatrixComplete = fileObj.adjacencyMatrixComplete;
                     try
                         generateLEDAFromAdjacencyMatrix(adjacencyMatrixComplete, outputLEDAFileName{:})
                         clear adjacencyMatrixComplete
