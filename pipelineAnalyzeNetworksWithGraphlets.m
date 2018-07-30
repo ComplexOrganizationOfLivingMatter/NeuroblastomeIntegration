@@ -41,17 +41,17 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     if isequal(marker, 'VTN')
         exportCharacteristicsAsCSV(strcat(outputDir, '\DistanceMatrixWeights'), '_HEPA_');
         exportCharacteristicsAsCSV(strcat(outputDir, '\DistanceMatrixWeights'), '_MACR_');
-        compareNegativeAndPositiveImages(strcat(basePath, '\Images\'), marker);
+        compareNegativeAndPositiveImages(strcat(basePath, '\Images\'), marker, outputDir);
     else
         exportCharacteristicsAsCSV(strcat(outputDir, '\DistanceMatrixWeights'), []);
     end
           
 
-%     %Execute minimumDistances.py to get the networks
-%     answer = 'n';
-%     while answer ~= 'y'
-%         answer = input('Have you executed minimumDistance.py? [y/n] ');
-%     end
+    %Execute minimumDistances.py to get the networks
+    answer = 'n';
+    while answer ~= 'y'
+        answer = input('Have you executed minimumDistance.py? [y/n] ');
+    end
 
     disp('Leda files...');
     disp('Iteration');
@@ -61,25 +61,26 @@ function [ ] = pipelineAnalyzeNetworksWithGraphlets( marker, dirName, pathFiles 
     disp('MST');
     calculateLEDAFilesFromDirectory(strcat(outputDir, '\MinimumSpanningTree\'));
     
-%     %Execute ./runGraphletCounter.sh to get graphlets
-%     answer = 'n';
-%     while answer ~= 'y'
-%         answer = input('Have you executed ./runGraphletCounter.sh? [y/n] ');
-%     end
+    %Execute ./runGraphletCounter.sh to get graphlets
+    answer = 'n';
+    while answer ~= 'y'
+        answer = input('Have you executed ./runGraphletCounter.sh? [y/n] ');
+    end
     
     sortBySample(strcat(outputDir, '\GraphletsCount\'), marker);
     
-%     %Execute ./runNetworkComparisonGraphlets.sh  to get the distances between real image and control
-%     answer = 'n';
-%     while answer ~= 'y'
-%         answer = input('Have you executed ./runNetworkComparisonGraphlets.sh? [y/n] ');
-%     end
+    %Execute ./runNetworkComparisonGraphlets.sh  to get the distances between real image and control
+    answer = 'n';
+    while answer ~= 'y'
+        answer = input('Have you executed ./runNetworkComparisonGraphlets.sh? [y/n] ');
+    end
+
     if isequal(marker, 'VTN')
         analyzeGraphletsDistances(strcat(outputDir, '\GraphletsCount\'), 'MACR', 'gdda');
         analyzeGraphletsDistances(strcat(outputDir, '\GraphletsCount\'), 'HEPA', 'gdda');
     else
         analyzeGraphletsDistances(strcat(outputDir, '\GraphletsCount\'), marker, 'gdda');
     end
-    
+
 end
 
