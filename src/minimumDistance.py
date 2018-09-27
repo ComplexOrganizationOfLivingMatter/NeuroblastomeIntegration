@@ -24,6 +24,12 @@ mypaths.append(basePath + 'RET/DistanceMatrixWeights/')
 mypaths.append(basePath + 'RET/ControlNetwork/')
 mypaths.append(basePath + 'VasosSanguineos/DistanceMatrixWeights/')
 mypaths.append(basePath + 'VasosSanguineos/ControlNetwork/')
+mypaths.append(basePath + 'COLAGENO/DistanceMatrixWeights/')
+mypaths.append(basePath + 'COLAGENO/ControlNetwork/')
+mypaths.append(basePath + 'GAGs/DistanceMatrixWeights/')
+mypaths.append(basePath + 'GAGs/ControlNetwork/')
+mypaths.append(basePath + 'LymphaticVessels/DistanceMatrixWeights/')
+mypaths.append(basePath + 'LymphaticVessels/ControlNetwork/') 
 
 
 
