@@ -78,3 +78,4 @@ src/lib/plot2svg-master
 *.Rhistory
 logFile
 *.pdf
+*.tiff
