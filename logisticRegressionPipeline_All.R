@@ -128,21 +128,18 @@ characteristicsOnlyClinic <-
 characteristicsOnlyClinic <- characteristicsOnlyClinic[, -3]
 
 
-characteristicsWithoutClinicVTN <-
-  characteristicsWithoutClinic[, grepl("VTN" , colnames(characteristicsWithoutClinic))]
-
-#Only our new features
-if (dependentCategory == "Instability") {
-  characteristicsWithoutClinicVTN <- characteristicsWithoutClinicVTN[, 1:47]; #/32 for high vs no high
-} else {
-  characteristicsWithoutClinicVTN <- characteristicsWithoutClinicVTN[, 1:47];
-}
+# #Only our new features
+# if (dependentCategory == "Instability") {
+#   characteristicsWithoutClinic <- characteristicsWithoutClinic[, 1:47]; #/32 for high vs no high
+# } else {
+#   characteristicsWithoutClinic <- characteristicsWithoutClinic[, 1:47];
+# }
 
 # library(xlsx)
-# write.xlsx(characteristicsWithoutClinicVTN, 'file.xlsx', sheetName="Sheet1")
+# write.xlsx(characteristicsWithoutClinic, 'file.xlsx', sheetName="Sheet1")
 
 colNamesOfFormula <-
-  paste(colnames(characteristicsWithoutClinicVTN), collapse = '` + `')
+  paste(colnames(characteristicsWithoutClinic), collapse = '` + `')
 
 initialFormula <-
   as.formula(paste(dependentCategory, " ~ `", colNamesOfFormula, "`", sep =
@@ -181,22 +178,21 @@ if (dependentCategory == "Instability") {
   # - 112 - VTN - Percentage of stained area INTRAC ++
   bestVTNMorphometricsFeatures <- c(109, 118, 119, 120)
   pValueThreshold <- 0.0003
-  #pValueThreshold <- 0.0002
 } else {
   pValueThreshold <- 0.011
 }
 
 pvaluesChars <-
-  univariateAnalysis(initialInfoDicotomized, initialIndex, dependentCategory, characteristicsWithoutClinicVTN, pValueThreshold)
+  univariateAnalysis(initialInfoDicotomized, initialIndex, dependentCategory, characteristicsWithoutClinic, pValueThreshold)
 
 which(pvaluesChars < pValueThreshold)
 #ToSave
-significantCharNames <- colnames(characteristicsWithoutClinicVTN[, pvaluesChars < pValueThreshold])
+significantCharNames <- colnames(characteristicsWithoutClinic[, pvaluesChars < pValueThreshold])
 
 outputFile <- paste("significantList_", dependentCategory, '_', format(Sys.time(), "%d-%m-%Y"), ".RData", sep='');
 saveRDS(list(significantCharNames, pvaluesChars), file = outputFile)
 
-significantCharacteristics <- characteristicsWithoutClinicVTN[,pvaluesChars < pValueThreshold];
+significantCharacteristics <- characteristicsWithoutClinic[,pvaluesChars < pValueThreshold];
 
 significantAndClinicChars <-
   cbind(significantCharacteristics, characteristicsOnlyClinic)
@@ -538,13 +534,13 @@ summary(glm.results)
 #the INRG prognostic categories using the non-parametric Mann-Whitney and
 #Kruskal-Wallis tests
 
-characteristicsWithoutClinicVTN <-
+characteristicsWithoutClinic <-
   characteristicsWithoutClinic[, grepl("VTN" , colnames(characteristicsWithoutClinic))]
 
 #Only our new features
-characteristicsWithoutClinicVTN <- characteristicsWithoutClinicVTN[, 1:32];
+characteristicsWithoutClinic <- characteristicsWithoutClinic[, 1:32];
 
-significantCharacteristics <- characteristicsWithoutClinicVTN[,pvaluesChars[1:32] < 0.05];
+significantCharacteristics <- characteristicsWithoutClinic[,pvaluesChars[1:32] < 0.05];
 significantCharacteristics <- characteristicsWithoutClinic[, bestVTNMorphometricsFeatures]
 
 colClasses <- rep("list", length(significantCharacteristics))

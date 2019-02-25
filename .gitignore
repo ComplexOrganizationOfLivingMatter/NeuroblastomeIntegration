@@ -79,3 +79,4 @@ src/lib/plot2svg-master
 logFile
 *.pdf
 *.tiff
+*.Rproj
