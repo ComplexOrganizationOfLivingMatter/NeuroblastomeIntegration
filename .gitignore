@@ -80,3 +80,4 @@ logFile
 *.pdf
 *.tiff
 *.Rproj
+*.RData
