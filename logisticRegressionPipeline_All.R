@@ -127,6 +127,10 @@ characteristicsOnlyClinic <-
 #Removing histoCat
 characteristicsOnlyClinic <- characteristicsOnlyClinic[, -3]
 
+relevantCharacteristics <- cbind(characteristicsOnlyClinic, characteristicsWithoutClinic[,c(72, 69)])
+
+characteristicsWithoutClinicAndVN <-
+  characteristicsWithoutClinic[, grepl("VTN" , colnames(characteristicsWithoutClinic)) == F]
 
 # #Only our new features
 # if (dependentCategory == "Instability") {
@@ -139,7 +143,7 @@ characteristicsOnlyClinic <- characteristicsOnlyClinic[, -3]
 # write.xlsx(characteristicsWithoutClinic, 'file.xlsx', sheetName="Sheet1")
 
 colNamesOfFormula <-
-  paste(colnames(characteristicsWithoutClinic), collapse = '` + `')
+  paste(colnames(characteristicsWithoutClinicAndVN), collapse = '` + `')
 
 initialFormula <-
   as.formula(paste(dependentCategory, " ~ `", colNamesOfFormula, "`", sep =
@@ -177,25 +181,26 @@ if (dependentCategory == "Instability") {
   # - 110 - VTN - Percantege of stained area VN EXTRAC +
   # - 112 - VTN - Percentage of stained area INTRAC ++
   bestVTNMorphometricsFeatures <- c(109, 118, 119, 120)
-  pValueThreshold <- 0.0003
+  pValueThreshold <- 0.001
 } else {
   pValueThreshold <- 0.011
 }
 
 pvaluesChars <-
-  univariateAnalysis(initialInfoDicotomized, initialIndex, dependentCategory, characteristicsWithoutClinic, pValueThreshold)
+  univariateAnalysis(initialInfoDicotomized, initialIndex, dependentCategory, characteristicsWithoutClinicAndVN, pValueThreshold)
 
 which(pvaluesChars < pValueThreshold)
 #ToSave
-significantCharNames <- colnames(characteristicsWithoutClinic[, pvaluesChars < pValueThreshold])
+significantCharNames <- colnames(characteristicsWithoutClinicAndVN[, pvaluesChars < pValueThreshold])
 
 outputFile <- paste("significantList_", dependentCategory, '_', format(Sys.time(), "%d-%m-%Y"), ".RData", sep='');
 saveRDS(list(significantCharNames, pvaluesChars), file = outputFile)
 
-significantCharacteristics <- characteristicsWithoutClinic[,pvaluesChars < pValueThreshold];
+significantCharacteristics <- characteristicsWithoutClinicAndVN[,pvaluesChars < pValueThreshold];
 
 significantAndClinicChars <-
-  cbind(significantCharacteristics, characteristicsOnlyClinic)
+  cbind(significantCharacteristics, relevantCharacteristics)
+
 colNamesOfFormula <-
   paste(names(significantAndClinicChars), collapse = '` + `')
 
